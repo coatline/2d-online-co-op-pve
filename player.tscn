@@ -2,8 +2,12 @@
 
 [ext_resource type="Texture2D" uid="uid://cqvmqw6yh8slq" path="res://_assets/sprites/player.png" id="1_4flbx"]
 [ext_resource type="Script" uid="uid://de28wh0dgfbxj" path="res://player.gd" id="1_onrkg"]
+[ext_resource type="Script" uid="uid://bkactp13yxjxm" path="res://gun.gd" id="3_i3pqv"]
+[ext_resource type="PackedScene" uid="uid://cmm25fpv320tr" path="res://bullet.tscn" id="4_hqtel"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_j8e57"]
+radius = 3.0
+height = 14.0
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_onrkg"]
 properties/0/path = NodePath(".:position")
@@ -23,6 +27,7 @@ position = Vector2(0, 1)
 texture = ExtResource("1_4flbx")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=298429460]
+position = Vector2(0, 1)
 shape = SubResource("CapsuleShape2D_j8e57")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=683154133]
@@ -35,3 +40,7 @@ replication_config = SubResource("SceneReplicationConfig_onrkg")
 [node name="UsernameLabel" type="Label" parent="." unique_id=1279099218]
 offset_right = 40.0
 offset_bottom = 23.0
+
+[node name="Gun" type="Marker2D" parent="." unique_id=846691962]
+script = ExtResource("3_i3pqv")
+bullet_scene = ExtResource("4_hqtel")

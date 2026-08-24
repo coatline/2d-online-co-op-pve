@@ -9,6 +9,7 @@ signal quit_game
 @export var player_card_holder: HBoxContainer
 @export var start_button: Button
 @export var quit_button: Button
+@export var room_id_label: Label
 
 func _ready() -> void:
 	visibility_changed.connect(_on_visibility_changed)
