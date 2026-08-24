@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://bkuapdfpwjbi3"]
+
+[ext_resource type="Texture2D" uid="uid://cqvmqw6yh8slq" path="res://_assets/sprites/player.png" id="1_4w3uk"]
+
+[node name="PlayerCard" type="VBoxContainer" unique_id=2073463764]
+custom_minimum_size = Vector2(65, 65)
+offset_right = 65.0
+offset_bottom = 65.0
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=862129230]
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("1_4w3uk")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="." unique_id=1119756533]
+layout_mode = 2
+text = "Player"
+horizontal_alignment = 1
+vertical_alignment = 1

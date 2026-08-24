@@ -1,0 +1,82 @@
+[gd_scene format=3 uid="uid://oh4xpwdn85v8"]
+
+[ext_resource type="Script" uid="uid://b27da6oxvux8" path="res://enet_connection_manager.gd" id="1_jikk2"]
+[ext_resource type="Script" uid="uid://ce7ig464dwyfw" path="res://connection_manager.gd" id="1_n707c"]
+
+[node name="ConnectionManager" type="Control" unique_id=604422901 node_paths=PackedStringArray("e_net_connection_manager")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_n707c")
+e_net_connection_manager = NodePath("JoinContainer/ConnectionMethods/ENetConnectionManager")
+
+[node name="TitleContainer" type="MarginContainer" parent="." unique_id=1793499415]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TitleContainer" unique_id=1392347658]
+layout_mode = 2
+text = "Connect to Lobby"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+horizontal_alignment = 1
+
+[node name="JoinContainer" type="MarginContainer" parent="." unique_id=137634101]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -46.5
+offset_bottom = 46.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 250
+theme_override_constants/margin_right = 250
+
+[node name="ConnectionMethods" type="VBoxContainer" parent="JoinContainer" unique_id=604647221]
+layout_mode = 2
+
+[node name="ENetConnectionManager" type="PanelContainer" parent="JoinContainer/ConnectionMethods" unique_id=2124940545 node_paths=PackedStringArray("host_ip", "host_port", "host_e_net_button", "join_e_net_button")]
+layout_mode = 2
+script = ExtResource("1_jikk2")
+host_ip = NodePath("VBoxContainer/JoinMenu/HostIP")
+host_port = NodePath("VBoxContainer/JoinMenu/HostPort")
+host_e_net_button = NodePath("VBoxContainer/HostENetButton")
+join_e_net_button = NodePath("VBoxContainer/JoinMenu/JoinENetButton")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="JoinContainer/ConnectionMethods/ENetConnectionManager" unique_id=19450092]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="JoinContainer/ConnectionMethods/ENetConnectionManager/VBoxContainer" unique_id=30473193]
+layout_mode = 2
+text = "Connect via ENet"
+
+[node name="JoinMenu" type="HBoxContainer" parent="JoinContainer/ConnectionMethods/ENetConnectionManager/VBoxContainer" unique_id=1324079676]
+layout_mode = 2
+
+[node name="HostIP" type="LineEdit" parent="JoinContainer/ConnectionMethods/ENetConnectionManager/VBoxContainer/JoinMenu" unique_id=265227096]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "127.0.0.1"
+placeholder_text = "HostIP"
+
+[node name="HostPort" type="LineEdit" parent="JoinContainer/ConnectionMethods/ENetConnectionManager/VBoxContainer/JoinMenu" unique_id=1430650416]
+layout_mode = 2
+text = "25565"
+placeholder_text = "Port"
+
+[node name="JoinENetButton" type="Button" parent="JoinContainer/ConnectionMethods/ENetConnectionManager/VBoxContainer/JoinMenu" unique_id=1142531826]
+layout_mode = 2
+text = "Join"
+
+[node name="HostENetButton" type="Button" parent="JoinContainer/ConnectionMethods/ENetConnectionManager/VBoxContainer" unique_id=308058355]
+layout_mode = 2
+text = "Host via ENet"

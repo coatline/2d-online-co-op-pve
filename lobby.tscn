@@ -1,0 +1,78 @@
+[gd_scene format=3 uid="uid://bbdnfb36ll0oy"]
+
+[ext_resource type="Script" uid="uid://cjtrax6u0fgma" path="res://lobby.gd" id="1_ll2xe"]
+[ext_resource type="PackedScene" uid="uid://bkuapdfpwjbi3" path="res://player_card.tscn" id="2_xrgmn"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_r5v3i"]
+font_size = 32
+
+[node name="Lobby" type="Control" unique_id=1894008978 node_paths=PackedStringArray("host_controls", "player_card_holder", "start_button", "quit_button")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_right = 6.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ll2xe")
+host_controls = [NodePath("Centered/Controls/StartButton")]
+player_card_scene = ExtResource("2_xrgmn")
+player_card_holder = NodePath("Centered/PlayerCards")
+start_button = NodePath("Centered/Controls/StartButton")
+quit_button = NodePath("Centered/Controls/QuitButton")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1783317366]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -109.5
+offset_right = 109.5
+offset_bottom = 45.0
+grow_horizontal = 2
+
+[node name="Label" type="Label" parent="VBoxContainer" unique_id=1125122202]
+layout_mode = 2
+text = "Waiting Lobby"
+label_settings = SubResource("LabelSettings_r5v3i")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Centered" type="VBoxContainer" parent="." unique_id=568421805]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -23.0
+offset_top = -35.0
+offset_right = 23.0
+offset_bottom = 35.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+
+[node name="PlayerCards" type="HBoxContainer" parent="Centered" unique_id=160290709]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="PlayerCardSpawner" type="MultiplayerSpawner" parent="Centered/PlayerCards" unique_id=1753766874]
+_spawnable_scenes = PackedStringArray("uid://bkuapdfpwjbi3")
+spawn_path = NodePath("..")
+
+[node name="Controls" type="HBoxContainer" parent="Centered" unique_id=1249897348]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="StartButton" type="Button" parent="Centered/Controls" unique_id=53260585]
+layout_mode = 2
+text = "Start"
+
+[node name="QuitButton" type="Button" parent="Centered/Controls" unique_id=22577168]
+layout_mode = 2
+text = "Quit"
