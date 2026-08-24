@@ -11,12 +11,11 @@ func _enter_tree() -> void:
 	
 	if is_multiplayer_authority() == false:
 		camera_2d.queue_free()
+		physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_ON
 
 func _physics_process(delta: float) -> void:
 	if !is_multiplayer_authority():
-		physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_ON
 		return
-	
 	
 	var dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	

@@ -44,10 +44,11 @@ theme_override_constants/margin_right = 250
 [node name="ConnectionMethods" type="VBoxContainer" parent="JoinContainer" unique_id=604647221]
 layout_mode = 2
 
-[node name="ENetConnectionManager" type="PanelContainer" parent="JoinContainer/ConnectionMethods" unique_id=2124940545 node_paths=PackedStringArray("room_id_line_edit", "host_e_net_button", "join_e_net_button")]
+[node name="ENetConnectionManager" type="PanelContainer" parent="JoinContainer/ConnectionMethods" unique_id=2124940545 node_paths=PackedStringArray("host_ip", "host_port", "host_e_net_button", "join_e_net_button")]
 layout_mode = 2
 script = ExtResource("1_jikk2")
-room_id_line_edit = NodePath("VBoxContainer/JoinMenu/RoomIdLineEdit")
+host_ip = NodePath("VBoxContainer/JoinMenu/HostIP")
+host_port = NodePath("VBoxContainer/JoinMenu/HostPort")
 host_e_net_button = NodePath("VBoxContainer/HostENetButton")
 join_e_net_button = NodePath("VBoxContainer/JoinMenu/JoinENetButton")
 
@@ -56,16 +57,21 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="JoinContainer/ConnectionMethods/ENetConnectionManager/VBoxContainer" unique_id=30473193]
 layout_mode = 2
-size_flags_horizontal = 4
-text = "Peer-to-Peer"
+text = "Connect via ENet"
 
 [node name="JoinMenu" type="HBoxContainer" parent="JoinContainer/ConnectionMethods/ENetConnectionManager/VBoxContainer" unique_id=1324079676]
 layout_mode = 2
 
-[node name="RoomIdLineEdit" type="LineEdit" parent="JoinContainer/ConnectionMethods/ENetConnectionManager/VBoxContainer/JoinMenu" unique_id=265227096]
+[node name="HostIP" type="LineEdit" parent="JoinContainer/ConnectionMethods/ENetConnectionManager/VBoxContainer/JoinMenu" unique_id=265227096]
 layout_mode = 2
 size_flags_horizontal = 3
-placeholder_text = "Room id"
+text = "127.0.0.1"
+placeholder_text = "HostIP"
+
+[node name="HostPort" type="LineEdit" parent="JoinContainer/ConnectionMethods/ENetConnectionManager/VBoxContainer/JoinMenu" unique_id=1430650416]
+layout_mode = 2
+text = "25565"
+placeholder_text = "Port"
 
 [node name="JoinENetButton" type="Button" parent="JoinContainer/ConnectionMethods/ENetConnectionManager/VBoxContainer/JoinMenu" unique_id=1142531826]
 layout_mode = 2

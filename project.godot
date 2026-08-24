@@ -15,16 +15,30 @@ run/main_scene="uid://ch8yy61us2i7p"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://_assets/sprites/icon.svg"
 
+[audio]
+
+buses/default_bus_layout="uid://crp6mck4upexy"
+driver/enable_input=true
+
+[autoload]
+
+MultiplayerManager="*uid://n3706abyt54q"
+
 [display]
 
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/nodetunnel/plugin.cfg")
+
 [file_customization]
 
 folder_colors={
 "res://_assets/": "red",
-"res://_resources/": "orange"
+"res://_resources/": "orange",
+"res://addons/": "yellow"
 }
 
 [input]

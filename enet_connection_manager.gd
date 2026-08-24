@@ -4,25 +4,19 @@ class_name ENetConnectionManager
 signal server_created
 signal server_joined
 
-@export var host_ip: LineEdit
-@export var host_port: LineEdit
+@export var room_id_line_edit: LineEdit
 @export var host_e_net_button: Button
 @export var join_e_net_button: Button
-
-var peer = ENetMultiplayerPeer.new()
 
 func _ready() -> void:
 	host_e_net_button.pressed.connect(_on_host_enet_pressed)
 	join_e_net_button.pressed.connect(_on_join_pressed)
 
 func _on_host_enet_pressed() -> void:
-	peer.create_server(int(host_port.text))
-	multiplayer.multiplayer_peer = peer
-	
+	var room_id = await MultiplayerManager.host_new_room()
+	DisplayServer.clipboard_set(room_id)
 	server_created.emit()
 
 func _on_join_pressed() -> void:
-	peer.create_client(host_ip.text, int(host_port.text))
-	multiplayer.multiplayer_peer = peer
-	
+	await MultiplayerManager.join_room(room_id_line_edit.text)
 	server_joined.emit()

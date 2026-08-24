@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://de28wh0dgfbxj" path="res://player.gd" id="1_onrkg"]
 [ext_resource type="Script" uid="uid://bkactp13yxjxm" path="res://gun.gd" id="3_i3pqv"]
 [ext_resource type="PackedScene" uid="uid://cmm25fpv320tr" path="res://bullet.tscn" id="4_hqtel"]
+[ext_resource type="Script" uid="uid://ftsp6wctkkyn" path="res://voice_chat.gd" id="5_sweqy"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_j8e57"]
 radius = 3.0
@@ -44,3 +45,16 @@ offset_bottom = 23.0
 [node name="Gun" type="Marker2D" parent="." unique_id=846691962]
 script = ExtResource("3_i3pqv")
 bullet_scene = ExtResource("4_hqtel")
+
+[node name="AudioListener2D" type="AudioListener2D" parent="." unique_id=657262104]
+
+[node name="VoiceChat" type="Node2D" parent="." unique_id=1376469033 node_paths=PackedStringArray("voice_player", "audio_listener_2d", "mic")]
+script = ExtResource("5_sweqy")
+voice_player = NodePath("AudioStreamPlayer2D")
+audio_listener_2d = NodePath("../AudioListener2D")
+mic = NodePath("Microphone")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="VoiceChat" unique_id=2095347842]
+
+[node name="Microphone" type="AudioStreamPlayer" parent="VoiceChat" unique_id=2018038668]
+bus = &"Microphone"

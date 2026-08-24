@@ -6,7 +6,7 @@
 [sub_resource type="LabelSettings" id="LabelSettings_r5v3i"]
 font_size = 32
 
-[node name="Lobby" type="Control" unique_id=1894008978 node_paths=PackedStringArray("host_controls", "player_card_holder", "start_button", "quit_button")]
+[node name="Lobby" type="Control" unique_id=1894008978 node_paths=PackedStringArray("host_controls", "player_card_holder", "start_button", "quit_button", "room_id_label", "copy_to_clipboard_button")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -21,6 +21,8 @@ player_card_scene = ExtResource("2_xrgmn")
 player_card_holder = NodePath("Centered/PlayerCards")
 start_button = NodePath("Centered/Controls/StartButton")
 quit_button = NodePath("Centered/Controls/QuitButton")
+room_id_label = NodePath("VBoxContainer2/RoomIdLabel")
+copy_to_clipboard_button = NodePath("VBoxContainer2/CopyToClipboardButton")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1783317366]
 layout_mode = 1
@@ -76,3 +78,33 @@ text = "Start"
 [node name="QuitButton" type="Button" parent="Centered/Controls" unique_id=22577168]
 layout_mode = 2
 text = "Quit"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="." unique_id=851509448]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -85.0
+offset_top = 123.0
+offset_right = 85.0
+offset_bottom = 208.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RoomIdLabel" type="Label" parent="VBoxContainer2" unique_id=656275722]
+layout_mode = 2
+text = "RoomId: 18394813984"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CopyToClipboardButton" type="Button" parent="VBoxContainer2" unique_id=1995646411]
+layout_mode = 2
+text = "Copy to Clipboard"
+
+[node name="Copied to clipboard" type="Label" parent="VBoxContainer2" unique_id=1119076433]
+layout_mode = 2
+text = "Copied to clipboard!"
+horizontal_alignment = 1
+vertical_alignment = 1
