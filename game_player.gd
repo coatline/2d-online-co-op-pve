@@ -10,6 +10,7 @@ var network_player: NetworkPlayer
 func setup(_network_player: NetworkPlayer, _position: Vector2):
 	network_player = _network_player
 	
+	player_body.set_multiplayer_authority(network_player.peer_id)
 	set_multiplayer_authority(network_player.peer_id)
 	username_label.text = network_player.username
 	name = str(network_player.peer_id)

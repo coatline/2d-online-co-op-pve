@@ -9,6 +9,8 @@ static var I: GameMultiplayer
 
 var pid_to_game_player: Dictionary[int, GamePlayer]
 
+signal game_began
+
 func _enter_tree() -> void:
 	I = self
 
@@ -31,3 +33,13 @@ func get_game_player(pid: int):
 
 func get_game_players() -> Array[GamePlayer]:
 	return GameMultiplayer.I.pid_to_game_player.keys()
+
+@rpc("any_peer", "call_local", "reliable")
+func start_game():
+	if is_multiplayer_authority():
+		GameMultiplayer.I.spawn_player(1)
+		
+		for peer in multiplayer.get_peers():
+			GameMultiplayer.I.spawn_player(peer)
+
+	game_began.emit()

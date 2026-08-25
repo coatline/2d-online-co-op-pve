@@ -8,6 +8,8 @@ var pid_to_network_player: Dictionary[int, NetworkPlayer]
 var peer: NodeTunnelPeer
 var current_room: String
 
+signal game_began
+
 func _ready() -> void:
 	connect_to_relay()
 	

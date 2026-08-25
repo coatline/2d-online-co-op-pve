@@ -1,8 +1,6 @@
 extends Control
 class_name Lobby
 
-@export var game: Game
-
 @export var host_controls: Array[Control] = []
 @export var player_card_scene: PackedScene
 @export var player_card_holder: HBoxContainer
@@ -13,9 +11,10 @@ class_name Lobby
 
 func _ready() -> void:
 	visibility_changed.connect(_on_visibility_changed)
-	start_button.pressed.connect(game.start_game)
+	start_button.pressed.connect(_on_start_game_pressed)
 	quit_button.pressed.connect(_quit_button_pressed)
 	copy_to_clipboard_button.pressed.connect(_on_copy_to_clipboard_pressed)
+	GameMultiplayer.I.game_began.connect(hide)
 
 func setup_screen() -> void:
 	if !multiplayer.is_server():
@@ -36,6 +35,9 @@ func spawn_card(pid: int):
 func remove_card(pid: int) -> void:
 	var client_card = player_card_holder.get_node(str(pid))
 	client_card.queue_free()
+
+func _on_start_game_pressed() -> void:
+	GameMultiplayer.I.start_game.rpc()
 
 func _on_visibility_changed():
 	if visible:
