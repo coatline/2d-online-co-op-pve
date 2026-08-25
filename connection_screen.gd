@@ -1,9 +1,7 @@
 extends Control
-class_name ConnectionManager
+class_name ConnectionScreen
 
-signal started_hosting
-signal started_joining
-
+@export var lobby: Lobby
 @export var e_net_connection_manager: ENetConnectionManager
 
 func _ready() -> void:
@@ -11,9 +9,9 @@ func _ready() -> void:
 	e_net_connection_manager.server_joined.connect(_join_handler)
 
 func _host_handler() -> void:
-	started_hosting.emit()
+	lobby.show()
 	hide()
 
 func _join_handler() -> void:
-	started_joining.emit()
+	lobby.show()
 	hide()

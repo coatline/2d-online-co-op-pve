@@ -1,16 +1,10 @@
 extends CharacterBody2D
-class_name Player
+class_name PlayerBody
 
 @export var speed: float = 250.0
-@export var camera_2d: Camera2D
-@export var username_label: Label
 
-func _enter_tree() -> void:
-	set_multiplayer_authority(int(name))
-	username_label.text = name
-	
+func _ready() -> void:
 	if is_multiplayer_authority() == false:
-		camera_2d.queue_free()
 		physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_ON
 
 func _physics_process(delta: float) -> void:

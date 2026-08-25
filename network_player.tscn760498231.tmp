@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://c1fdp4bgdvbba"]
+
+[ext_resource type="Script" uid="uid://bk8hsiqyh5pql" path="res://network_player.gd" id="1_5nebm"]
+[ext_resource type="Script" uid="uid://ftsp6wctkkyn" path="res://voice_chatter.gd" id="2_j6rbc"]
+[ext_resource type="PackedScene" uid="uid://dvpkwo6h7y0sj" path="res://addons/twovoip/voiphelper/two_voip_mic.tscn" id="3_gugwo"]
+[ext_resource type="PackedScene" uid="uid://c613yggmsl08x" path="res://addons/twovoip/voiphelper/two_voip_speaker.tscn" id="4_uy1v5"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_63n27"]
+
+[node name="NetworkPlayer" type="Node" unique_id=248662508 node_paths=PackedStringArray("multiplayer_synchronizer", "voice_chatter")]
+script = ExtResource("1_5nebm")
+multiplayer_synchronizer = NodePath("MultiplayerSynchronizer")
+voice_chatter = NodePath("VoiceChatter")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1114429015]
+replication_config = SubResource("SceneReplicationConfig_63n27")
+
+[node name="VoiceChatter" type="Node" parent="." unique_id=2115617403 node_paths=PackedStringArray("mic", "speaker")]
+script = ExtResource("2_j6rbc")
+mic = NodePath("TwoVoipMic")
+speaker = NodePath("AudioStreamPlayer2D/TwoVoipSpeaker")
+
+[node name="TwoVoipMic" parent="VoiceChatter" unique_id=2054874447 instance=ExtResource("3_gugwo")]
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="VoiceChatter" unique_id=1305208724]
+
+[node name="TwoVoipSpeaker" parent="VoiceChatter/AudioStreamPlayer2D" unique_id=227661049 instance=ExtResource("4_uy1v5")]

@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://oh4xpwdn85v8"]
 
 [ext_resource type="Script" uid="uid://b27da6oxvux8" path="res://enet_connection_manager.gd" id="1_jikk2"]
-[ext_resource type="Script" uid="uid://ce7ig464dwyfw" path="res://connection_manager.gd" id="1_n707c"]
+[ext_resource type="Script" uid="uid://ce7ig464dwyfw" path="res://connection_screen.gd" id="1_n707c"]
 
-[node name="ConnectionManager" type="Control" unique_id=604422901 node_paths=PackedStringArray("e_net_connection_manager")]
+[node name="ConnectionScreen" type="Control" unique_id=604422901 node_paths=PackedStringArray("e_net_connection_manager")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

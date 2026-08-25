@@ -1,4 +1,5 @@
 extends Node
+class_name TwoVoipSpeaker
 
 var audioplayeropus = null
 var audiostreamopus : AudioStreamOpus = null

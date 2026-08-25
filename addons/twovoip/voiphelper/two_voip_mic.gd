@@ -1,4 +1,5 @@
 extends Node
+class_name TwoVoipMic
 
 var opusencoder : TwovoipOpusEncoder = TwovoipOpusEncoder.new()
 var chunkprefix : PackedByteArray = PackedByteArray([0,0]) 

@@ -13,10 +13,10 @@ func _ready() -> void:
 	join_e_net_button.pressed.connect(_on_join_pressed)
 
 func _on_host_enet_pressed() -> void:
-	var room_id = await MultiplayerManager.host_new_room()
+	var room_id = await MultiplayerSessionManager.host_new_room()
 	DisplayServer.clipboard_set(room_id)
 	server_created.emit()
 
 func _on_join_pressed() -> void:
-	await MultiplayerManager.join_room(room_id_line_edit.text)
+	await MultiplayerSessionManager.join_room(room_id_line_edit.text)
 	server_joined.emit()

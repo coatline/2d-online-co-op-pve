@@ -19,10 +19,11 @@ config/icon="res://_assets/sprites/icon.svg"
 
 buses/default_bus_layout="uid://crp6mck4upexy"
 driver/enable_input=true
+driver/mix_rate=48000
 
 [autoload]
 
-MultiplayerManager="*uid://n3706abyt54q"
+MultiplayerSessionManager="*uid://65e52knbta8e"
 
 [display]
 
