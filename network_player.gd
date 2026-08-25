@@ -5,17 +5,15 @@ class_name NetworkPlayer
 @export var voice_chatter: VoiceChatter
 
 var peer_id: int
-
 var join_order: int
 var username: String
 var is_ready: bool
 var color: Color
 
 func _ready() -> void:
-	setup_sync.call_deferred()
+	setup_sync()
 
 func setup_sync():
-	print("Ready")
 	var config = SceneReplicationConfig.new()
 	
 	var props = [
@@ -23,17 +21,16 @@ func setup_sync():
 		[".:is_ready", SceneReplicationConfig.REPLICATION_MODE_ON_CHANGE],
 		[".:color", SceneReplicationConfig.REPLICATION_MODE_ON_CHANGE]
 	]
-
+	
 	for i in props.size():
 		var path = props[i][0]
 		var mode = props[i][1]
 		config.add_property(path)
 		config.property_set_replication_mode(path, mode)
-
+	
 	multiplayer_synchronizer.replication_config = config
 
 func setup(pid: int, _join_order: int):
-	print("SETUP!")
 	peer_id = pid
 	name = str(peer_id)
 	join_order = _join_order
