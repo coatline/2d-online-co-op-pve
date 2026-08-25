@@ -1,5 +1,5 @@
-extends PanelContainer
-class_name ENetConnectionManager
+extends VBoxContainer
+class_name OnlineRoomManager
 
 signal server_created
 signal server_joined

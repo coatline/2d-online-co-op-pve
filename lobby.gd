@@ -1,5 +1,5 @@
-extends Control
-class_name Lobby
+extends UIMenu
+class_name LobbyMenu
 
 @export var host_controls: Array[Control] = []
 @export var player_card_scene: PackedScene
@@ -10,13 +10,12 @@ class_name Lobby
 @export var room_id_label: Label
 
 func _ready() -> void:
-	visibility_changed.connect(_on_visibility_changed)
 	start_button.pressed.connect(_on_start_game_pressed)
 	quit_button.pressed.connect(_quit_button_pressed)
 	copy_to_clipboard_button.pressed.connect(_on_copy_to_clipboard_pressed)
 	GameMultiplayer.I.game_began.connect(hide)
 
-func setup_screen() -> void:
+func on_open() -> void:
 	if !multiplayer.is_server():
 		for c in host_controls:
 			c.hide()
@@ -38,10 +37,6 @@ func remove_card(pid: int) -> void:
 
 func _on_start_game_pressed() -> void:
 	GameMultiplayer.I.start_game.rpc()
-
-func _on_visibility_changed():
-	if visible:
-		setup_screen()
 
 func _quit_button_pressed() -> void:
 	multiplayer.multiplayer_peer.close()

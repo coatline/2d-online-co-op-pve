@@ -1,0 +1,163 @@
+[gd_scene format=3 uid="uid://oh4xpwdn85v8"]
+
+[ext_resource type="Script" uid="uid://ce7ig464dwyfw" path="res://online_connection_screen.gd" id="1_n707c"]
+
+[node name="OnlineConnectionMenu" type="Control" unique_id=604422901 node_paths=PackedStringArray("connecting_indicator", "connection_ui", "room_holder", "host_room_button", "join_private_room_button", "join_room_id_line_edit", "back_button")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_n707c")
+connecting_indicator = NodePath("ConnectingIndicator")
+connection_ui = NodePath("ConnectionUI")
+room_holder = NodePath("ConnectionUI/PublicRoomBrowser/PublicRoomsPanel/RoomsContainer/RoomHolder")
+host_room_button = NodePath("ConnectionUI/HostRoom/HBoxContainer/HostRoomButton")
+join_private_room_button = NodePath("ConnectionUI/PrivateRoomJoin/JoinWithRoomCode/JoinPrivateRoomButton")
+join_room_id_line_edit = NodePath("ConnectionUI/PrivateRoomJoin/JoinWithRoomCode/JoinRoomIdLineEdit")
+back_button = NodePath("ConnectingIndicator/BackButton")
+
+[node name="ConnectingIndicator" type="VBoxContainer" parent="." unique_id=378978196]
+visible = false
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -29.0
+offset_bottom = 74.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="ConnectingText" type="RichTextLabel" parent="ConnectingIndicator" unique_id=1392347658]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/bold_font_size = 24
+bbcode_enabled = true
+text = "[wave freq=10][rainbow freq=.5][b]Connecting to Relay Server..."
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+horizontal_alignment = 1
+
+[node name="BackButton" type="Button" parent="ConnectingIndicator" unique_id=1641773923]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Back"
+
+[node name="ConnectionUI" type="VBoxContainer" parent="." unique_id=237309786]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -250.0
+offset_top = 79.0
+offset_right = 250.0
+offset_bottom = -79.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="PublicRoomBrowser" type="VBoxContainer" parent="ConnectionUI" unique_id=1306643784]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="ConnectionUI/PublicRoomBrowser" unique_id=535879546]
+layout_mode = 2
+bbcode_enabled = true
+text = "[wave freq=3 amp=10][b]Public Rooms:"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+horizontal_alignment = 1
+
+[node name="PublicRoomsPanel" type="Panel" parent="ConnectionUI/PublicRoomBrowser" unique_id=48507242]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RoomsContainer" type="ScrollContainer" parent="ConnectionUI/PublicRoomBrowser/PublicRoomsPanel" unique_id=2082444954]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+
+[node name="RoomHolder" type="VBoxContainer" parent="ConnectionUI/PublicRoomBrowser/PublicRoomsPanel/RoomsContainer" unique_id=1118684400]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="RoomButton" type="Button" parent="ConnectionUI/PublicRoomBrowser/PublicRoomsPanel/RoomsContainer/RoomHolder" unique_id=50214344]
+layout_mode = 2
+text = "sdfasdfasdfasdf"
+
+[node name="RoomButton2" type="Button" parent="ConnectionUI/PublicRoomBrowser/PublicRoomsPanel/RoomsContainer/RoomHolder" unique_id=1033922793]
+layout_mode = 2
+text = "sdfasdfasdfasdf"
+
+[node name="RoomButton3" type="Button" parent="ConnectionUI/PublicRoomBrowser/PublicRoomsPanel/RoomsContainer/RoomHolder" unique_id=1674513684]
+layout_mode = 2
+text = "sdfasdfasdfasdf"
+
+[node name="RoomButton4" type="Button" parent="ConnectionUI/PublicRoomBrowser/PublicRoomsPanel/RoomsContainer/RoomHolder" unique_id=473561794]
+layout_mode = 2
+text = "sdfasdfasdfasdf"
+
+[node name="RoomButton5" type="Button" parent="ConnectionUI/PublicRoomBrowser/PublicRoomsPanel/RoomsContainer/RoomHolder" unique_id=1856616077]
+layout_mode = 2
+text = "sdfasdfasdfasdf"
+
+[node name="HSeparator" type="HSeparator" parent="ConnectionUI" unique_id=485462282]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="PrivateRoomJoin" type="VBoxContainer" parent="ConnectionUI" unique_id=1998644819]
+layout_mode = 2
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="ConnectionUI/PrivateRoomJoin" unique_id=755509638]
+layout_mode = 2
+bbcode_enabled = true
+text = "[wave freq=3 amp=10][b]Join a Private Room:"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+horizontal_alignment = 1
+
+[node name="JoinWithRoomCode" type="HBoxContainer" parent="ConnectionUI/PrivateRoomJoin" unique_id=1324079676]
+layout_mode = 2
+
+[node name="JoinRoomIdLineEdit" type="LineEdit" parent="ConnectionUI/PrivateRoomJoin/JoinWithRoomCode" unique_id=265227096]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Room id"
+
+[node name="JoinPrivateRoomButton" type="Button" parent="ConnectionUI/PrivateRoomJoin/JoinWithRoomCode" unique_id=1142531826]
+layout_mode = 2
+text = "Join"
+
+[node name="HSeparator3" type="HSeparator" parent="ConnectionUI" unique_id=2072398759]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="HostRoom" type="VBoxContainer" parent="ConnectionUI" unique_id=1478691488]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ConnectionUI/HostRoom" unique_id=580061589]
+layout_mode = 2
+
+[node name="HostRoomButton" type="Button" parent="ConnectionUI/HostRoom/HBoxContainer" unique_id=308058355]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Host"
+
+[node name="IsPublicRoomButton" type="CheckButton" parent="ConnectionUI/HostRoom/HBoxContainer" unique_id=2118214748]
+visible = false
+layout_mode = 2
+text = "Public"
