@@ -4,6 +4,8 @@
 [ext_resource type="Script" uid="uid://c55e2co8udbyf" path="res://world.gd" id="1_fj7yv"]
 [ext_resource type="PackedScene" uid="uid://dhyqw3rvhl107" path="res://game_player.tscn" id="2_fj7yv"]
 [ext_resource type="Script" uid="uid://blpxnewjtpxrh" path="res://game_multiplayer.gd" id="4_aqk2v"]
+[ext_resource type="Script" uid="uid://dwip3c3711own" path="res://enemy_spawner.gd" id="5_036b0"]
+[ext_resource type="PackedScene" uid="uid://bf5o27j075enk" path="res://zombie.tscn" id="6_dwbse"]
 
 [node name="World" type="Node2D" unique_id=2077963371]
 script = ExtResource("1_fj7yv")
@@ -17,13 +19,24 @@ tile_set = ExtResource("1_f3sb7")
 
 [node name="OnlineEntities" type="Node" parent="." unique_id=651066979]
 
-[node name="GameNetworking" type="Node" parent="." unique_id=1591471610 node_paths=PackedStringArray("player_spawn_position", "player_spawner")]
+[node name="GameMultiplayer" type="Node" parent="." unique_id=1591471610 node_paths=PackedStringArray("player_spawn_position", "player_spawner")]
 script = ExtResource("4_aqk2v")
 player_spawn_position = NodePath("../PlayerSpawnPosition")
 player_scene = ExtResource("2_fj7yv")
 player_spawner = NodePath("PlayerSpawner")
 
-[node name="PlayerSpawner" type="MultiplayerSpawner" parent="GameNetworking" unique_id=1394280387]
+[node name="PlayerSpawner" type="MultiplayerSpawner" parent="GameMultiplayer" unique_id=1394280387]
 spawn_path = NodePath("../../OnlineEntities")
+
+[node name="EnemySpawner" type="Node" parent="." unique_id=263676518 node_paths=PackedStringArray("multiplayer_spawner", "spawn_timer")]
+script = ExtResource("5_036b0")
+multiplayer_spawner = NodePath("MultiplayerSpawner")
+zombie_scene = ExtResource("6_dwbse")
+spawn_timer = NodePath("SpawnTimer")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="EnemySpawner" unique_id=243551586]
+spawn_path = NodePath("../../OnlineEntities")
+
+[node name="SpawnTimer" type="Timer" parent="EnemySpawner" unique_id=888756136]
 
 [node name="PlayerSpawnPosition" type="Node2D" parent="." unique_id=746065557]

@@ -1,12 +1,9 @@
 [gd_scene format=3 uid="uid://bbdnfb36ll0oy"]
 
-[ext_resource type="Script" uid="uid://cjtrax6u0fgma" path="res://lobby.gd" id="1_ll2xe"]
+[ext_resource type="Script" uid="uid://cjtrax6u0fgma" path="res://lobby_menu.gd" id="1_iohss"]
 [ext_resource type="PackedScene" uid="uid://bkuapdfpwjbi3" path="res://player_card.tscn" id="2_xrgmn"]
 
-[sub_resource type="LabelSettings" id="LabelSettings_r5v3i"]
-font_size = 32
-
-[node name="Lobby" type="Control" unique_id=1894008978 node_paths=PackedStringArray("host_controls", "player_card_holder", "copy_to_clipboard_button", "start_button", "quit_button", "room_id_label")]
+[node name="LobbyMenu" type="Control" unique_id=1894008978 node_paths=PackedStringArray("room_id_container", "lan_container", "host_controls", "player_card_holder", "copy_to_clipboard_button", "start_button", "quit_button", "room_id_label")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -15,29 +12,25 @@ offset_left = 6.0
 offset_right = 6.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_ll2xe")
+script = ExtResource("1_iohss")
+room_id_container = NodePath("RoomIdContainer")
+lan_container = NodePath("LANContainer")
 host_controls = [NodePath("Centered/Controls/StartButton")]
 player_card_scene = ExtResource("2_xrgmn")
 player_card_holder = NodePath("Centered/PlayerCards")
-copy_to_clipboard_button = NodePath("VBoxContainer2/CopyToClipboardButton")
+copy_to_clipboard_button = NodePath("RoomIdContainer/CopyToClipboardButton")
 start_button = NodePath("Centered/Controls/StartButton")
 quit_button = NodePath("Centered/Controls/QuitButton")
-room_id_label = NodePath("VBoxContainer2/RoomIdLabel")
+room_id_label = NodePath("RoomIdContainer/RoomIdLabel")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1783317366]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -109.5
-offset_right = 109.5
+[node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=1173069384]
+layout_mode = 0
+offset_left = 466.5
+offset_right = 685.5
 offset_bottom = 45.0
-grow_horizontal = 2
-
-[node name="Label" type="Label" parent="VBoxContainer" unique_id=1125122202]
-layout_mode = 2
-text = "Waiting Lobby"
-label_settings = SubResource("LabelSettings_r5v3i")
+theme_override_font_sizes/normal_font_size = 30
+bbcode_enabled = true
+text = "[wave]Lobby"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -79,7 +72,7 @@ text = "Start"
 layout_mode = 2
 text = "Quit"
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="." unique_id=851509448]
+[node name="RoomIdContainer" type="VBoxContainer" parent="." unique_id=851509448]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -93,18 +86,45 @@ offset_bottom = 208.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="RoomIdLabel" type="Label" parent="VBoxContainer2" unique_id=656275722]
+[node name="RoomIdLabel" type="Label" parent="RoomIdContainer" unique_id=656275722]
 layout_mode = 2
 text = "RoomId: 18394813984"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="CopyToClipboardButton" type="Button" parent="VBoxContainer2" unique_id=1995646411]
+[node name="CopyToClipboardButton" type="Button" parent="RoomIdContainer" unique_id=1995646411]
 layout_mode = 2
 text = "Copy to Clipboard"
 
-[node name="Copied to clipboard" type="Label" parent="VBoxContainer2" unique_id=1119076433]
+[node name="Copied to clipboard" type="Label" parent="RoomIdContainer" unique_id=1119076433]
 layout_mode = 2
 text = "Copied to clipboard!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LANContainer" type="VBoxContainer" parent="." unique_id=1538277144]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -85.0
+offset_top = 125.0
+offset_right = 85.0
+offset_bottom = 210.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="IPLabel" type="Label" parent="LANContainer" unique_id=1026210478]
+layout_mode = 2
+text = "IP: 127.0.0.1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PortLabel" type="Label" parent="LANContainer" unique_id=1000329694]
+layout_mode = 2
+text = "Port: 7777"
 horizontal_alignment = 1
 vertical_alignment = 1

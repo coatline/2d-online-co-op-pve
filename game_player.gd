@@ -21,6 +21,7 @@ func setup_rpc(authority_pid: int, _position: Vector2) -> void:
 		camera_2d.queue_free()
 	else:
 		camera_2d.make_current()
+		username_label.hide()
 
 func _process(delta: float) -> void:
 	username_label.global_position = player_body.global_position - Vector2(0, 10)

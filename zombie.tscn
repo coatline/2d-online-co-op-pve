@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://bf5o27j075enk"]
+
+[ext_resource type="Script" uid="uid://b3j1fhuvxct0h" path="res://zombie.gd" id="1_uiaus"]
+[ext_resource type="Texture2D" uid="uid://chvye1jcfamt5" path="res://_assets/sprites/icon.svg" id="2_roy8y"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_roy8y"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_j8e57"]
+
+[node name="Zombie" type="CharacterBody2D" unique_id=1889532193]
+script = ExtResource("1_uiaus")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1748429037]
+replication_config = SubResource("SceneReplicationConfig_roy8y")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=448853788]
+shape = SubResource("CircleShape2D_j8e57")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=817252668]
+scale = Vector2(0.078125, 0.078125)
+texture = ExtResource("2_roy8y")
