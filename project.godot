@@ -24,7 +24,7 @@ driver/mix_rate=48000
 [autoload]
 
 KeybindHelper="*uid://dgmlwhghob0y8"
-MultiplayerManager="*uid://b7fvq574c408s"
+ConnectionManager="*uid://b7fvq574c408s"
 SessionManager="*uid://65e52knbta8e"
 
 [display]

@@ -18,7 +18,7 @@ func _ready() -> void:
 
 func on_open() -> void:
 	if multiplayer.is_server():
-		if MultiplayerManager.connection_type == MultiplayerManager.ConnectionType.LAN:
+		if ConnectionManager.connection_type == ConnectionManager.ConnectionType.LAN:
 			lan_container.show()
 		
 		spawn_card(multiplayer.get_unique_id())
@@ -27,13 +27,14 @@ func on_open() -> void:
 	elif SessionManager.network_session_state.game_state == NetworkSessionState.GameState.LOBBY:
 		start_button.hide()
 	
-	if MultiplayerManager.connection_type == MultiplayerManager.ConnectionType.NODE_TUNNEL:
+	if ConnectionManager.connection_type == ConnectionManager.ConnectionType.NODE_TUNNEL:
 		room_id_container.show()
 		lan_container.hide()
 	else:
 		room_id_container.hide()
 	
 	room_id_label.text = "room id: %s" % SessionManager.current_room
+	SessionManager.network_session_state.game_state_changed.connect(func(val): close())
 
 func spawn_card(pid: int):
 	var player_card = player_card_scene.instantiate()
@@ -46,15 +47,15 @@ func remove_card(pid: int) -> void:
 
 func _on_start_game_pressed() -> void:
 	if multiplayer.is_server():
-		SessionManager.start_game()
-		start_game.rpc()
+		SessionManager.network_session_state.set_game_state(NetworkSessionState.GameState.GAME)
+		#start_game.rpc()
 	else:
-		SessionManager.start_game()
+		GameMultiplayer.I.request_spawn_player.rpc(multiplayer.get_unique_id())
 		close()
-
-@rpc("any_peer", "call_local", "reliable")
-func start_game():
-	close()
+#
+#@rpc("any_peer", "call_local", "reliable")
+#func start_game():
+	#close()
 
 func _quit_button_pressed() -> void:
 	multiplayer.multiplayer_peer.close()

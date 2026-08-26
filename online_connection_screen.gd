@@ -22,18 +22,18 @@ func _ready() -> void:
 func on_open() -> void:
 	connection_ui.hide()
 	connecting_indicator.show()
-	await MultiplayerManager.connect_to_relay()
+	await ConnectionManager.connect_to_relay()
 	connecting_indicator.hide()
 	connection_ui.show()
 
 func on_close() -> void:
-	MultiplayerManager._disconnect_current_session()
+	ConnectionManager._disconnect_current_session()
 
 func _on_host_room_pressed() -> void:
-	var room_id = await MultiplayerManager.host_new_room(true, "New Room")
+	var room_id = await ConnectionManager.host_new_room(true, "New Room")
 	DisplayServer.clipboard_set(room_id)
 	lobby.open()
 
 func _on_join_private_room_pressed() -> void:
-	await MultiplayerManager.join_room(join_room_id_line_edit.text)
+	await ConnectionManager.join_room(join_room_id_line_edit.text)
 	lobby.open()

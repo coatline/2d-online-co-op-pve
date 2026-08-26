@@ -5,17 +5,23 @@ class_name GamePlayer
 @export var username_label: Label
 @export var player_body: PlayerBody
 
+var authority_pid: int
+var spawn_position: Vector2
 var network_player: NetworkPlayer
 
-@rpc("authority", "call_local", "reliable")
-func setup_rpc(authority_pid: int, _position: Vector2) -> void:
-	print("%d is setting up player %d" % [multiplayer.get_unique_id(), authority_pid])
-	network_player = SessionManager.pid_to_network_player[authority_pid]
+func _ready() -> void:
 	set_multiplayer_authority(authority_pid)
+	network_player = SessionManager.get_network_player(authority_pid)
+	
+	if network_player == null:
+		push_error("Could not find NetworkPlayer for peer %d." % authority_pid)
+		return
+	
 	player_body.set_multiplayer_authority(authority_pid)
 	username_label.text = network_player.username
-	name = str(authority_pid)
-	player_body.global_position = _position
+	player_body.global_position = spawn_position
+	
+	print("[%d] is setting up player %d" % [multiplayer.get_unique_id(), authority_pid])
 	
 	if authority_pid != multiplayer.get_unique_id():
 		camera_2d.queue_free()
@@ -23,5 +29,5 @@ func setup_rpc(authority_pid: int, _position: Vector2) -> void:
 		camera_2d.make_current()
 		username_label.hide()
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	username_label.global_position = player_body.global_position - Vector2(0, 10)

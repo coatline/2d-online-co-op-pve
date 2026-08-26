@@ -15,11 +15,11 @@ func _ready() -> void:
 	host_lan_button.pressed.connect(host_lan)
 
 func host_lan() -> void:
-	MultiplayerManager.host_lan(int(host_port_line_edit.text))
+	ConnectionManager.host_lan(int(host_port_line_edit.text))
 	lobby.open()
 
 func try_join_lan():
 	# TODO: check to make sure that this is an actual valid host
-	MultiplayerManager.join_lan(join_ip_line_edit.text, int(join_port_line_edit.text))
+	ConnectionManager.join_lan(join_ip_line_edit.text, int(join_port_line_edit.text))
 	await get_tree().create_timer(0.5).timeout
 	lobby.open()

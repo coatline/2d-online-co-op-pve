@@ -1,5 +1,5 @@
 extends Node
-# Autoload MultiplayerManager
+# Autoload ConnectionManager
 
 enum ConnectionType { NONE, NODE_TUNNEL, LAN }
 
@@ -25,7 +25,8 @@ func _ready() -> void:
 	multiplayer.server_disconnected.connect(_on_server_disconnected)
 
 func connect_to_relay() -> void:
-	disconnect_from_network()
+	if is_online():
+		disconnect_from_network()
 	
 	node_tunnel_peer = NodeTunnelPeer.new()
 	node_tunnel_peer.error.connect(_on_node_tunnel_error)
@@ -68,7 +69,8 @@ func join_room(room_id: String) -> void:
 	print("Connected to room: ", room_id)
 
 func host_lan(port: int = lan_port) -> void:
-	disconnect_from_network()
+	if is_online():
+		disconnect_from_network()
 	
 	var lan_peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
 	var error: Error = lan_peer.create_server(port)
@@ -86,7 +88,8 @@ func host_lan(port: int = lan_port) -> void:
 	print("Hosting LAN game on port: ", port)
 
 func join_lan(address: String, port: int = lan_port) -> void:
-	disconnect_from_network()
+	if is_online():
+		disconnect_from_network()
 	
 	var lan_peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
 	var error: Error = lan_peer.create_client(address, port)
@@ -103,8 +106,7 @@ func join_lan(address: String, port: int = lan_port) -> void:
 	print("Joining LAN game at ", address, ":", port)
 
 func disconnect_from_network() -> void:
-	if multiplayer.multiplayer_peer != null:
-		multiplayer.multiplayer_peer.close()
+	multiplayer.multiplayer_peer.close()
 	
 	multiplayer.multiplayer_peer = null
 	peer = null
@@ -143,6 +145,9 @@ func _on_peer_disconnected(peer_id: int) -> void:
 func _on_node_tunnel_error(error_message: String) -> void:
 	push_error("NodeTunnel Error: " + error_message)
 
+func is_online() -> bool:
+	return peer != null
+
 func _exit_tree() -> void:
-	if multiplayer.multiplayer_peer != null:
+	if is_online():
 		disconnect_from_network()
