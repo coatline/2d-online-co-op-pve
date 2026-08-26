@@ -12,6 +12,7 @@ properties/1/spawn = true
 properties/1/replication_mode = 1
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_j8e57"]
+radius = 5.0
 
 [node name="Zombie" type="CharacterBody2D" unique_id=1889532193]
 script = ExtResource("1_uiaus")

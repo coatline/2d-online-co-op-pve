@@ -34,5 +34,5 @@ func setup(pid: int, _join_order: int):
 	peer_id = pid
 	name = str(peer_id)
 	join_order = _join_order
-	username = "Player %s" % str(join_order)
+	username = "Player %s" % str(join_order + 1)
 	set_multiplayer_authority(peer_id)

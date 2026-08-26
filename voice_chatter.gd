@@ -60,7 +60,7 @@ func _send_voice_packet_to_server(packet: PackedByteArray) -> void:
 
 	var sender_id: int = multiplayer.get_remote_sender_id()
 
-	for network_player: NetworkPlayer in MultiplayerSessionManager.pid_to_network_player.values():
+	for network_player: NetworkPlayer in SessionManager.pid_to_network_player.values():
 		if network_player.peer_id == sender_id:
 			continue
 
@@ -73,7 +73,7 @@ func _send_voice_json_to_server(json_bytes: PackedByteArray) -> void:
 
 	var sender_id: int = multiplayer.get_remote_sender_id()
 
-	for network_player: NetworkPlayer in MultiplayerSessionManager.pid_to_network_player.values():
+	for network_player: NetworkPlayer in SessionManager.pid_to_network_player.values():
 		if network_player.peer_id == sender_id:
 			continue
 

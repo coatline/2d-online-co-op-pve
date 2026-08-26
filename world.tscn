@@ -19,8 +19,9 @@ tile_set = ExtResource("1_f3sb7")
 
 [node name="OnlineEntities" type="Node" parent="." unique_id=651066979]
 
-[node name="GameMultiplayer" type="Node" parent="." unique_id=1591471610 node_paths=PackedStringArray("player_spawn_position", "player_spawner")]
+[node name="GameMultiplayer" type="Node" parent="." unique_id=1591471610 node_paths=PackedStringArray("enemy_spawner", "player_spawn_position", "player_spawner")]
 script = ExtResource("4_aqk2v")
+enemy_spawner = NodePath("../EnemySpawner")
 player_spawn_position = NodePath("../PlayerSpawnPosition")
 player_scene = ExtResource("2_fj7yv")
 player_spawner = NodePath("PlayerSpawner")

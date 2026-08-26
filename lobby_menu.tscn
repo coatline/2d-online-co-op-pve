@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cjtrax6u0fgma" path="res://lobby_menu.gd" id="1_iohss"]
 [ext_resource type="PackedScene" uid="uid://bkuapdfpwjbi3" path="res://player_card.tscn" id="2_xrgmn"]
 
-[node name="LobbyMenu" type="Control" unique_id=1894008978 node_paths=PackedStringArray("room_id_container", "lan_container", "host_controls", "player_card_holder", "copy_to_clipboard_button", "start_button", "quit_button", "room_id_label")]
+[node name="LobbyMenu" type="Control" unique_id=1894008978 node_paths=PackedStringArray("room_id_container", "lan_container", "player_card_holder", "copy_to_clipboard_button", "start_button", "quit_button", "room_id_label")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -15,7 +15,6 @@ grow_vertical = 2
 script = ExtResource("1_iohss")
 room_id_container = NodePath("RoomIdContainer")
 lan_container = NodePath("LANContainer")
-host_controls = [NodePath("Centered/Controls/StartButton")]
 player_card_scene = ExtResource("2_xrgmn")
 player_card_holder = NodePath("Centered/PlayerCards")
 copy_to_clipboard_button = NodePath("RoomIdContainer/CopyToClipboardButton")

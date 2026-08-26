@@ -6,19 +6,18 @@ class_name EnemySpawner
 @export var spawn_timer: Timer
 
 func _ready() -> void:
-	if is_multiplayer_authority() == false:
-		return
-	
 	multiplayer_spawner.spawn_function = spawn_zombie
-	spawn_timer.start(0.1)
+
+func begin_spawning() -> void:
+	spawn_timer.start(0.25)
 	spawn_timer.timeout.connect(spawn_bunch)
 
 func spawn_bunch():
-	var zombie = multiplayer_spawner.spawn()
-	var player: PlayerBody = GameMultiplayer.I.get_game_player(1)
-	zombie.global_position = player.global_position + Vector2(0, 10)
-	spawn_timer.start(0.1)
+	var zombie: Zombie = multiplayer_spawner.spawn(multiplayer.get_unique_id())
+	var player: PlayerBody = GameMultiplayer.I.get_game_player(1).player_body
+	zombie.global_position = player.global_position + Vector2(0, 100)
+	spawn_timer.start(0.25)
 
-func spawn_zombie() -> Zombie:
+func spawn_zombie(pid: int) -> Zombie:
 	var zombie: Zombie = zombie_scene.instantiate()
 	return zombie

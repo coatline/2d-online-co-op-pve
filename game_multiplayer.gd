@@ -3,8 +3,7 @@ class_name GameMultiplayer
 
 static var I: GameMultiplayer
 
-signal game_began
-
+@export var enemy_spawner: EnemySpawner
 @export var player_spawn_position: Node2D
 @export var player_scene: PackedScene
 @export var player_spawner: MultiplayerSpawner
@@ -16,16 +15,19 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
 	player_spawner.spawn_function = _multiplayer_spawner_player
+	SessionManager.network_session_state.game_state_changed.connect(_game_state_changed)
 
-@rpc("any_peer", "call_local", "reliable")
-func start_game():
-	game_began.emit()
-	if multiplayer.is_server():
+func _game_state_changed(state: NetworkSessionState.GameState):
+	if multiplayer.is_server() == false:
+		return
+	
+	if state == NetworkSessionState.GameState.GAME:
 		spawn_player(1)
 		
 		for peer in multiplayer.get_peers():
 			spawn_player(peer)
-			
+		
+		enemy_spawner.begin_spawning()
 
 func spawn_player(pid: int):
 	var game_player: GamePlayer = player_spawner.spawn(pid)
@@ -41,4 +43,4 @@ func get_game_player(pid: int):
 	return pid_to_game_player[pid]
 
 func get_game_players() -> Array[GamePlayer]:
-	return GameMultiplayer.I.pid_to_game_player.keys()
+	return GameMultiplayer.I.pid_to_game_player.values()

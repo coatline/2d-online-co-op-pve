@@ -10,7 +10,7 @@ var network_player: NetworkPlayer
 @rpc("authority", "call_local", "reliable")
 func setup_rpc(authority_pid: int, _position: Vector2) -> void:
 	print("%d is setting up player %d" % [multiplayer.get_unique_id(), authority_pid])
-	network_player = MultiplayerSessionManager.pid_to_network_player[authority_pid]
+	network_player = SessionManager.pid_to_network_player[authority_pid]
 	set_multiplayer_authority(authority_pid)
 	player_body.set_multiplayer_authority(authority_pid)
 	username_label.text = network_player.username

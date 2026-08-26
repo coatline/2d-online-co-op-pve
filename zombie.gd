@@ -23,4 +23,6 @@ func _process(delta: float) -> void:
 	look_at(target.global_position)
 
 func get_target():
-	target = GameMultiplayer.I.get_game_players()[0].player_body
+	var players: Array[GamePlayer] = GameMultiplayer.I.get_game_players()
+	if players.is_empty() == false:
+		target = players[0].player_body
