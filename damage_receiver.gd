@@ -5,7 +5,7 @@ signal damage_received(damage: DamageInfo)
 signal damage_blocked(damage: DamageInfo)
 
 @export var health: Health
-@export var invincible: bool = false
+var invincible: bool
 
 func take_damage(damage: DamageInfo) -> void:
 	if not multiplayer.is_server():

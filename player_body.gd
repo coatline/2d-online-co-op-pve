@@ -1,4 +1,4 @@
-extends CharacterBody2D
+extends RapierCharacterBody2D
 class_name PlayerBody
 
 @export var speed: float = 250.0

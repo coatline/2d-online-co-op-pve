@@ -1,4 +1,4 @@
-extends Node
+extends Entity
 class_name GamePlayer
 
 @export var camera_2d: Camera2D

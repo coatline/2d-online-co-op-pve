@@ -2,6 +2,9 @@
 
 [ext_resource type="Script" uid="uid://b3j1fhuvxct0h" path="res://zombie.gd" id="1_uiaus"]
 [ext_resource type="Texture2D" uid="uid://chvye1jcfamt5" path="res://_assets/sprites/icon.svg" id="2_roy8y"]
+[ext_resource type="Script" uid="uid://bypr83su6dioh" path="res://health.gd" id="3_jmu02"]
+[ext_resource type="Script" uid="uid://qhk77rcsugaf" path="res://damage_dealer.gd" id="4_7nqyo"]
+[ext_resource type="Script" uid="uid://mv7tsabwdngp" path="res://damage_receiver.gd" id="5_lnshm"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_roy8y"]
 properties/0/path = NodePath(".:position")
@@ -26,3 +29,12 @@ shape = SubResource("CircleShape2D_j8e57")
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=817252668]
 scale = Vector2(0.078125, 0.078125)
 texture = ExtResource("2_roy8y")
+
+[node name="Health" type="Node" parent="." unique_id=564760744]
+script = ExtResource("3_jmu02")
+
+[node name="DamageDealer" type="Node" parent="." unique_id=1799148478]
+script = ExtResource("4_7nqyo")
+
+[node name="DamageReceiver" type="Node" parent="." unique_id=234635592]
+script = ExtResource("5_lnshm")
