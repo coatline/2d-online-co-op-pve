@@ -29,6 +29,7 @@ func _ready() -> void:
 		NetworkLogger.I.print_networked("I have the camera!")
 		#username_label.hide()
 		camera_2d.make_current()
-	
+
 func _process(_delta: float) -> void:
-	username_label.global_position = player_body.global_position - Vector2(username_label.size.x / 2.0, username_label.size.y + 10.0)
+	var reference_pos = camera_2d.global_position if camera_2d else player_body.global_position
+	username_label.global_position = reference_pos - Vector2(username_label.size.x / 2.0, username_label.size.y + 10.0)
