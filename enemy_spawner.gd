@@ -13,11 +13,13 @@ func begin_spawning() -> void:
 	spawn_timer.timeout.connect(spawn_bunch)
 
 func spawn_bunch():
-	var zombie: Zombie = multiplayer_spawner.spawn(multiplayer.get_unique_id())
 	var player: PlayerBody = GameMultiplayer.I.get_game_player(1).player_body
-	zombie.global_position = player.global_position + Vector2(0, 100)
+	multiplayer_spawner.spawn({"position" : player.global_position + Vector2(0, 100)})
 	spawn_timer.start(0.25)
 
-func spawn_zombie(pid: int) -> Zombie:
+func spawn_zombie(data: Dictionary) -> Zombie:
+	var position: Vector2 = data["position"]
+	
 	var zombie: Zombie = zombie_scene.instantiate()
+	zombie.global_position = position
 	return zombie
