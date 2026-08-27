@@ -50,7 +50,7 @@ func _on_start_game_pressed() -> void:
 		SessionManager.network_session_state.set_game_state(NetworkSessionState.GameState.GAME)
 		#start_game.rpc()
 	else:
-		GameMultiplayer.I.request_spawn_player.rpc(multiplayer.get_unique_id())
+		PlayerSpawner.I.request_spawn_player.rpc(multiplayer.get_unique_id())
 		close()
 #
 #@rpc("any_peer", "call_local", "reliable")

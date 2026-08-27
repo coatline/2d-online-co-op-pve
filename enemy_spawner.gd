@@ -13,7 +13,7 @@ func begin_spawning() -> void:
 	spawn_timer.timeout.connect(spawn_bunch)
 
 func spawn_bunch():
-	var player: PlayerBody = GameMultiplayer.I.get_game_player(1).player_body
+	var player: PlayerBody = PlayerSpawner.I.get_game_player(1).player_body
 	multiplayer_spawner.spawn({"position" : player.global_position + Vector2(0, 100)})
 	spawn_timer.start(0.25)
 

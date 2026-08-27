@@ -16,11 +16,10 @@ func _request_spawn(position: Vector2, direction: Vector2, source_id: int):
 
 func spawn_projectile(position: Vector2, direction: Vector2, source_id: int) -> void:
 	if not multiplayer.is_server():
-		_request_spawn.rpc()
+		_request_spawn.rpc(position, direction, source_id)
 		return
 	
-	var data: Dictionary = {"position" : position }
-	#var data: Dictionary = {"position" : position, "direction" : direction, "source_id" : source_id}
+	var data: Dictionary = { "position" : position }
 	var projectile: Projectile = multiplayer_spawner.spawn(data)
 	projectile.setup(source_id, direction)
 

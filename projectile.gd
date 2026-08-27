@@ -1,6 +1,7 @@
 extends Node2D
 class_name Projectile
 
+@export var damage_dealer: DamageDealer
 @export var speed: float = 100
 @export var hit_box: Hitbox
 
@@ -8,6 +9,7 @@ var source_id: int
 var direction: Vector2
 
 func setup(_source_id: int, _direction: Vector2) -> void:
+	damage_dealer.entity_id = source_id
 	source_id = _source_id
 	direction = _direction
 

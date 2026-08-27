@@ -1,0 +1,93 @@
+[gd_scene format=3 uid="uid://ch8yy61us2i7p"]
+
+[ext_resource type="Script" uid="uid://doky671klofj3" path="res://ui_menu_controller.gd" id="1_7mycd"]
+[ext_resource type="Script" uid="uid://b3if0p10n1krv" path="res://network_logger.gd" id="2_7mycd"]
+[ext_resource type="Script" uid="uid://dikpdyg0r5x5w" path="res://game_type_menu.gd" id="2_272bh"]
+[ext_resource type="PackedScene" uid="uid://oh4xpwdn85v8" path="res://online_connection_screen.tscn" id="3_5vw27"]
+[ext_resource type="PackedScene" uid="uid://bbdnfb36ll0oy" path="res://lobby_menu.tscn" id="4_kek77"]
+[ext_resource type="PackedScene" uid="uid://75gu8dv1652a" path="res://lan_connection_menu.tscn" id="5_4c57u"]
+[ext_resource type="PackedScene" uid="uid://cvwkjv2rk8kj2" path="res://game.tscn" id="7_272bh"]
+
+[node name="Main" type="Node" unique_id=873018209]
+
+[node name="UIMenuController" type="Node" parent="." unique_id=1483285719 node_paths=PackedStringArray("default_menu")]
+script = ExtResource("1_7mycd")
+default_menu = NodePath("../CanvasLayer/GameTypeMenu")
+
+[node name="NetworkLogger" type="Node" parent="." unique_id=255615257]
+script = ExtResource("2_7mycd")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=673156944]
+
+[node name="MainMenu" type="Control" parent="CanvasLayer" unique_id=580976894]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PlayButton" type="Button" parent="CanvasLayer/MainMenu" unique_id=1860993874]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+text = "Play"
+
+[node name="Quit" type="Button" parent="CanvasLayer/MainMenu" unique_id=199403538]
+layout_mode = 0
+offset_right = 42.0
+offset_bottom = 31.0
+text = "Quit"
+
+[node name="GameTypeMenu" type="Control" parent="CanvasLayer" unique_id=1084682500 node_paths=PackedStringArray("online_connection_menu", "lan_connection_screen", "singleplayer_button", "online_button", "lan_button")]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -60.0
+offset_top = -60.0
+offset_right = 60.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_272bh")
+online_connection_menu = NodePath("../OnlineConnectionMenu")
+lan_connection_screen = NodePath("../LANConnectionScreen")
+singleplayer_button = NodePath("VBoxContainer/SingleplayerButton")
+online_button = NodePath("VBoxContainer/OnlineButton")
+lan_button = NodePath("VBoxContainer/LANButton")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/GameTypeMenu" unique_id=157203025]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="SingleplayerButton" type="Button" parent="CanvasLayer/GameTypeMenu/VBoxContainer" unique_id=1735550078]
+layout_mode = 2
+text = "Singleplayer"
+
+[node name="OnlineButton" type="Button" parent="CanvasLayer/GameTypeMenu/VBoxContainer" unique_id=216275096]
+layout_mode = 2
+text = "Online"
+
+[node name="LANButton" type="Button" parent="CanvasLayer/GameTypeMenu/VBoxContainer" unique_id=1279360656]
+layout_mode = 2
+text = "LAN"
+
+[node name="OnlineConnectionMenu" parent="CanvasLayer" unique_id=604422901 node_paths=PackedStringArray("lobby") instance=ExtResource("3_5vw27")]
+visible = false
+lobby = NodePath("../LobbyMenu")
+
+[node name="LobbyMenu" parent="CanvasLayer" unique_id=1894008978 instance=ExtResource("4_kek77")]
+visible = false
+
+[node name="LANConnectionScreen" parent="CanvasLayer" unique_id=1189615941 node_paths=PackedStringArray("lobby") instance=ExtResource("5_4c57u")]
+visible = false
+lobby = NodePath("../LobbyMenu")
+
+[node name="Game" parent="." unique_id=2077963371 instance=ExtResource("7_272bh")]

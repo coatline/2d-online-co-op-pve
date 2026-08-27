@@ -1,7 +1,8 @@
-extends CharacterBody2D
+extends RapierCharacterBody2D
 class_name Zombie
 
 @export var speed: float = 100.0
+@export var character_body_2d: CharacterBody2D
 
 var target: Node2D
 
@@ -17,12 +18,12 @@ func _process(delta: float) -> void:
 	if is_multiplayer_authority() == false:
 		return
 	
-	velocity = (target.global_position - global_position).normalized() * speed
-	move_and_slide()
+	character_body_2d.velocity = (target.global_position - character_body_2d.global_position).normalized() * speed
+	character_body_2d.move_and_slide()
 	
-	look_at(target.global_position)
+	character_body_2d.look_at(target.global_position)
 
 func get_target():
-	var players: Array[GamePlayer] = GameMultiplayer.I.get_game_players()
+	var players: Array[GamePlayer] = PlayerSpawner.I.get_game_players()
 	if players.is_empty() == false:
 		target = players[0].player_body

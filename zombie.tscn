@@ -1,10 +1,16 @@
 [gd_scene format=3 uid="uid://bf5o27j075enk"]
 
 [ext_resource type="Script" uid="uid://b3j1fhuvxct0h" path="res://zombie.gd" id="1_uiaus"]
+[ext_resource type="Script" uid="uid://dfjv1yn72gpy1" path="res://hit_box.gd" id="2_lnshm"]
 [ext_resource type="Texture2D" uid="uid://chvye1jcfamt5" path="res://_assets/sprites/icon.svg" id="2_roy8y"]
 [ext_resource type="Script" uid="uid://bypr83su6dioh" path="res://health.gd" id="3_jmu02"]
 [ext_resource type="Script" uid="uid://qhk77rcsugaf" path="res://damage_dealer.gd" id="4_7nqyo"]
 [ext_resource type="Script" uid="uid://mv7tsabwdngp" path="res://damage_receiver.gd" id="5_lnshm"]
+[ext_resource type="Script" uid="uid://csdsu667ynetq" path="res://hurt_box.gd" id="7_x5rsa"]
+[ext_resource type="Script" uid="uid://d4nb1sntsl8fs" path="res://entity.gd" id="9_i82o5"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_j8e57"]
+radius = 5.0
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_roy8y"]
 properties/0/path = NodePath(".:position")
@@ -14,27 +20,52 @@ properties/1/path = NodePath(".:rotation")
 properties/1/spawn = true
 properties/1/replication_mode = 1
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_j8e57"]
-radius = 5.0
+[sub_resource type="CircleShape2D" id="CircleShape2D_uj2k4"]
 
-[node name="Zombie" type="CharacterBody2D" unique_id=1889532193]
+[node name="Zombie" type="CharacterBody2D" unique_id=1911698460 node_paths=PackedStringArray("character_body_2d")]
 script = ExtResource("1_uiaus")
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1748429037]
-replication_config = SubResource("SceneReplicationConfig_roy8y")
+character_body_2d = NodePath(".")
+body_skin = 1.0
+metadata/_custom_type_script = "uid://c5qpdmvd63ugb"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=448853788]
 shape = SubResource("CircleShape2D_j8e57")
+
+[node name="Entity" type="Node2D" parent="." unique_id=876384619 node_paths=PackedStringArray("root_node")]
+script = ExtResource("9_i82o5")
+root_node = NodePath("..")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1748429037]
+replication_config = SubResource("SceneReplicationConfig_roy8y")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=817252668]
 scale = Vector2(0.078125, 0.078125)
 texture = ExtResource("2_roy8y")
 
-[node name="Health" type="Node" parent="." unique_id=564760744]
+[node name="Health" type="Node" parent="." unique_id=564760744 node_paths=PackedStringArray("root")]
 script = ExtResource("3_jmu02")
+root = NodePath("..")
 
-[node name="DamageDealer" type="Node" parent="." unique_id=1799148478]
+[node name="DamageDealer" type="Node2D" parent="." unique_id=753300106 node_paths=PackedStringArray("entity")]
 script = ExtResource("4_7nqyo")
+entity = NodePath("..")
 
-[node name="DamageReceiver" type="Node" parent="." unique_id=234635592]
+[node name="DamageReceiver" type="Node" parent="." unique_id=234635592 node_paths=PackedStringArray("health")]
 script = ExtResource("5_lnshm")
+health = NodePath("../Health")
+
+[node name="HitBox" type="Area2D" parent="." unique_id=198362422 node_paths=PackedStringArray("damage_dealer")]
+script = ExtResource("2_lnshm")
+damage_dealer = NodePath("../DamageDealer")
+metadata/_custom_type_script = "uid://cburu6b4ckehs"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox" unique_id=429880873]
+shape = SubResource("CircleShape2D_uj2k4")
+
+[node name="HurtBox" type="Area2D" parent="." unique_id=1709071140 node_paths=PackedStringArray("damage_receiver")]
+script = ExtResource("7_x5rsa")
+damage_receiver = NodePath("../DamageReceiver")
+metadata/_custom_type_script = "uid://cburu6b4ckehs"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox" unique_id=318782658]
+shape = SubResource("CircleShape2D_uj2k4")
