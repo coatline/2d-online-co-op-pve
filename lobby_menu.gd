@@ -24,7 +24,7 @@ func on_open() -> void:
 		spawn_card(multiplayer.get_unique_id())
 		multiplayer.peer_connected.connect(spawn_card)
 		multiplayer.peer_disconnected.connect(remove_card)
-	elif SessionManager.network_session_state.game_state == NetworkSessionState.GameState.LOBBY:
+	elif LocalWorldState.in_lobby:
 		start_button.hide()
 	
 	if ConnectionManager.connection_type == ConnectionManager.ConnectionType.NODE_TUNNEL:
@@ -33,8 +33,7 @@ func on_open() -> void:
 	else:
 		room_id_container.hide()
 	
-	room_id_label.text = "room id: %s" % SessionManager.current_room
-	SessionManager.network_session_state.game_state_changed.connect(func(val): close())
+	room_id_label.text = "room id: %s" % LocalWorldState.current_room
 
 func spawn_card(pid: int):
 	var player_card = player_card_scene.instantiate()
@@ -47,18 +46,14 @@ func remove_card(pid: int) -> void:
 
 func _on_start_game_pressed() -> void:
 	if multiplayer.is_server():
-		SessionManager.network_session_state.set_game_state(NetworkSessionState.GameState.GAME)
+		NetworkTransport.I.start_game()
 		#start_game.rpc()
 	else:
 		PlayerSpawner.I.request_spawn_player.rpc(multiplayer.get_unique_id())
 		close()
-#
-#@rpc("any_peer", "call_local", "reliable")
-#func start_game():
-	#close()
 
 func _quit_button_pressed() -> void:
 	multiplayer.multiplayer_peer.close()
 
 func _on_copy_to_clipboard_pressed() -> void:
-	DisplayServer.clipboard_set(SessionManager.current_room)
+	DisplayServer.clipboard_set(LocalWorldState.current_room)

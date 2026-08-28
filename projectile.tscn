@@ -6,14 +6,6 @@
 [ext_resource type="Script" uid="uid://dfjv1yn72gpy1" path="res://hit_box.gd" id="4_2b2rl"]
 [ext_resource type="Script" uid="uid://bypr83su6dioh" path="res://health.gd" id="4_2xblw"]
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_2b2rl"]
-properties/0/path = NodePath(".:position")
-properties/0/spawn = true
-properties/0/replication_mode = 1
-properties/1/path = NodePath(".:rotation")
-properties/1/spawn = true
-properties/1/replication_mode = 1
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_2xblw"]
 radius = 1.0
 
@@ -32,9 +24,6 @@ damage = 100.0
 [node name="Health" type="Node" parent="." unique_id=887532784 node_paths=PackedStringArray("root")]
 script = ExtResource("4_2xblw")
 root = NodePath("..")
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=780365073]
-replication_config = SubResource("SceneReplicationConfig_2b2rl")
 
 [node name="HitBox" type="Area2D" parent="." unique_id=627272104 node_paths=PackedStringArray("damage_dealer")]
 script = ExtResource("4_2b2rl")

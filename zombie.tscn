@@ -2,20 +2,11 @@
 
 [ext_resource type="Script" uid="uid://b3j1fhuvxct0h" path="res://zombie.gd" id="1_uiaus"]
 [ext_resource type="Script" uid="uid://dfjv1yn72gpy1" path="res://hit_box.gd" id="2_lnshm"]
-[ext_resource type="PackedScene" uid="uid://ct5it414otp4x" path="res://entity.tscn" id="2_ogcpr"]
 [ext_resource type="Texture2D" uid="uid://chvye1jcfamt5" path="res://_assets/sprites/icon.svg" id="2_roy8y"]
 [ext_resource type="Script" uid="uid://bypr83su6dioh" path="res://health.gd" id="3_jmu02"]
 [ext_resource type="Script" uid="uid://qhk77rcsugaf" path="res://damage_dealer.gd" id="4_7nqyo"]
 [ext_resource type="Script" uid="uid://mv7tsabwdngp" path="res://damage_receiver.gd" id="5_lnshm"]
 [ext_resource type="Script" uid="uid://csdsu667ynetq" path="res://hurt_box.gd" id="7_x5rsa"]
-
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_roy8y"]
-properties/0/path = NodePath(".:position")
-properties/0/spawn = true
-properties/0/replication_mode = 1
-properties/1/path = NodePath(".:rotation")
-properties/1/spawn = true
-properties/1/replication_mode = 1
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_j8e57"]
 radius = 5.0
@@ -27,13 +18,6 @@ script = ExtResource("1_uiaus")
 character_body_2d = NodePath(".")
 body_skin = 1.0
 metadata/_custom_type_script = "uid://c5qpdmvd63ugb"
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1748429037]
-replication_config = SubResource("SceneReplicationConfig_roy8y")
-
-[node name="Entity" parent="." unique_id=1624359949 node_paths=PackedStringArray("root_node") instance=ExtResource("2_ogcpr")]
-root_node = NodePath("..")
-team = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=448853788]
 shape = SubResource("CircleShape2D_j8e57")
@@ -50,11 +34,11 @@ root = NodePath("..")
 [node name="DamageDealer" type="Node2D" parent="." unique_id=753300106 node_paths=PackedStringArray("source_entity")]
 script = ExtResource("4_7nqyo")
 damage = 5.0
-source_entity = NodePath("../Entity")
+source_entity = NodePath("")
 
 [node name="DamageReceiver" type="Node" parent="." unique_id=234635592 node_paths=PackedStringArray("entity", "health")]
 script = ExtResource("5_lnshm")
-entity = NodePath("../Entity")
+entity = NodePath("")
 health = NodePath("../Health")
 
 [node name="HitBox" type="Area2D" parent="." unique_id=198362422 node_paths=PackedStringArray("damage_dealer")]

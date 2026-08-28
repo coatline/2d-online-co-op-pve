@@ -3,24 +3,12 @@
 [ext_resource type="Script" uid="uid://datf8ybnnb3bp" path="res://game_player.gd" id="1_36iq3"]
 [ext_resource type="Script" uid="uid://60baqwwhmpc1" path="res://player_body.gd" id="2_hb3fq"]
 [ext_resource type="Texture2D" uid="uid://cqvmqw6yh8slq" path="res://_assets/sprites/player.png" id="2_uqgpx"]
-[ext_resource type="PackedScene" uid="uid://ct5it414otp4x" path="res://entity.tscn" id="3_d341c"]
 [ext_resource type="Script" uid="uid://bkactp13yxjxm" path="res://gun.gd" id="3_hb3fq"]
 [ext_resource type="PackedScene" uid="uid://cmm25fpv320tr" path="res://projectile.tscn" id="4_6ngf4"]
 [ext_resource type="Script" uid="uid://mv7tsabwdngp" path="res://damage_receiver.gd" id="6_hb3fq"]
 [ext_resource type="Script" uid="uid://dw5e6w6thbbwk" path="res://health_bar.gd" id="7_0voeo"]
 [ext_resource type="Script" uid="uid://bypr83su6dioh" path="res://health.gd" id="7_6ngf4"]
 [ext_resource type="Script" uid="uid://csdsu667ynetq" path="res://hurt_box.gd" id="7_d341c"]
-
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_onrkg"]
-properties/0/path = NodePath(".:position")
-properties/0/spawn = true
-properties/0/replication_mode = 1
-properties/1/path = NodePath(".:rotation")
-properties/1/spawn = true
-properties/1/replication_mode = 1
-properties/2/path = NodePath("../Health:current")
-properties/2/spawn = true
-properties/2/replication_mode = 2
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_j8e57"]
 radius = 3.0
@@ -36,15 +24,9 @@ username_label = NodePath("UI/UsernameLabel")
 player_body = NodePath("PlayerBody")
 ui = NodePath("UI")
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1242173780]
-root_path = NodePath("../PlayerBody")
-replication_config = SubResource("SceneReplicationConfig_onrkg")
-
 [node name="PlayerBody" type="CharacterBody2D" parent="." unique_id=583774154]
 script = ExtResource("2_hb3fq")
 metadata/_custom_type_script = "uid://c5qpdmvd63ugb"
-
-[node name="Entity" parent="PlayerBody" unique_id=1624359949 instance=ExtResource("3_d341c")]
 
 [node name="Sprite2D" type="Sprite2D" parent="PlayerBody" unique_id=1433516863]
 texture = ExtResource("2_uqgpx")
@@ -59,7 +41,7 @@ position_smoothing_enabled = true
 [node name="Gun" type="Marker2D" parent="PlayerBody" unique_id=846691962 node_paths=PackedStringArray("entity")]
 position = Vector2(3, 4)
 script = ExtResource("3_hb3fq")
-entity = NodePath("../Entity")
+entity = NodePath("")
 bullet_scene = ExtResource("4_6ngf4")
 
 [node name="AudioListener2D" type="AudioListener2D" parent="PlayerBody" unique_id=657262104]
@@ -74,7 +56,7 @@ shape = SubResource("CircleShape2D_lxywf")
 
 [node name="DamageReceiver" type="Node" parent="." unique_id=1910297558 node_paths=PackedStringArray("entity", "health")]
 script = ExtResource("6_hb3fq")
-entity = NodePath("../PlayerBody/Entity")
+entity = NodePath("")
 health = NodePath("../Health")
 
 [node name="Health" type="Node" parent="." unique_id=655140992 node_paths=PackedStringArray("root")]
