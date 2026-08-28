@@ -12,16 +12,16 @@ func _ready() -> void:
 
 @rpc("any_peer", "call_remote", "reliable")
 func _request_spawn(position: Vector2, direction: Vector2, source_id: int):
-	spawn_projectile(position, direction, source_id)
+	spawn_projectile(position, direction, EntityManager.I.get_entity(source_id))
 
-func spawn_projectile(position: Vector2, direction: Vector2, source_id: int) -> void:
+func spawn_projectile(position: Vector2, force: Vector2, source_entity: Entity) -> void:
 	if not multiplayer.is_server():
-		_request_spawn.rpc(position, direction, source_id)
+		_request_spawn.rpc(position, force, source_entity.id)
 		return
 	
 	var data: Dictionary = { "position" : position }
 	var projectile: Projectile = multiplayer_spawner.spawn(data)
-	projectile.setup(source_id, direction)
+	projectile.setup(source_entity, force)
 
 func multiplayer_spawn(data: Dictionary) -> Projectile:
 	var projectile: Projectile = projectile_scene.instantiate()

@@ -1,11 +1,23 @@
 extends Node
-# Autoload EntityManager
+class_name EntityManager
 
+static var I: EntityManager
+
+var next_entity_id: int = 1
 var entities: Dictionary[int, Entity] = {}
-var next_id: int = 1
 
-func register_entity(entity: Entity) -> int:
-	var id = next_id
-	next_id += 1
+func _init() -> void:
+	I = self
+
+func get_next_entity_id() -> int:
+	next_entity_id += 1
+	return next_entity_id - 1
+
+func register_entity(id: int, entity: Entity):
 	entities[id] = entity
-	return id
+
+func get_entity(id: int) -> Entity:
+	return entities[id]
+
+func unregister_entity(id: int) -> void:
+	entities.erase(id)

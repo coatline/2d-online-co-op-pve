@@ -2,16 +2,16 @@ extends Node2D
 class_name Projectile
 
 @export var damage_dealer: DamageDealer
-@export var speed: float = 100
 @export var hit_box: Hitbox
 
-var source_id: int
-var direction: Vector2
+var force: Vector2
 
-func setup(_source_id: int, _direction: Vector2) -> void:
-	damage_dealer.entity_id = source_id
-	source_id = _source_id
-	direction = _direction
+func setup(_source_entity: Entity, _force: Vector2) -> void:
+	if _source_entity == null:
+		push_error("source entity null!")
+	damage_dealer.setup(_source_entity, 10, force.length())
+	damage_dealer.source_entity = _source_entity
+	force = _force
 
 func _ready() -> void:
 	if multiplayer.is_server() == false:
@@ -25,5 +25,5 @@ func _physics_process(delta: float) -> void:
 	if multiplayer.is_server() == false:
 		return
 	
-	global_position += direction * speed * delta
+	global_position += force * delta
 	#global_position += global_transform.x * speed * delta

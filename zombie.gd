@@ -5,23 +5,31 @@ class_name Zombie
 @export var character_body_2d: CharacterBody2D
 
 var target: Node2D
+var entity_id: int = -1
+var target_timer: float = 0.0
 
 func _ready() -> void:
-	if is_multiplayer_authority() == false:
+	if !is_multiplayer_authority():
 		return
-	
-	while is_instance_valid(self):
-		get_target()
-		await get_tree().create_timer(randf_range(1.0, 2.0)).timeout
 
-func _process(delta: float) -> void:
-	if is_multiplayer_authority() == false:
+	get_target()
+
+func _physics_process(delta: float) -> void:
+	if !is_multiplayer_authority():
 		return
-	
-	character_body_2d.velocity = (target.global_position - character_body_2d.global_position).normalized() * speed
-	character_body_2d.move_and_slide()
-	
-	character_body_2d.look_at(target.global_position)
+
+	if target:
+		character_body_2d.velocity = (target.global_position - character_body_2d.global_position).normalized() * speed
+
+		character_body_2d.move_and_slide()
+		character_body_2d.look_at(target.global_position)
+
+	if target_timer <= 0:
+		target_timer = randf_range(1.0, 2.0)
+		get_target()
+	else:
+		target_timer -= delta
+
 
 func get_target():
 	var players: Array[GamePlayer] = PlayerSpawner.I.get_game_players()

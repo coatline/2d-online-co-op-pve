@@ -4,6 +4,7 @@ class_name GamePlayer
 @export var camera_2d: Camera2D
 @export var username_label: Label
 @export var player_body: PlayerBody
+@export var ui: Control
 
 var peer_id: int
 var spawn_position: Vector2
@@ -19,6 +20,7 @@ func _ready() -> void:
 	
 	player_body.set_multiplayer_authority(peer_id)
 	username_label.text = network_player.username
+	username_label.position.x = -username_label.size.x / 2
 	player_body.global_position = spawn_position
 	
 	print("[%d] is setting up player %d" % [multiplayer.get_unique_id(), peer_id])
@@ -31,5 +33,6 @@ func _ready() -> void:
 		camera_2d.make_current()
 
 func _process(_delta: float) -> void:
-	var reference_pos = camera_2d.global_position if camera_2d else player_body.global_position
-	username_label.global_position = reference_pos - Vector2(username_label.size.x / 2.0, username_label.size.y + 10.0)
+	ui.global_position = player_body.global_position
+	#var reference_pos = camera_2d.global_position if camera_2d else player_body.global_position
+	#username_label.global_position = reference_pos - Vector2(username_label.size.x / 2.0, username_label.size.y + 10.0)

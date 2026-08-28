@@ -10,4 +10,4 @@ func _process(delta: float) -> void:
 	
 	if Input.is_action_just_pressed("shoot"):
 		var direction: Vector2 = Vector2.RIGHT.rotated(global_rotation)
-		ProjectileManager.I.spawn_projectile(global_position, direction, entity.id)
+		ProjectileManager.I.spawn_projectile(global_position, direction * 250, entity)

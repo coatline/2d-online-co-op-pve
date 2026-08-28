@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://bbdnfb36ll0oy" path="res://lobby_menu.tscn" id="4_kek77"]
 [ext_resource type="PackedScene" uid="uid://75gu8dv1652a" path="res://lan_connection_menu.tscn" id="5_4c57u"]
 [ext_resource type="PackedScene" uid="uid://cvwkjv2rk8kj2" path="res://game.tscn" id="7_272bh"]
+[ext_resource type="Script" uid="uid://ca4m5hxjdms6r" path="res://entity_manager.gd" id="9_999999"]
 
 [node name="Main" type="Node" unique_id=873018209]
 
@@ -16,6 +17,9 @@ default_menu = NodePath("../CanvasLayer/GameTypeMenu")
 
 [node name="NetworkLogger" type="Node" parent="." unique_id=255615257]
 script = ExtResource("2_7mycd")
+
+[node name="EntityManager" type="Node" parent="." unique_id=1232623458]
+script = ExtResource("9_999999")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=673156944]
 

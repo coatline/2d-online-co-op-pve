@@ -3,11 +3,13 @@
 [ext_resource type="Script" uid="uid://datf8ybnnb3bp" path="res://game_player.gd" id="1_36iq3"]
 [ext_resource type="Script" uid="uid://60baqwwhmpc1" path="res://player_body.gd" id="2_hb3fq"]
 [ext_resource type="Texture2D" uid="uid://cqvmqw6yh8slq" path="res://_assets/sprites/player.png" id="2_uqgpx"]
+[ext_resource type="PackedScene" uid="uid://ct5it414otp4x" path="res://entity.tscn" id="3_d341c"]
 [ext_resource type="Script" uid="uid://bkactp13yxjxm" path="res://gun.gd" id="3_hb3fq"]
 [ext_resource type="PackedScene" uid="uid://cmm25fpv320tr" path="res://projectile.tscn" id="4_6ngf4"]
 [ext_resource type="Script" uid="uid://mv7tsabwdngp" path="res://damage_receiver.gd" id="6_hb3fq"]
+[ext_resource type="Script" uid="uid://dw5e6w6thbbwk" path="res://health_bar.gd" id="7_0voeo"]
 [ext_resource type="Script" uid="uid://bypr83su6dioh" path="res://health.gd" id="7_6ngf4"]
-[ext_resource type="Script" uid="uid://d4nb1sntsl8fs" path="res://entity.gd" id="8_8l3cb"]
+[ext_resource type="Script" uid="uid://csdsu667ynetq" path="res://hurt_box.gd" id="7_d341c"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_onrkg"]
 properties/0/path = NodePath(".:position")
@@ -16,16 +18,23 @@ properties/0/replication_mode = 1
 properties/1/path = NodePath(".:rotation")
 properties/1/spawn = true
 properties/1/replication_mode = 1
+properties/2/path = NodePath("../Health:current")
+properties/2/spawn = true
+properties/2/replication_mode = 2
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_j8e57"]
 radius = 3.0
 height = 14.0
 
-[node name="GamePlayer" type="Node" unique_id=623911534 node_paths=PackedStringArray("camera_2d", "username_label", "player_body")]
+[sub_resource type="CircleShape2D" id="CircleShape2D_lxywf"]
+radius = 8.0
+
+[node name="GamePlayer" type="Node" unique_id=623911534 node_paths=PackedStringArray("camera_2d", "username_label", "player_body", "ui")]
 script = ExtResource("1_36iq3")
 camera_2d = NodePath("PlayerBody/Camera2D")
-username_label = NodePath("UsernameLabel")
+username_label = NodePath("UI/UsernameLabel")
 player_body = NodePath("PlayerBody")
+ui = NodePath("UI")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1242173780]
 root_path = NodePath("../PlayerBody")
@@ -35,16 +44,12 @@ replication_config = SubResource("SceneReplicationConfig_onrkg")
 script = ExtResource("2_hb3fq")
 metadata/_custom_type_script = "uid://c5qpdmvd63ugb"
 
-[node name="Entity" type="Node2D" parent="PlayerBody" unique_id=434547296 node_paths=PackedStringArray("root_node")]
-script = ExtResource("8_8l3cb")
-root_node = NodePath("../..")
+[node name="Entity" parent="PlayerBody" unique_id=1624359949 instance=ExtResource("3_d341c")]
 
 [node name="Sprite2D" type="Sprite2D" parent="PlayerBody" unique_id=1433516863]
-position = Vector2(0, 1)
 texture = ExtResource("2_uqgpx")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerBody" unique_id=298429460]
-position = Vector2(0, 1)
 shape = SubResource("CapsuleShape2D_j8e57")
 
 [node name="Camera2D" type="Camera2D" parent="PlayerBody" unique_id=683154133]
@@ -52,20 +57,20 @@ zoom = Vector2(3, 3)
 position_smoothing_enabled = true
 
 [node name="Gun" type="Marker2D" parent="PlayerBody" unique_id=846691962 node_paths=PackedStringArray("entity")]
+position = Vector2(3, 4)
 script = ExtResource("3_hb3fq")
 entity = NodePath("../Entity")
 bullet_scene = ExtResource("4_6ngf4")
 
 [node name="AudioListener2D" type="AudioListener2D" parent="PlayerBody" unique_id=657262104]
 
-[node name="UsernameLabel" type="Label" parent="." unique_id=1279099220]
-offset_top = -40.0
-offset_right = 62.0
-offset_bottom = -17.0
-theme_override_font_sizes/font_size = 16
-text = "Player 1"
-horizontal_alignment = 1
-vertical_alignment = 1
+[node name="HurtBox" type="Area2D" parent="PlayerBody" unique_id=284794380 node_paths=PackedStringArray("damage_receiver")]
+script = ExtResource("7_d341c")
+damage_receiver = NodePath("../../DamageReceiver")
+metadata/_custom_type_script = "uid://cburu6b4ckehs"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerBody/HurtBox" unique_id=982982240]
+shape = SubResource("CircleShape2D_lxywf")
 
 [node name="DamageReceiver" type="Node" parent="." unique_id=1910297558 node_paths=PackedStringArray("entity", "health")]
 script = ExtResource("6_hb3fq")
@@ -74,4 +79,33 @@ health = NodePath("../Health")
 
 [node name="Health" type="Node" parent="." unique_id=655140992 node_paths=PackedStringArray("root")]
 script = ExtResource("7_6ngf4")
+destroy_on_death = false
 root = NodePath("..")
+
+[node name="UI" type="Control" parent="." unique_id=43523393]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="UsernameLabel" type="Label" parent="UI" unique_id=1279099220]
+layout_mode = 0
+offset_left = -29.0
+offset_top = -33.0
+offset_right = 33.0
+offset_bottom = -10.0
+theme_override_font_sizes/font_size = 8
+text = "Player 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HealthBar" type="ProgressBar" parent="UI" unique_id=1711592752 node_paths=PackedStringArray("health")]
+layout_mode = 0
+offset_left = -9.0
+offset_top = 10.0
+offset_right = 9.0
+offset_bottom = 14.0
+max_value = 1.0
+step = 0.001
+value = 1.0
+show_percentage = false
+script = ExtResource("7_0voeo")
+health = NodePath("../../Health")

@@ -5,9 +5,10 @@ enum Team { PLAYER, ENEMY }
 
 @export var root_node: Node
 @export var team: Team
-
-var id: int
+@export var id: int = -1
 
 func _enter_tree() -> void:
-	if multiplayer.is_server():
-		id = EntityManager.register_entity(self)
+	EntityManager.I.register_entity(id, self)
+
+func _exit_tree() -> void:
+	EntityManager.I.unregister_entity(id)
