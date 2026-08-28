@@ -1,37 +1,22 @@
 extends Node
 class_name NetworkTransport
 
-func process_packets() -> void:
-	while multiplayer.multiplayer_peer.get_available_packet_count() > 0:
-		var packet: PackedByteArray = multiplayer.multiplayer_peer.get_packet()
-		deserialize_packet(packet)
+@rpc("any_peer", "unreliable")
+func command_move(direction: Vector2, tick: int) -> void:
+	if not multiplayer.is_server():
+		return
+	var sender_id: int = multiplayer.get_remote_sender_id()
+	GameSimulation.I.move(sender_id, direction, tick)
 
-func serialize_packet(packet_type: int, data: Variant) -> PackedByteArray:
-	var bytes: PackedByteArray = PackedByteArray()
-	bytes.append(packet_type)
-	bytes.append_array(var_to_bytes(data))
-	return bytes
+@rpc("any_peer", "reliable")
+func command_attack(target_id: int, tick: int) -> void:
+	if not multiplayer.is_server():
+		return
+	var sender_id: int = multiplayer.get_remote_sender_id()
+	GameSimulation.I.attack(sender_id, target_id, tick)
 
-func deserialize_packet(packet: PackedByteArray) -> void:
-	var packet_header: int = packet.decode_u8(0)
-	var data: Variant = bytes_to_var(packet.slice(1))
-
-	match packet_header:
-		PacketHeader.COMMAND:
-			handle_command(data)
-		PacketHeader.SNAPSHOT:
-			handle_snapshot(data)
-		#PacketType.EVENT:
-			#handle_event(data)
-
-func handle_command(byte_array: PackedByteArray):
-	pass
-
-func handle_snapshot(byte_array: PackedByteArray):
-	pass
-
-enum PacketHeader{
-	COMMAND,
-	SNAPSHOT,
-	EVENT
-}
+@rpc("authority", "unreliable")
+func receive_snapshot(snapshot: Dictionary) -> void:
+	if multiplayer.is_server():
+		return
+	GameSimulation.I.apply_snapshot(snapshot)
