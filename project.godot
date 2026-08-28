@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="CurtJs Multiplayer Tutorial"
-run/main_scene="uid://ch8yy61us2i7p"
+run/main_scene="uid://ckxgmrbiiet8l"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://_assets/sprites/icon.svg"
 

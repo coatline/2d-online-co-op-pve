@@ -4,6 +4,7 @@ class_name DamageReceiver
 signal damage_received(damage: DamageInfo)
 signal damage_blocked(damage: DamageInfo)
 
+@export var entity: Entity
 @export var health: Health
 var invincible: bool
 

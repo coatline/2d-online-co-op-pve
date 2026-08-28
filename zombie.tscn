@@ -34,6 +34,7 @@ shape = SubResource("CircleShape2D_j8e57")
 [node name="Entity" type="Node2D" parent="." unique_id=876384619 node_paths=PackedStringArray("root_node")]
 script = ExtResource("9_i82o5")
 root_node = NodePath("..")
+team = 1
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1748429037]
 replication_config = SubResource("SceneReplicationConfig_roy8y")
@@ -50,8 +51,9 @@ root = NodePath("..")
 script = ExtResource("4_7nqyo")
 entity = NodePath("..")
 
-[node name="DamageReceiver" type="Node" parent="." unique_id=234635592 node_paths=PackedStringArray("health")]
+[node name="DamageReceiver" type="Node" parent="." unique_id=234635592 node_paths=PackedStringArray("entity", "health")]
 script = ExtResource("5_lnshm")
+entity = NodePath("../Entity")
 health = NodePath("../Health")
 
 [node name="HitBox" type="Area2D" parent="." unique_id=198362422 node_paths=PackedStringArray("damage_dealer")]
