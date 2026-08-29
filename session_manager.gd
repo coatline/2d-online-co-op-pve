@@ -5,8 +5,6 @@ signal user_joined(peer_id: int)
 signal user_left(peer_id: int)
 
 var session_state: SessionState
-
-var entity_id_to_entity: Dictionary[int, Entity]
 var current_room: String
 
 func _ready() -> void:
@@ -54,10 +52,6 @@ func end_session() -> void:
 
 func _on_network_disconnected() -> void:
 	end_session()
-
-@rpc("authority", "reliable")
-func receive_game_started() -> void:
-	session_state.game_started = true
 
 func get_my_user_state() -> UserState:
 	return session_state.peer_to_user_state[multiplayer.get_unique_id()]

@@ -14,8 +14,10 @@ func command_move(direction: Vector2) -> void:
 	GameSimulation.I.process_move(peer_id, direction)
 
 @rpc("authority", "call_remote", "unreliable")
-func clients_update_world_state(world_state_dict: Dictionary) -> void:
-	
+func clients_update_world_state(world_state_dict: Array) -> void:
+	var world_state: WorldState = WorldState.deserialize(world_state_dict)
+	for entity in world_state.entities:
+		SessionManager.
 	pass
 
 func deserialize_entity(data: Array) -> EntityState:

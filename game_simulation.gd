@@ -4,8 +4,11 @@ class_name GameSimulation
 static var I: GameSimulation
 
 @export var player_scene: PackedScene
-var players: Dictionary[int, PlayerState] = {}
-# var players: Dictionary[int, GamePlayer] = {}
+
+var peer_id_to_player_state: Dictionary[int, PlayerState] = {}
+var peer_id_to_player: Dictionary[int, GamePlayer]
+
+var entity_id_to_entity: Dictionary[int, Entity]
 
 func _enter_tree() -> void:
 	I = self

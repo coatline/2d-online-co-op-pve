@@ -1,7 +1,9 @@
 class_name WorldState
 
 var tick: int
-var entities: Array[EntityState] = []
+var entities: Dictionary[int, EntityState]
+var dictionary: Array[PlayerState]
+var players: Array[PlayerState] = []
 
 func serialize() -> Array:
 	var data: Array = [tick]
