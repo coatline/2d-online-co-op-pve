@@ -6,21 +6,17 @@ static var I: NetworkTransport
 func _enter_tree() -> void:
 	I = self
 
-@rpc("any_peer", "unreliable")
+@rpc("any_peer", "call_remote", "unreliable")
 func command_move(direction: Vector2) -> void:
 	if not multiplayer.is_server():
 		return
 	var peer_id: int = multiplayer.get_remote_sender_id()
 	GameSimulation.I.process_move(peer_id, direction)
 
-@rpc("authority", "unreliable")
-func receive_snapshot(snapshot: Dictionary) -> void:
-	if multiplayer.is_server():
-		return
-	for peer_id in snapshot:
-		var player_view: PlayerView = get_node_or_null("../Players/" + str(peer_id))
-		if player_view != null:
-			player_view.apply_snapshot(snapshot[peer_id])
+@rpc("authority", "call_remote", "unreliable")
+func clients_update_world_state(world_state_dict: Dictionary) -> void:
+	
+	pass
 
 func deserialize_entity(data: Array) -> EntityState:
 	var entity_type: int = data[0]
@@ -32,6 +28,3 @@ func deserialize_entity(data: Array) -> EntityState:
 		#EntityState.EntityType.PROJECTILE:
 			#return ProjectileState.deserialize(data)
 	return EntityState.deserialize(data)
-
-func send_snapshot(snapshot: Dictionary) -> void:
-	receive_snapshot.rpc(snapshot)

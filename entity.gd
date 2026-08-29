@@ -9,7 +9,7 @@ enum Team { PLAYER, ENEMY }
 
 func take_data(entity_state: EntityState):
 	root_node.global_position = entity_state.position
-	root_node.global_rotation = entity_state.rotation
+	root_node.global_rotation = entity_state.rotation_degrees
 	#root_node.v`elocity = entity_state.velocity
 	pass
 

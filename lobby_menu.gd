@@ -46,10 +46,9 @@ func remove_card(pid: int) -> void:
 
 func _on_start_game_pressed() -> void:
 	if multiplayer.is_server():
-		NetworkTransport.I.start_game()
-		#start_game.rpc()
+		SessionSynchronizer.set_game_started_all()
 	else:
-		PlayerSpawner.I.request_spawn_player.rpc(multiplayer.get_unique_id())
+		SessionSynchronizer.set_user_in_game_all()
 		close()
 
 func _quit_button_pressed() -> void:

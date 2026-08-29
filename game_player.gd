@@ -8,18 +8,20 @@ class_name GamePlayer
 
 var peer_id: int
 var spawn_position: Vector2
-var network_player: NetworkPlayer
+
+func initialize(user_state: UserState):
+	username_label.text = user_state.username
+
+func receive_packet(player_state: PlayerState):
+	player_body.velocity = player_state.velocity
+	player_body.global_position = player_state.position
+	player_body.rotation_degrees = player_state.rotation_degrees
+	pass
 
 func _ready() -> void:
 	set_multiplayer_authority(peer_id)
-	network_player = SessionManager.get_network_player(peer_id)
-	
-	if network_player == null:
-		push_error("Could not find NetworkPlayer for peer %d." % peer_id)
-		return
 	
 	player_body.set_multiplayer_authority(peer_id)
-	username_label.text = network_player.username
 	username_label.position.x = -username_label.size.x / 2
 	player_body.global_position = spawn_position
 	

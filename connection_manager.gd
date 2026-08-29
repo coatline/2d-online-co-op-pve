@@ -116,9 +116,6 @@ func disconnect_from_network() -> void:
 	
 	disconnected_from_network.emit()
 
-func get_peer_id() -> int:
-	return multiplayer.get_unique_id()
-
 func is_connected_to_network() -> bool:
 	return multiplayer.multiplayer_peer != null
 

@@ -3,7 +3,8 @@ class_name NetworkLogger
 
 static var I: NetworkLogger
 
-func _ready() -> void:
+func _init() -> void:
+	print("IIIII")
 	I = self
 
 static func print_networked(message: String) -> void:

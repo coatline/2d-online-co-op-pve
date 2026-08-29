@@ -38,10 +38,9 @@ shape = SubResource("CapsuleShape2D_j8e57")
 zoom = Vector2(3, 3)
 position_smoothing_enabled = true
 
-[node name="Gun" type="Marker2D" parent="PlayerBody" unique_id=846691962 node_paths=PackedStringArray("entity")]
+[node name="Gun" type="Marker2D" parent="PlayerBody" unique_id=846691962]
 position = Vector2(3, 4)
 script = ExtResource("3_hb3fq")
-entity = NodePath("")
 bullet_scene = ExtResource("4_6ngf4")
 
 [node name="AudioListener2D" type="AudioListener2D" parent="PlayerBody" unique_id=657262104]
@@ -54,9 +53,8 @@ metadata/_custom_type_script = "uid://cburu6b4ckehs"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerBody/HurtBox" unique_id=982982240]
 shape = SubResource("CircleShape2D_lxywf")
 
-[node name="DamageReceiver" type="Node" parent="." unique_id=1910297558 node_paths=PackedStringArray("entity", "health")]
+[node name="DamageReceiver" type="Node" parent="." unique_id=1910297558 node_paths=PackedStringArray("health")]
 script = ExtResource("6_hb3fq")
-entity = NodePath("")
 health = NodePath("../Health")
 
 [node name="Health" type="Node" parent="." unique_id=655140992 node_paths=PackedStringArray("root")]

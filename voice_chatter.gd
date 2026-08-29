@@ -60,11 +60,11 @@ func _send_voice_packet_to_server(packet: PackedByteArray) -> void:
 
 	var sender_id: int = multiplayer.get_remote_sender_id()
 
-	for network_player: NetworkPlayer in SessionManager.pid_to_network_player.values():
-		if network_player.peer_id == sender_id:
-			continue
-
-		network_player.voice_chat._receive_voice_packet.rpc_id(network_player.peer_id, packet)
+	#for network_player: NetworkPlayer in SessionManager.pid_to_network_player.values():
+		#if network_player.peer_id == sender_id:
+			#continue
+#
+		#network_player.voice_chat._receive_voice_packet.rpc_id(network_player.peer_id, packet)
 
 @rpc("any_peer", "call_remote", "reliable", 0)
 func _send_voice_json_to_server(json_bytes: PackedByteArray) -> void:
@@ -73,11 +73,11 @@ func _send_voice_json_to_server(json_bytes: PackedByteArray) -> void:
 
 	var sender_id: int = multiplayer.get_remote_sender_id()
 
-	for network_player: NetworkPlayer in SessionManager.pid_to_network_player.values():
-		if network_player.peer_id == sender_id:
-			continue
-
-		network_player.voice_chat._receive_voice_json.rpc_id(network_player.peer_id, json_bytes)
+	#for network_player: NetworkPlayer in SessionManager.pid_to_network_player.values():
+		#if network_player.peer_id == sender_id:
+			#continue
+#
+		#network_player.voice_chat._receive_voice_json.rpc_id(network_player.peer_id, json_bytes)
 
 @rpc("authority", "call_remote", "unreliable", 0)
 func _receive_voice_packet(packet: PackedByteArray) -> void:

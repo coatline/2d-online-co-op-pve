@@ -31,14 +31,12 @@ script = ExtResource("3_jmu02")
 maximum = 5.0
 root = NodePath("..")
 
-[node name="DamageDealer" type="Node2D" parent="." unique_id=753300106 node_paths=PackedStringArray("source_entity")]
+[node name="DamageDealer" type="Node2D" parent="." unique_id=753300106]
 script = ExtResource("4_7nqyo")
 damage = 5.0
-source_entity = NodePath("")
 
-[node name="DamageReceiver" type="Node" parent="." unique_id=234635592 node_paths=PackedStringArray("entity", "health")]
+[node name="DamageReceiver" type="Node" parent="." unique_id=234635592 node_paths=PackedStringArray("health")]
 script = ExtResource("5_lnshm")
-entity = NodePath("")
 health = NodePath("../Health")
 
 [node name="HitBox" type="Area2D" parent="." unique_id=198362422 node_paths=PackedStringArray("damage_dealer")]
