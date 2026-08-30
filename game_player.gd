@@ -9,8 +9,9 @@ class_name GamePlayer
 var peer_id: int
 var spawn_position: Vector2
 
-func initialize(user_state: UserState):
-	username_label.text = user_state.username
+func initialize(_username: String, player_state: PlayerState):
+	username_label.text = _username
+	receive_packet(player_state)
 
 func receive_packet(player_state: PlayerState):
 	player_body.velocity = player_state.velocity

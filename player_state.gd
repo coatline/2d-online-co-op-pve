@@ -4,15 +4,15 @@ extends EntityState
 var peer_id: int
 var health: int
 
-func serialize() -> Array:
-	return [entity_id, peer_id, position, velocity, rotation_degrees, health]
+func _init() -> void:
+	entity_type = EntityType.PLAYER
 
-static func deserialize(data: Array) -> PlayerState:
-	var state: PlayerState = PlayerState.new()
-	state.entity_id = data[0]
-	state.peer_id = data[1]
-	state.position = data[2]
-	state.velocity = data[3]
-	state.rotation_degrees = data[4]
-	state.health = data[5]
-	return state
+func serialize(writer: BinaryWriter) -> void:
+	super.serialize(writer)
+	writer.write_u32(peer_id)
+	writer.write_u16(health)
+
+func load(reader: BinaryReader) -> void:
+	super.load(reader)
+	peer_id = reader.read_u32()
+	health = reader.read_u16()

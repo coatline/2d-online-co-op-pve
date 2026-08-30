@@ -14,13 +14,13 @@ func command_move(direction: Vector2) -> void:
 	GameSimulation.I.process_move(peer_id, direction)
 
 @rpc("authority", "call_remote", "unreliable")
-func clients_update_world_state(world_state_dict: Array) -> void:
-	var world_state: WorldState = WorldState.deserialize(world_state_dict)
-	for entity in world_state.entities:
-		SessionManager.
-	pass
+func clients_update_world_state(world_state_data: PackedByteArray) -> void:
+	# Maybe only if we are actually in the game
+	# if SessionManager.get_my_user_state().in_game:
+	GameSimulation.I.apply_world_snapshot(world_state_data)
 
-func deserialize_entity(data: Array) -> EntityState:
+func deserialize_entity(data: PackedByteArray) -> EntityState:
+	var reader: BinaryReader = BinaryReader.new(data)
 	var entity_type: int = data[0]
 	match entity_type:
 		EntityState.EntityType.PLAYER:
@@ -30,3 +30,6 @@ func deserialize_entity(data: Array) -> EntityState:
 		#EntityState.EntityType.PROJECTILE:
 			#return ProjectileState.deserialize(data)
 	return EntityState.deserialize(data)
+
+
+func deserialize_player()

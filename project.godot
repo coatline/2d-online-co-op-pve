@@ -25,8 +25,8 @@ driver/mix_rate=48000
 
 KeybindHelper="*uid://dgmlwhghob0y8"
 ConnectionManager="*uid://b7fvq574c408s"
-SessionManager="*uid://65e52knbta8e"
-LocalWorldState="*uid://ecbnt8c8suc"
+SoundManager="*uid://clu7i3y0x4ost"
+SessionManager="*uid://gocopu8gcjcd"
 SessionSynchronizer="*uid://dd7axq0konukw"
 
 [display]

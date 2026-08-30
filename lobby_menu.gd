@@ -24,7 +24,7 @@ func on_open() -> void:
 		spawn_card(multiplayer.get_unique_id())
 		multiplayer.peer_connected.connect(spawn_card)
 		multiplayer.peer_disconnected.connect(remove_card)
-	elif LocalWorldState.in_lobby:
+	elif SessionManager.get_my_user_state().in_game == false:
 		start_button.hide()
 	
 	if ConnectionManager.connection_type == ConnectionManager.ConnectionType.NODE_TUNNEL:
@@ -33,7 +33,7 @@ func on_open() -> void:
 	else:
 		room_id_container.hide()
 	
-	room_id_label.text = "room id: %s" % LocalWorldState.current_room
+	room_id_label.text = "room id: %s" % SessionManager.current_room
 
 func spawn_card(pid: int):
 	var player_card = player_card_scene.instantiate()
@@ -55,4 +55,4 @@ func _quit_button_pressed() -> void:
 	multiplayer.multiplayer_peer.close()
 
 func _on_copy_to_clipboard_pressed() -> void:
-	DisplayServer.clipboard_set(LocalWorldState.current_room)
+	DisplayServer.clipboard_set(SessionManager.current_room)
