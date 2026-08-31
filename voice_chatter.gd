@@ -55,7 +55,7 @@ func _on_mic_json(json_bytes: Dictionary) -> void:
 
 @rpc("any_peer", "call_remote", "unreliable", 0)
 func _send_voice_packet_to_server(packet: PackedByteArray) -> void:
-	if not multiplayer.is_server():
+	if not SessionManager.is_server():
 		return
 
 	var sender_id: int = multiplayer.get_remote_sender_id()
@@ -68,7 +68,7 @@ func _send_voice_packet_to_server(packet: PackedByteArray) -> void:
 
 @rpc("any_peer", "call_remote", "reliable", 0)
 func _send_voice_json_to_server(json_bytes: PackedByteArray) -> void:
-	if not multiplayer.is_server():
+	if not SessionManager.is_server():
 		return
 
 	var sender_id: int = multiplayer.get_remote_sender_id()

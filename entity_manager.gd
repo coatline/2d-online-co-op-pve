@@ -17,7 +17,7 @@ func register_entity(id: int, entity: Entity):
 	entities[id] = entity
 
 func get_entity(id: int) -> Entity:
-	return entities[id]
+	return entities.get(id, null)
 
 func unregister_entity(id: int) -> void:
 	entities.erase(id)

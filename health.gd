@@ -16,7 +16,7 @@ signal died
 		health_changed.emit(current, maximum)
 
 func _ready() -> void:
-	if multiplayer.is_server() == false:
+	if SessionManager.is_server() == false:
 		return
 	
 	current = maximum

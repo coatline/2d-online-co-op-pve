@@ -9,7 +9,7 @@ signal damage_blocked(damage: DamageInfo)
 var invincible: bool
 
 func take_damage(damage: DamageInfo) -> void:
-	if not multiplayer.is_server():
+	if not SessionManager.is_server():
 		return
 	
 	if invincible:

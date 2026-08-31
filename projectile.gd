@@ -14,7 +14,7 @@ func setup(_source_entity: Entity, _force: Vector2) -> void:
 	force = _force
 
 func _ready() -> void:
-	if multiplayer.is_server() == false:
+	if SessionManager.is_server() == false:
 		hit_box.queue_free()
 		return
 	
@@ -22,7 +22,7 @@ func _ready() -> void:
 	hit_box.damaged_entity.connect(queue_free)
 
 func _physics_process(delta: float) -> void:
-	if multiplayer.is_server() == false:
+	if SessionManager.is_server() == false:
 		return
 	
 	global_position += force * delta

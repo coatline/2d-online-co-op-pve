@@ -6,30 +6,36 @@ static var I: NetworkTransport
 func _enter_tree() -> void:
 	I = self
 
-@rpc("any_peer", "call_remote", "unreliable")
-func command_move(direction: Vector2) -> void:
-	if not multiplayer.is_server():
-		return
-	var peer_id: int = multiplayer.get_remote_sender_id()
-	GameSimulation.I.process_move(peer_id, direction)
+func process_packets() -> void:
+	# Always recieve packets
+	while multiplayer.multiplayer_peer.get_available_packet_count() > 0:
+		var packet: PackedByteArray = multiplayer.multiplayer_peer.get_packet()
+		deserialize_packet(packet)
 
-@rpc("authority", "call_remote", "unreliable")
-func clients_update_world_state(world_state_data: PackedByteArray) -> void:
-	# Maybe only if we are actually in the game
-	# if SessionManager.get_my_user_state().in_game:
-	GameSimulation.I.apply_world_snapshot(world_state_data)
+func serialize_packet(packet_type: int, data: Variant) -> PackedByteArray:
+	var bytes: PackedByteArray = PackedByteArray()
+	bytes.append(packet_type)
+	bytes.append_array(var_to_bytes(data))
+	return bytes
 
-func deserialize_entity(data: PackedByteArray) -> EntityState:
-	var reader: BinaryReader = BinaryReader.new(data)
-	var entity_type: int = data[0]
-	match entity_type:
-		EntityState.EntityType.PLAYER:
-			return PlayerState.deserialize(data)
-		#EntityState.EntityType.ENEMY:
-			#return EnemyState.deserialize(data)
-		#EntityState.EntityType.PROJECTILE:
-			#return ProjectileState.deserialize(data)
-	return EntityState.deserialize(data)
+func deserialize_packet(packet: PackedByteArray) -> void:
+	var binary_reader: BinaryReader = BinaryReader.new(packet)
+	var packet_header: int = binary_reader.read_u8()
 
+	match packet_header:
+		PacketHeader.COMMAND:
+			handle_command(binary_reader)
+		PacketHeader.WORLD_UPDATE:
+			handle_world_update(binary_reader)
 
-func deserialize_player()
+func handle_command(reader: BinaryReader):
+	pass
+
+func handle_world_update(reader: BinaryReader):
+	pass
+
+enum PacketHeader{
+	COMMAND,
+	WORLD_UPDATE,
+	GAME_STARTED
+}

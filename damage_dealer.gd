@@ -11,7 +11,7 @@ func setup(_source_entity: Entity, _damage: float = damage, _knockback: float = 
 	knockback = _knockback
 
 func deal_damage(hurtbox: Hurtbox) -> void:
-	if not multiplayer.is_server():
+	if not SessionManager.is_server():
 		return
 	if hurtbox.damage_receiver == null:
 		return

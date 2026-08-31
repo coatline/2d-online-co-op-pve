@@ -10,7 +10,7 @@ func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 
 func _on_area_entered(other_area: Area2D) -> void:
-	if not multiplayer.is_server():
+	if not SessionManager.is_server():
 		return
 	
 	var hurt_box: Hurtbox = other_area as Hurtbox
@@ -28,7 +28,7 @@ func _on_area_entered(other_area: Area2D) -> void:
 		damaged_entity.emit()
 
 func _on_body_entered(body: Node2D) -> void:
-	if not multiplayer.is_server():
+	if not SessionManager.is_server():
 		return
 	
 	var hurt_box: Hurtbox = body as Hurtbox

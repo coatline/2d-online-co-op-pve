@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://oh4xpwdn85v8" path="res://online_connection_screen.tscn" id="3_5vw27"]
 [ext_resource type="PackedScene" uid="uid://bbdnfb36ll0oy" path="res://lobby_menu.tscn" id="4_kek77"]
 [ext_resource type="PackedScene" uid="uid://75gu8dv1652a" path="res://lan_connection_menu.tscn" id="5_4c57u"]
-[ext_resource type="PackedScene" uid="uid://cni6xqx2ewuim" path="res://game_new.tscn" id="8_5vw27"]
 [ext_resource type="Script" uid="uid://ca4m5hxjdms6r" path="res://entity_manager.gd" id="9_999999"]
 
 [node name="Main" type="Node" unique_id=873018209]
@@ -93,5 +92,3 @@ visible = false
 [node name="LANConnectionScreen" parent="CanvasLayer" unique_id=1189615941 node_paths=PackedStringArray("lobby") instance=ExtResource("5_4c57u")]
 visible = false
 lobby = NodePath("../LobbyMenu")
-
-[node name="Game" parent="." unique_id=2077963371 instance=ExtResource("8_5vw27")]

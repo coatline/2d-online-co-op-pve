@@ -16,7 +16,7 @@ func _ready() -> void:
 	player_spawner.spawn_function = _multiplayer_spawn_player
 
 func spawn_player(pid: int) -> void:
-	if not multiplayer.is_server():
+	if not SessionManager.is_server():
 		push_error("[%d] Is not the server and is trying to spawn a player." % multiplayer.get_unique_id())
 		return
 	
@@ -40,7 +40,7 @@ func _multiplayer_spawn_player(data: Dictionary) -> GamePlayer:
 # For late joiners
 @rpc("any_peer", "call_remote", "reliable")
 func request_spawn_player(pid: int) -> void:
-	if not multiplayer.is_server():
+	if not SessionManager.is_server():
 		return
 	
 	spawn_player(pid)

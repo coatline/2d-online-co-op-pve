@@ -17,7 +17,7 @@ func _ready() -> void:
 	copy_to_clipboard_button.pressed.connect(_on_copy_to_clipboard_pressed)
 
 func on_open() -> void:
-	if multiplayer.is_server():
+	if SessionManager.is_server():
 		if ConnectionManager.connection_type == ConnectionManager.ConnectionType.LAN:
 			lan_container.show()
 		
@@ -45,10 +45,10 @@ func remove_card(pid: int) -> void:
 	client_card.queue_free()
 
 func _on_start_game_pressed() -> void:
-	if multiplayer.is_server():
-		SessionSynchronizer.set_game_started_all()
+	if SessionManager.is_server():
+		SessionSynchronizer.all_set_game_started()
 	else:
-		SessionSynchronizer.set_user_in_game_all()
+		SessionSynchronizer.all_join_this_player_in_game()
 		close()
 
 func _quit_button_pressed() -> void:
