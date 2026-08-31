@@ -14,7 +14,8 @@ func _ready() -> void:
 	lan_button.pressed.connect(_lan_pressed)
 
 func _singleplayer_pressed() -> void:
-	pass
+	close()
+	SessionManager.begin_game()
 
 func _online_pressed() -> void:
 	online_connection_menu.open()

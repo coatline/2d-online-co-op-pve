@@ -14,4 +14,6 @@ func _ready() -> void:
 
 func _player_joined_game(peer: int) -> void:
 	if SessionManager.is_server():
-		GameSimulation.I.add_player(peer, player_spawn_position.global_position + Vector2.ONE * randf_range(-3.0, 3.0))
+		var player_state: PlayerState = PlayerState.new()
+		player_state.position = player_spawn_position.global_position + Vector2.ONE * randf_range(-3.0, 3.0)
+		GameSimulation.I.spawn_player(peer, player_state)

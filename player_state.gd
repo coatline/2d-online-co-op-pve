@@ -12,7 +12,7 @@ func serialize(writer: BinaryWriter) -> void:
 	writer.write_u32(peer_id)
 	writer.write_u16(health)
 
-func load(reader: BinaryReader) -> void:
-	super.load(reader)
+func deserialize(reader: BinaryReader) -> void:
+	super.deserialize(reader)
 	peer_id = reader.read_u32()
 	health = reader.read_u16()

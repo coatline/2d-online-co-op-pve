@@ -7,20 +7,28 @@ static var I: GameSimulation
 
 var peer_id_to_player_state: Dictionary[int, PlayerState] = {}
 var peer_id_to_player: Dictionary[int, GamePlayer]
+var world_state: WorldState
 
 var entity_id_to_entity: Dictionary[int, Entity]
 
 func _enter_tree() -> void:
 	I = self
+	world_state = WorldState.new()
 
 func _physics_process(delta: float) -> void:
 	if SessionManager.is_server():
-		if SessionManager.session_state.game_started:
-			var world_state: WorldState = SessionManager.session_state.world_state
+		if SessionManager.game_started:
 			update_world_state(world_state)
 			var writer: BinaryWriter = BinaryWriter.new()
 			world_state.serialize(writer)
-			NetworkTransport.I.clients_update_world_state.rpc(writer.get_data())
+			#NetworkTransport.I.clients_update_world_state.rpc(writer.get_data())
+			print(writer.get_data())
+
+
+func spawn_player(peer: int, player_state: PlayerState) -> void:
+	var player: GamePlayer = entity_type_to_scene[EntityState.EntityType.PLAYER].instantiate()
+	player.initialize(SessionManager.get_user_state(peer).username, player_state)
+	add_child(player)
 
 # Client only
 

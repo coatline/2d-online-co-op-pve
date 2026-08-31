@@ -10,7 +10,7 @@ func serialize(writer: BinaryWriter) -> void:
 	for entity: EntityState in entity_id_to_state.values():
 		entity.serialize(writer)
 
-func load(reader: BinaryReader) -> void:
+func deserialize(reader: BinaryReader) -> void:
 	tick = reader.read_u32()
 	var entity_count: int = reader.read_u16()
 	var received_ids: Dictionary[int, bool] = {}
@@ -24,7 +24,7 @@ func load(reader: BinaryReader) -> void:
 			entity_id_to_state[entity_id] = create_entity(entity_type)
 
 		var entity: EntityState = entity_id_to_state[entity_id]
-		entity.load(reader)
+		entity.deserialize(reader)
 
 	for entity_id: int in entity_id_to_state.keys():
 		if not received_ids.has(entity_id):

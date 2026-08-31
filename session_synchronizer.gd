@@ -2,13 +2,10 @@ extends Node
 # Autoload SessionSynchronizer
 
 signal player_joined_game(peer_id: int)
-signal game_began()
 
 @rpc("authority", "call_local", "reliable")
 func all_set_game_started() -> void:
-	SessionManager.session_state.game_started = true
-	game_began.emit()
-	
+	SessionManager.begin_game()
 	all_join_this_player_in_game.rpc()
 
 @rpc("any_peer", "call_local", "reliable")

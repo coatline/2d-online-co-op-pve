@@ -17,7 +17,6 @@ func receive_packet(player_state: PlayerState):
 	player_body.velocity = player_state.velocity
 	player_body.global_position = player_state.position
 	player_body.rotation_degrees = player_state.rotation_degrees
-	pass
 
 func _ready() -> void:
 	set_multiplayer_authority(peer_id)

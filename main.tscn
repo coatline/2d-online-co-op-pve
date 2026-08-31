@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://b3if0p10n1krv" path="res://network_logger.gd" id="2_7mycd"]
 [ext_resource type="Script" uid="uid://dikpdyg0r5x5w" path="res://game_type_menu.gd" id="2_272bh"]
 [ext_resource type="PackedScene" uid="uid://oh4xpwdn85v8" path="res://online_connection_screen.tscn" id="3_5vw27"]
+[ext_resource type="Script" uid="uid://bmhy3elwy58if" path="res://network_transport.gd" id="4_5vw27"]
 [ext_resource type="PackedScene" uid="uid://bbdnfb36ll0oy" path="res://lobby_menu.tscn" id="4_kek77"]
 [ext_resource type="PackedScene" uid="uid://75gu8dv1652a" path="res://lan_connection_menu.tscn" id="5_4c57u"]
 [ext_resource type="Script" uid="uid://ca4m5hxjdms6r" path="res://entity_manager.gd" id="9_999999"]
@@ -19,6 +20,9 @@ script = ExtResource("2_7mycd")
 
 [node name="EntityManager" type="Node" parent="." unique_id=1232623458]
 script = ExtResource("9_999999")
+
+[node name="NetworkTransport" type="Node" parent="." unique_id=778272156]
+script = ExtResource("4_5vw27")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=673156944]
 
