@@ -11,6 +11,7 @@ var spawn_position: Vector2
 
 func initialize(_username: String, player_state: PlayerState):
 	username_label.text = _username
+	peer_id = player_state.peer_id
 	receive_packet(player_state)
 
 func receive_packet(player_state: PlayerState):

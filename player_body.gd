@@ -8,9 +8,9 @@ func _ready() -> void:
 		physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_ON
 
 func _physics_process(delta: float) -> void:
-	#var dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	var dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	
-	#velocity = dir * speed
+	velocity = dir * speed
 	move_and_slide()
 	
 	var mouse_pos = get_global_mouse_position()

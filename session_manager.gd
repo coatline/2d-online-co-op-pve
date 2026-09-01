@@ -21,6 +21,7 @@ func _ready() -> void:
 	ConnectionManager.peer_connected.connect(_on_peer_connected)
 	ConnectionManager.peer_disconnected.connect(_on_peer_disconnected)
 	ConnectionManager.disconnected_from_network.connect(_on_network_disconnected)
+	create_user(multiplayer.get_unique_id())
 
 func _on_hosted_room(peer_id: int) -> void:
 	current_room = ""
@@ -32,7 +33,6 @@ func _on_hosted_room(peer_id: int) -> void:
 	end_session()
 	
 	session_mode = SessionMode.HOST
-	create_user(multiplayer.get_unique_id())
 
 func _on_peer_connected(peer_id: int) -> void:
 	if SessionManager.is_server():
@@ -56,6 +56,8 @@ func begin_game() -> void:
 	var game = game_scene.instantiate()
 	get_tree().root.add_child(game)
 	game_began.emit()
+	
+	SessionSynchronizer.all_join_this_player_in_game.rpc()
 
 func end_session() -> void:
 	current_room = ""

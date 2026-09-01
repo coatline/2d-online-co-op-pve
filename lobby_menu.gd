@@ -15,25 +15,30 @@ func _ready() -> void:
 	start_button.pressed.connect(_on_start_game_pressed)
 	quit_button.pressed.connect(_quit_button_pressed)
 	copy_to_clipboard_button.pressed.connect(_on_copy_to_clipboard_pressed)
+	
+	if SessionManager.is_server():
+		multiplayer.peer_connected.connect(spawn_card)
+		multiplayer.peer_disconnected.connect(remove_card)
 
 func on_open() -> void:
+	NetworkLogger.I.print_networked("there are %d players" % SessionManager.peer_to_user_state.size())
+	for peer in SessionManager.peer_to_user_state.keys():
+		spawn_card(peer)
+	
+	# Show different ui based on connection type
 	if SessionManager.is_server():
 		if ConnectionManager.connection_type == ConnectionManager.ConnectionType.LAN:
 			lan_container.show()
-		
-		spawn_card(multiplayer.get_unique_id())
-		multiplayer.peer_connected.connect(spawn_card)
-		multiplayer.peer_disconnected.connect(remove_card)
 	elif SessionManager.get_my_user_state().in_game == false:
 		start_button.hide()
 	
 	if ConnectionManager.connection_type == ConnectionManager.ConnectionType.NODE_TUNNEL:
 		room_id_container.show()
 		lan_container.hide()
+		room_id_label.text = "room id: %s" % SessionManager.current_room
 	else:
 		room_id_container.hide()
 	
-	room_id_label.text = "room id: %s" % SessionManager.current_room
 
 func spawn_card(pid: int):
 	var player_card = player_card_scene.instantiate()
@@ -49,7 +54,8 @@ func _on_start_game_pressed() -> void:
 		SessionSynchronizer.all_set_game_started()
 	else:
 		SessionSynchronizer.all_join_this_player_in_game()
-		close()
+	
+	close()
 
 func _quit_button_pressed() -> void:
 	multiplayer.multiplayer_peer.close()

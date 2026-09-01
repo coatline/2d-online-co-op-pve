@@ -22,13 +22,15 @@ func _physics_process(delta: float) -> void:
 			var writer: BinaryWriter = BinaryWriter.new()
 			world_state.serialize(writer)
 			#NetworkTransport.I.clients_update_world_state.rpc(writer.get_data())
-			print(writer.get_data())
+			#print(writer.get_data())
 
 
 func spawn_player(peer: int, player_state: PlayerState) -> void:
+	print("Spawnin player")
 	var player: GamePlayer = entity_type_to_scene[EntityState.EntityType.PLAYER].instantiate()
 	player.initialize(SessionManager.get_user_state(peer).username, player_state)
 	add_child(player)
+	peer_id_to_player[peer] = player
 
 # Client only
 

@@ -14,7 +14,7 @@ func _on_area_entered(other_area: Area2D) -> void:
 		return
 	
 	var hurt_box: Hurtbox = other_area as Hurtbox
-	
+	return
 	if hurt_box:
 		if damage_dealer.source_entity == null:
 			NetworkLogger.I.print_networked("Null source entity")
