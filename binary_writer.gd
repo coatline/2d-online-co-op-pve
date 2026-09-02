@@ -3,6 +3,9 @@ class_name BinaryWriter
 
 var data: PackedByteArray = PackedByteArray()
 
+func write_header_u8(value: int) -> void:
+	write_u8(value)
+
 func write_u8(value: int) -> void:
 	data.append(value)
 
@@ -29,6 +32,14 @@ func write_float(value: float) -> void:
 func write_vector2(value: Vector2) -> void:
 	write_float(value.x)
 	write_float(value.y)
+
+func write_string(value: String) -> void:
+	var bytes: PackedByteArray = value.to_utf8_buffer()
+	write_u16(bytes.size())
+	write_bytes(bytes)
+
+func write_bool(value: bool) -> void:
+	write_u8(1 if value else 0)
 
 func write_bytes(value: PackedByteArray) -> void:
 	data.append_array(value)

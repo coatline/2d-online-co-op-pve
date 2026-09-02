@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://bbdnfb36ll0oy" path="res://lobby_menu.tscn" id="4_kek77"]
 [ext_resource type="PackedScene" uid="uid://75gu8dv1652a" path="res://lan_connection_menu.tscn" id="5_4c57u"]
 [ext_resource type="Script" uid="uid://ca4m5hxjdms6r" path="res://entity_manager.gd" id="9_999999"]
+[ext_resource type="Script" uid="uid://ekta5qaxp3pl" path="res://network_info_display.gd" id="9_kek77"]
 
 [node name="Main" type="Node" unique_id=873018209]
 
@@ -96,3 +97,30 @@ visible = false
 [node name="LANConnectionScreen" parent="CanvasLayer" unique_id=1189615941 node_paths=PackedStringArray("lobby") instance=ExtResource("5_4c57u")]
 visible = false
 lobby = NodePath("../LobbyMenu")
+
+[node name="NetworkInfoDisplay" type="Control" parent="CanvasLayer" unique_id=1975141779 node_paths=PackedStringArray("connection_type_label", "user_connection_type_lable", "user_count_label")]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("9_kek77")
+connection_type_label = NodePath("VBoxContainer/ConnectionTypeLabel")
+user_connection_type_lable = NodePath("VBoxContainer/UserConnectionTypeLable")
+user_count_label = NodePath("VBoxContainer/UserCountLabel")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/NetworkInfoDisplay" unique_id=195070936]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ConnectionTypeLabel" type="Label" parent="CanvasLayer/NetworkInfoDisplay/VBoxContainer" unique_id=1894630319]
+layout_mode = 2
+text = "sdfasdf"
+
+[node name="UserConnectionTypeLable" type="Label" parent="CanvasLayer/NetworkInfoDisplay/VBoxContainer" unique_id=367457082]
+layout_mode = 2
+text = "sdf"
+
+[node name="UserCountLabel" type="Label" parent="CanvasLayer/NetworkInfoDisplay/VBoxContainer" unique_id=868394624]
+layout_mode = 2
+text = "sdf"

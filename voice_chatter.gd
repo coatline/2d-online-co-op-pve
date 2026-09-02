@@ -5,6 +5,7 @@ class_name VoiceChatter
 @export var speaker: TwoVoipSpeaker
 
 func _ready() -> void:
+	return
 	var mic_button: Button = Button.new()
 	mic_button.toggle_mode = true
 

@@ -1,7 +1,25 @@
 extends Node
 # Autoload SessionSynchronizer
 
+# Server sends updates to clients
+# Clients send updates to server
+
 signal player_joined_game(peer_id: int)
+
+func _ready() -> void:
+	SessionManager.user_joined.connect(_user_joined)
+
+func _user_joined(peer_id: int):
+	if SessionManager.is_server() == false or peer_id == multiplayer.get_unique_id():
+		return
+	
+	NetworkLogger.I.print_networked("Initializing the user %d's networking info" % peer_id)
+	
+	var writer: BinaryWriter = BinaryWriter.new()
+	var user_state: UserState = SessionManager.get_user_state(peer_id)
+	writer.write_header_u8(NetworkTransport.PacketType.INITIALIZE_CLIENT)
+	user_state.serialize(writer)
+	NetworkTransport.I.send_packet_to(writer.get_data(), peer_id)
 
 @rpc("authority", "call_local", "reliable")
 func all_set_game_started() -> void:

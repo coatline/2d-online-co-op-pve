@@ -11,8 +11,9 @@ func _ready() -> void:
 	multiplayer_spawner.spawn_function = multiplayer_spawn
 
 @rpc("any_peer", "call_remote", "reliable")
-func _request_spawn(position: Vector2, direction: Vector2, source_id: int):
-	spawn_projectile(position, direction, EntityManager.I.get_entity(source_id))
+func _request_spawn(position: Vector2, direction: Vector2, source_entity_id: int):
+	NetworkLogger.I.print_networked("Requesting to spawn a projectile")
+	spawn_projectile(position, direction, EntityManager.I.get_entity(source_entity_id))
 
 func spawn_projectile(position: Vector2, force: Vector2, source_entity: Entity) -> void:
 	if not SessionManager.is_server():

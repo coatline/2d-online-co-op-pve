@@ -13,6 +13,7 @@ func process_incoming_packets() -> void:
 	# Always recieve packets
 	while multiplayer.multiplayer_peer.get_available_packet_count() > 0:
 		var packet: PackedByteArray = multiplayer.multiplayer_peer.get_packet()
+		NetworkLogger.I.print_networked("Recieved packet!")
 		deserialize_packet(packet)
 
 func send_packet_all(packet: PackedByteArray):
@@ -37,6 +38,9 @@ func deserialize_packet(packet: PackedByteArray) -> void:
 			handle_command(binary_reader)
 		PacketType.WORLD_UPDATE:
 			handle_world_update(binary_reader)
+		PacketType.INITIALIZE_CLIENT:
+			NetworkLogger.I.print_networked("Recieved info on initilized client")
+			pass
 
 func handle_command(reader: BinaryReader):
 	pass
@@ -45,6 +49,7 @@ func handle_world_update(reader: BinaryReader):
 	pass
 
 enum PacketType {
+	INITIALIZE_CLIENT,
 	COMMAND,
 	WORLD_UPDATE,
 	GAME_STARTED

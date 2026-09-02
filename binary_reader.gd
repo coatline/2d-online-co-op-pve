@@ -37,6 +37,14 @@ func read_vector2() -> Vector2:
 	var y: float = read_float()
 	return Vector2(x, y)
 
+func read_string() -> String:
+	var length: int = read_u16()
+	var bytes: PackedByteArray = read_bytes(length)
+	return bytes.get_string_from_utf8()
+
+func read_bool() -> bool:
+	return read_u8() != 0
+
 func read_bytes(length: int) -> PackedByteArray:
 	var value: PackedByteArray = data.slice(offset, offset + length)
 	offset += length
