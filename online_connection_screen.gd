@@ -26,11 +26,11 @@ func on_open() -> void:
 	connecting_indicator.hide()
 	connection_ui.show()
 
-func on_close() -> void:
-	ConnectionManager._disconnect_current_session()
+#func on_close() -> void:
+	#ConnectionManager.disconnect_from_network()
 
 func _on_host_room_pressed() -> void:
-	var room_id = await ConnectionManager.host_new_room(true, "New Room")
+	var room_id = await ConnectionManager.host_room(true, "New Room")
 	DisplayServer.clipboard_set(room_id)
 	lobby.open()
 
