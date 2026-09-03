@@ -60,7 +60,7 @@ func begin_game() -> void:
 	get_tree().root.add_child(game)
 	game_began.emit()
 	
-	SessionSynchronizer.all_join_this_player_in_game.rpc()
+	#SessionSynchronizer.all_join_this_player_in_game.rpc()
 
 func end_session() -> void:
 	current_room = ""

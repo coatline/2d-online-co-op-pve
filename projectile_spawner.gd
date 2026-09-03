@@ -17,7 +17,7 @@ func _request_spawn(position: Vector2, direction: Vector2, source_entity_id: int
 
 func spawn_projectile(position: Vector2, force: Vector2, source_entity: Entity) -> void:
 	if not SessionManager.is_server():
-		_request_spawn.rpc(position, force, source_entity.id)
+		#_request_spawn.rpc(position, force, source_entity.id)
 		return
 	
 	var data: Dictionary = { "position" : position }

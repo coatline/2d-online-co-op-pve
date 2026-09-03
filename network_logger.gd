@@ -6,7 +6,7 @@ static var I: NetworkLogger
 func _init() -> void:
 	I = self
 
-static func print_networked(message: String) -> void:
+func print_networked(message: String) -> void:
 	if I == null:
 		print("[0] %s" % message)
 		return

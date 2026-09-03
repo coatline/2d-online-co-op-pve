@@ -29,8 +29,9 @@ func on_open() -> void:
 	if SessionManager.is_server():
 		if ConnectionManager.connection_type == ConnectionManager.ConnectionType.LAN:
 			lan_container.show()
-	elif SessionManager.get_my_user_state().in_game == false:
+	else:
 		start_button.hide()
+	#elif SessionManager.get_my_user_state().in_game == false:
 	
 	if ConnectionManager.connection_type == ConnectionManager.ConnectionType.NODE_TUNNEL:
 		room_id_container.show()

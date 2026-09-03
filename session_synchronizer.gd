@@ -8,6 +8,7 @@ signal player_joined_game(peer_id: int)
 
 func _ready() -> void:
 	SessionManager.user_joined.connect(_user_joined)
+	set_multiplayer_authority(multiplayer.get_unique_id())
 
 func _user_joined(peer_id: int):
 	if SessionManager.is_server() == false or peer_id == multiplayer.get_unique_id():
