@@ -15,7 +15,7 @@ func _ready() -> void:
 	start_button.pressed.connect(_on_start_game_pressed)
 	quit_button.pressed.connect(_quit_button_pressed)
 	copy_to_clipboard_button.pressed.connect(_on_copy_to_clipboard_pressed)
-	
+	SessionManager.session_terminated.connect(_on_session_terminated)
 
 func on_open() -> void:
 	SessionManager.session_state.user_joined.connect(user_joined)
@@ -39,11 +39,19 @@ func on_open() -> void:
 		room_id_container.hide()
 
 func on_close() -> void:
-	SessionManager.user_joined.disconnect(user_joined)
+	SessionManager.session_state.user_joined.disconnect(user_joined)
+
+func _on_session_terminated():
+	if visible:
+		back()
+
+# if back() gets called and i haven't terminated the session, terminate it
+# if the session is terminated, go back.
 
 func on_back() -> void:
-	# TODO: Disconnect
-	pass
+	# If we aren't going back because we just terminated, terminate.
+	if SessionManager.initialized:
+		SessionManager.terminate_session()
 
 func user_joined(pid: int) -> void:
 	spawn_card(SessionManager.try_get_user_state(pid))

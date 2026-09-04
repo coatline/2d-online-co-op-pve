@@ -19,7 +19,7 @@ extends Node
 #func _on_hosted_room(peer_id: int) -> void:
 	#current_room = ""
 	#
-	#create_user(multiplayer.get_unique_id())
+	#create_user(ConnectionManager.get_peer_id())
 	#
 	## TEMP:
 	#my_user_state.username = "Host"
@@ -65,7 +65,7 @@ extends Node
 	#return peer_to_user_state.get(peer_id)
 #
 #func get_my_user_state() -> UserState:
-	#return peer_to_user_state[multiplayer.get_unique_id()]
+	#return peer_to_user_state[ConnectionManager.get_peer_id()]
 #
 #
 #func is_server() -> bool:

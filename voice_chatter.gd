@@ -30,7 +30,7 @@ func _ready() -> void:
 
 	speaker.set_sinewave_out(false)
 
-	var local_peer_id: int = multiplayer.get_unique_id()
+	var local_peer_id: int = ConnectionManager.get_peer_id()
 	var owning_peer_id: int = get_parent().peer_id
 
 	if local_peer_id == owning_peer_id:
@@ -45,7 +45,7 @@ func _enable_microphone() -> void:
 
 	mic.pttbutton.button_pressed = true
 
-	print("[VoiceChat] Microphone enabled for peer ", multiplayer.get_unique_id())
+	print("[VoiceChat] Microphone enabled for peer ", ConnectionManager.get_peer_id())
 
 func _on_mic_packet(packet: PackedByteArray, frame_count: int) -> void:
 	_send_voice_packet_to_server.rpc_id(1, packet)

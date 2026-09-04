@@ -26,9 +26,9 @@ func _ready() -> void:
 	username_label.position.x = -username_label.size.x / 2
 	player_body.global_position = spawn_position
 	
-	print("[%d] is setting up player %d" % [multiplayer.get_unique_id(), peer_id])
+	print("[%d] is setting up player %d" % [ConnectionManager.get_peer_id(), peer_id])
 	
-	if peer_id != multiplayer.get_unique_id():
+	if peer_id != ConnectionManager.get_peer_id():
 		camera_2d.queue_free()
 	else:
 		NetworkLogger.I.print_networked("I have the camera!")

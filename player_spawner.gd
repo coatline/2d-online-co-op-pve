@@ -17,7 +17,7 @@ func _ready() -> void:
 
 func spawn_player(pid: int) -> void:
 	if not ConnectionManager.is_server():
-		push_error("[%d] Is not the server and is trying to spawn a player." % multiplayer.get_unique_id())
+		push_error("[%d] Is not the server and is trying to spawn a player." % ConnectionManager.get_peer_id())
 		return
 	
 	var position: Vector2 = player_spawn_position.global_position + Vector2.ONE * randf_range(-3.0, 3.0)

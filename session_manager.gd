@@ -2,6 +2,7 @@ extends Node
 # Autoload SessionManager
 
 signal session_initialized()
+signal session_terminated()
 
 var session_state: SessionState
 var initialized: bool = false
@@ -10,7 +11,7 @@ var initialized: bool = false
 func _ready() -> void:
 	ConnectionManager.joined_room.connect(_joined_room)
 	ConnectionManager.hosted_room.connect(_on_hosted_room)
-	ConnectionManager.disconnected_from_network.connect(end_session)
+	ConnectionManager.disconnected_from_network.connect(terminate_session)
 
 
 func initialize_session() -> void:
@@ -19,13 +20,18 @@ func initialize_session() -> void:
 	NetworkLogger.I.print_networked("Initialized session")
 	session_initialized.emit()
 
+func terminate_session() -> void:
+	NetworkLogger.I.print_networked("Session terminated")
+	initialized = false
+	session_terminated.emit()
+	session_state = null
 
 func _joined_room() -> void:
 	initialized = false
 	
 	SessionSynchronizer.submit_user_info.rpc_id(
 		1,
-		"Client %d" % multiplayer.get_unique_id()
+		"Client %d" % ConnectionManager.get_peer_id()
 	)
 
 
@@ -33,7 +39,7 @@ func _on_hosted_room() -> void:
 	session_state = SessionState.new()
 	
 	create_user(
-		multiplayer.get_unique_id(),
+		ConnectionManager.get_peer_id(),
 		"Host"
 	)
 	
@@ -81,13 +87,8 @@ func get_my_user_state() -> UserState:
 	if session_state == null:
 		return null
 	
-	return session_state.get_user(multiplayer.get_unique_id())
+	return session_state.get_user(ConnectionManager.get_peer_id())
 
 
 func is_server() -> bool:
 	return ConnectionManager.is_server()
-
-
-func end_session() -> void:
-	session_state = null
-	initialized = false

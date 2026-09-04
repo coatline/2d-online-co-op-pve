@@ -15,7 +15,7 @@ func begin_tracking() -> void:
 	SessionManager.session_state.user_joined.connect(_user_joined)
 
 func _user_joined(peer_id: int):
-	if ConnectionManager.is_server() == false or peer_id == multiplayer.get_unique_id():
+	if ConnectionManager.is_server() == false or peer_id == ConnectionManager.get_peer_id():
 		return
 	
 	NetworkLogger.I.print_networked("Initializing the user %d's networking info" % peer_id)

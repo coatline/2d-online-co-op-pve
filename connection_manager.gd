@@ -161,6 +161,12 @@ func is_online() -> bool:
 func is_server() -> bool:
 	return session_mode == SessionMode.SINGLEPLAYER or session_mode == SessionMode.HOST
 
+func get_peer_id() -> int:
+	if peer and peer.get_connection_status() != peer.ConnectionStatus.CONNECTION_DISCONNECTED:
+		return multiplayer.get_unique_id()
+	else:
+		return -1
+
 func _exit_tree() -> void:
 	if is_online():
 		disconnect_from_network()
