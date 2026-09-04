@@ -4,37 +4,36 @@ extends Node
 signal user_joined(peer_id: int)
 signal user_left(peer_id: int)
 
-signal connection_initialized()
-
+signal session_initialized()
 
 var session_state: SessionState
+var initialized: bool
 
 func _ready() -> void:
 	ConnectionManager.joined_room.connect(_joined_room)
 	ConnectionManager.hosted_room.connect(_on_hosted_room)
-	# ConnectionManager.peer_connected.connect(_on_peer_connected)
 	ConnectionManager.disconnected_from_network.connect(end_session)
 
-func start_session():
-	NetworkLogger.I.print_networked("Starting session")
-	connection_initialized.emit()
+func initialize_session():
+	initialized = true
+	NetworkLogger.I.print_networked("Initialized session")
+	session_initialized.emit()
 
 func _joined_room() -> void:
+	initialized = false
 	SessionSynchronizer.submit_user_info.rpc_id(1, "Client %d" % multiplayer.get_unique_id())
 
 func _on_hosted_room() -> void:
 	session_state = SessionState.new()
 	create_user(multiplayer.get_unique_id(), "Host")
 	
-	start_session()
-
-# func _on_peer_connected(peer_id: int) -> void:
-# 	if ConnectionManager.is_server():
-# 		create_user(peer_id)
+	initialize_session()
 
 # Server only
 func create_user(peer_id: int, username: String) -> void:
-	var user_state: UserState = UserState.new(peer_id, username)
+	var user_state: UserState = UserState.new()
+	user_state.peer_id = peer_id
+	user_state.username = username
 	join_user(user_state)
 
 func join_user(user_data: UserState) -> void:

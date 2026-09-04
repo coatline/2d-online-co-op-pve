@@ -13,7 +13,7 @@ class_name LANConnectionMenu
 func _ready() -> void:
 	join_lan_button.pressed.connect(try_join_lan)
 	host_lan_button.pressed.connect(host_lan)
-	SessionManager.connection_initialized.connect(lobby.open)
+	SessionManager.session_initialized.connect(lobby.open)
 
 func host_lan() -> void:
 	ConnectionManager.host_lan(int(host_port_line_edit.text))

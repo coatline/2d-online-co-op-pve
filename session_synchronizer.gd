@@ -17,7 +17,7 @@ func _user_joined(peer_id: int):
 	NetworkLogger.I.print_networked("Initializing the user %d's networking info" % peer_id)
 	
 	var user_state: UserState = SessionManager.try_get_user_state(peer_id)
-	update_session_state.rpc(SessionManager.session_state)
+	update_session_state.rpc(SessionManager.session_state.serialize())
 
 	# var writer: BinaryWriter = BinaryWriter.new()
 	# var user_state: UserState = SessionManager.try_get_user_state(peer_id)
@@ -34,12 +34,16 @@ func submit_user_info(username: String) -> void:
 		var peer_id: int = multiplayer.get_remote_sender_id()
 		SessionManager.create_user(peer_id, username)
 		NetworkLogger.I.print_networked("User %d submitted their info" % peer_id)
-		
 
 @rpc("authority", "call_remote", "reliable")
-func update_session_state(session_state: SessionState) -> void:
-	NetworkLogger.I.print_networked("Updating session state, %s" % session_state)
-
+func update_session_state(session_state_dict: Dictionary) -> void:
+	NetworkLogger.I.print_networked("Updating session state, %s" % session_state_dict)
+	if SessionManager.session_state == null:
+		SessionManager.session_state = SessionState.new()
+	SessionManager.session_state.deserialize(session_state_dict)
+	
+	if SessionManager.initialized == false:
+		SessionManager.initialize_session()
 
 #func join_game() -> void:
 	#if ConnectionManager.is_server():

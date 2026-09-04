@@ -4,7 +4,15 @@ var peer_id: int
 var username: String
 var joined_game: bool
 
-func _init(peer_id: int, username: String) -> void:
-	self.peer_id = peer_id
-	self.username = username
-	self.joined_game = false
+func serialize() -> Dictionary:
+	var dict: Dictionary = {
+		"peer_id" : peer_id,
+		"username" : username,
+		"joined_game" : joined_game
+	}
+	return dict
+
+func deserialize(dict: Dictionary) -> void:
+	peer_id = dict.peer_id
+	username = dict.username
+	joined_game = dict.joined_game
