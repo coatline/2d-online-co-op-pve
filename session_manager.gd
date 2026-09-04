@@ -46,9 +46,12 @@ func _on_peer_connected(peer_id: int) -> void:
 func create_user(peer_id: int) -> void:
 	var order: int = peer_to_user_state.size()
 	var user_state: UserState = UserState.new(peer_id, "Player %d" % (order + 1))
-	peer_to_user_state[peer_id] = user_state
-	NetworkLogger.I.print_networked("Registered user: %d" % peer_id)
-	user_joined.emit(peer_id)
+	join_user(user_state)
+
+func join_user(user_data: UserState) -> void:
+	NetworkLogger.I.print_networked("Registered user: %d" % user_data.peer_id)
+	peer_to_user_state[user_data.peer_id] = user_data
+	user_joined.emit(user_data.peer_id)
 
 func _on_peer_disconnected(peer_id: int) -> void:
 	user_left.emit(peer_id)
@@ -68,8 +71,8 @@ func end_session() -> void:
 func _on_network_disconnected() -> void:
 	end_session()
 
-func get_user_state(peer_id: int) -> UserState:
-	return peer_to_user_state[peer_id]
+func try_get_user_state(peer_id: int) -> UserState:
+	return peer_to_user_state.get(peer_id)
 
 func get_my_user_state() -> UserState:
 	return peer_to_user_state[multiplayer.get_unique_id()]

@@ -28,6 +28,7 @@ ConnectionManager="*uid://b7fvq574c408s"
 SoundManager="*uid://clu7i3y0x4ost"
 SessionManager="*uid://gocopu8gcjcd"
 SessionSynchronizer="*uid://dd7axq0konukw"
+NetworkTransport="*uid://bmhy3elwy58if"
 
 [display]
 

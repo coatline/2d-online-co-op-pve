@@ -1,37 +1,25 @@
 extends Node
-class_name NetworkTransport
+# Autoload NetworkTransport
 
-static var I: NetworkTransport
+func _ready() -> void:
+	multiplayer.peer_packet.connect(_on_peer_packet)
 
-func _enter_tree() -> void:
-	I = self
-
-func _process(delta: float) -> void:
-	process_incoming_packets()
-
-func process_incoming_packets() -> void:
-	# Always recieve packets
-	while multiplayer.multiplayer_peer.get_available_packet_count() > 0:
-		var packet: PackedByteArray = multiplayer.multiplayer_peer.get_packet()
-		NetworkLogger.I.print_networked("Recieved packet!")
-		deserialize_packet(packet)
+func _on_peer_packet(peer_id: int, packet: PackedByteArray) -> void:
+	NetworkLogger.I.print_networked("Received packet %s from peer %d" % [packet, peer_id])
+	deserialize_packet(packet)
 
 func send_packet_all(packet: PackedByteArray):
 	multiplayer.multiplayer_peer.set_target_peer(MultiplayerPeer.TARGET_PEER_BROADCAST)
+	multiplayer.send_bytes(packet)
 
 func send_packet_to(packet: PackedByteArray, target_peer_id: int) -> void:
 	multiplayer.multiplayer_peer.set_target_peer(target_peer_id)
-	multiplayer.multiplayer_peer.put_packet(packet)
-
-func serialize_packet(packet_type: PacketType, data: Variant) -> PackedByteArray:
-	var bytes: PackedByteArray = PackedByteArray()
-	bytes.append(packet_type)
-	bytes.append_array(var_to_bytes(data))
-	return bytes
+	multiplayer.send_bytes(packet)
 
 func deserialize_packet(packet: PackedByteArray) -> void:
 	var binary_reader: BinaryReader = BinaryReader.new(packet)
 	var packet_header: int = binary_reader.read_u8()
+	NetworkLogger.I.print_networked("Packet header: %d" % packet_header)
 
 	match packet_header:
 		PacketType.COMMAND:
@@ -40,6 +28,18 @@ func deserialize_packet(packet: PackedByteArray) -> void:
 			handle_world_update(binary_reader)
 		PacketType.INITIALIZE_CLIENT:
 			NetworkLogger.I.print_networked("Recieved info on initilized client")
+			var peer_id: int = binary_reader.read_i32()
+			var user_state: UserState = SessionManager.try_get_user_state(peer_id)
+			if user_state == null:
+				var in_game = binary_reader.read_bool()
+				user_state = UserState.new(peer_id, binary_reader.read_string())
+				user_state.in_game = in_game
+				SessionManager.join_user(user_state)
+			else:
+				user_state.deserialize(binary_reader)
+			#writer.write_header_u8(NetworkTransport.PacketType.INITIALIZE_CLIENT)
+			#user_state.serialize(writer)
+			#NetworkTransport.send_packet_to(writer.get_data(), peer_id)
 			pass
 
 func handle_command(reader: BinaryReader):
@@ -50,6 +50,8 @@ func handle_world_update(reader: BinaryReader):
 
 enum PacketType {
 	INITIALIZE_CLIENT,
+	SPAWN,
+	DESPAWN,
 	COMMAND,
 	WORLD_UPDATE,
 	GAME_STARTED

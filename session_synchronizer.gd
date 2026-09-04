@@ -17,10 +17,10 @@ func _user_joined(peer_id: int):
 	NetworkLogger.I.print_networked("Initializing the user %d's networking info" % peer_id)
 	
 	var writer: BinaryWriter = BinaryWriter.new()
-	var user_state: UserState = SessionManager.get_user_state(peer_id)
+	var user_state: UserState = SessionManager.try_get_user_state(peer_id)
 	writer.write_header_u8(NetworkTransport.PacketType.INITIALIZE_CLIENT)
 	user_state.serialize(writer)
-	NetworkTransport.I.send_packet_to(writer.get_data(), peer_id)
+	NetworkTransport.send_packet_to(writer.get_data(), peer_id)
 
 @rpc("authority", "call_local", "reliable")
 func all_set_game_started() -> void:

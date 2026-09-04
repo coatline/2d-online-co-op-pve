@@ -28,7 +28,7 @@ func _physics_process(delta: float) -> void:
 func spawn_player(peer: int, player_state: PlayerState) -> void:
 	print("Spawnin player")
 	var player: GamePlayer = entity_type_to_scene[EntityState.EntityType.PLAYER].instantiate()
-	player.initialize(SessionManager.get_user_state(peer).username, player_state)
+	player.initialize(SessionManager.try_get_user_state(peer).username, player_state)
 	add_child(player)
 	peer_id_to_player[peer] = player
 
