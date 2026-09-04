@@ -33,6 +33,7 @@ func close() -> void:
 
 func back() -> void:
 	UIMenuController.I.pop_menu()
+	on_back()
 
 # Whether the menu can be closed by pause/cancel input. Overridden by menus
 # that are busy (e.g. mid-rebind).
@@ -48,6 +49,9 @@ func on_open() -> void:
 	pass
 
 func on_close() -> void:
+	pass
+
+func on_back() -> void:
 	pass
 
 # Focus the last focused button if it's still valid, otherwise the first

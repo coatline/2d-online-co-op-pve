@@ -8,7 +8,11 @@ signal joined_game()
 # Clients send updates to server
 
 func _ready() -> void:
-	SessionManager.user_joined.connect(_user_joined)
+	SessionManager.session_initialized.connect(begin_tracking)
+	# SessionManager.session_state.user_joined.connect(_user_joined)
+
+func begin_tracking() -> void:
+	SessionManager.session_state.user_joined.connect(_user_joined)
 
 func _user_joined(peer_id: int):
 	if ConnectionManager.is_server() == false or peer_id == multiplayer.get_unique_id():
@@ -16,7 +20,7 @@ func _user_joined(peer_id: int):
 	
 	NetworkLogger.I.print_networked("Initializing the user %d's networking info" % peer_id)
 	
-	var user_state: UserState = SessionManager.try_get_user_state(peer_id)
+	var user_state: UserState = SessionManager.session_state.get_user(peer_id)
 	update_session_state.rpc(SessionManager.session_state.serialize())
 
 	# var writer: BinaryWriter = BinaryWriter.new()
@@ -32,7 +36,10 @@ func _user_joined(peer_id: int):
 func submit_user_info(username: String) -> void:
 	if ConnectionManager.is_server():
 		var peer_id: int = multiplayer.get_remote_sender_id()
-		SessionManager.create_user(peer_id, username)
+		var new_user: UserState = UserState.new()
+		new_user.peer_id = peer_id
+		new_user.username = username
+		SessionManager.session_state.add_user(new_user)
 		NetworkLogger.I.print_networked("User %d submitted their info" % peer_id)
 
 @rpc("authority", "call_remote", "reliable")

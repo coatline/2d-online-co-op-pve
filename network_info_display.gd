@@ -6,8 +6,14 @@ class_name NetworkInfoDisplay
 @export var user_count_label: Label
 
 func _ready() -> void:
-	ConnectionManager.hosted_room.connect(update_network_info)
-	SessionManager.user_joined.connect(func(peer_id: int): update_network_info())
+	SessionManager.session_initialized.connect(session_initialize)
+
+func session_initialize() -> void:
+	update_network_info()
+	SessionManager.session_state.user_joined.connect(user_joined)
+
+func user_joined(pid: int) -> void:
+	update_network_info()
 
 func update_network_info():
 	connection_type_label.text = ConnectionManager.ConnectionType.keys()[ConnectionManager.connection_type]

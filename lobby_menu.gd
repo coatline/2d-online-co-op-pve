@@ -16,12 +16,12 @@ func _ready() -> void:
 	quit_button.pressed.connect(_quit_button_pressed)
 	copy_to_clipboard_button.pressed.connect(_on_copy_to_clipboard_pressed)
 	
-	SessionManager.user_joined.connect(func(id: int): spawn_card(SessionManager.try_get_user_state(id)))
 
 func on_open() -> void:
+	SessionManager.session_state.user_joined.connect(user_joined)
 	NetworkLogger.I.print_networked("there are %d players" % SessionManager.session_state.peer_to_user_state.size())
-	#for user: UserState in SessionManager.session_state.peer_to_user_state.values():
-		#spawn_card(user)
+	for user: UserState in SessionManager.session_state.peer_to_user_state.values():
+		spawn_card(user)
 	
 	# Show different ui based on connection type
 	if ConnectionManager.is_server():
@@ -38,9 +38,15 @@ func on_open() -> void:
 	else:
 		room_id_container.hide()
 
-func back() -> void:
+func on_close() -> void:
+	SessionManager.user_joined.disconnect(user_joined)
+
+func on_back() -> void:
 	# TODO: Disconnect
-	super()
+	pass
+
+func user_joined(pid: int) -> void:
+	spawn_card(SessionManager.try_get_user_state(pid))
 
 func spawn_card(user_state: UserState):
 	var lobby_player_ui: LobbyPlayerUI = player_card_scene.instantiate()
@@ -53,7 +59,8 @@ func remove_card(pid: int) -> void:
 
 func _on_start_game_pressed() -> void:
 	if ConnectionManager.is_server():
-		SessionSynchronizer.start_game()
+		pass
+		#SessionSynchronizer.start_game()
 		# SessionManager.join_game()
 		# SessionSynchronizer.all_set_game_started()
 	else:
