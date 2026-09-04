@@ -19,7 +19,11 @@ func _ready() -> void:
 
 func on_open() -> void:
 	SessionManager.session_state.user_joined.connect(user_joined)
-	NetworkLogger.I.print_networked("there are %d players" % SessionManager.session_state.peer_to_user_state.size())
+	SessionManager.session_state.user_left.connect(user_left)
+
+	for ui in player_card_holder.get_children():
+		ui.queue_free()
+
 	for user: UserState in SessionManager.session_state.peer_to_user_state.values():
 		spawn_card(user)
 	
@@ -27,6 +31,8 @@ func on_open() -> void:
 	if ConnectionManager.is_server():
 		if ConnectionManager.connection_type == ConnectionManager.ConnectionType.LAN:
 			lan_container.show()
+		
+		start_button.show()
 	else:
 		start_button.hide()
 	#elif SessionManager.get_my_user_state().in_game == false:
@@ -56,9 +62,13 @@ func on_back() -> void:
 func user_joined(pid: int) -> void:
 	spawn_card(SessionManager.try_get_user_state(pid))
 
+func user_left(pid: int) -> void:
+	remove_card(pid)
+
 func spawn_card(user_state: UserState):
 	var lobby_player_ui: LobbyPlayerUI = player_card_scene.instantiate()
 	lobby_player_ui.setup(user_state)
+	lobby_player_ui.name = str(user_state.peer_id)
 	player_card_holder.add_child(lobby_player_ui)
 
 func remove_card(pid: int) -> void:
@@ -78,7 +88,8 @@ func _on_start_game_pressed() -> void:
 	close()
 
 func _quit_button_pressed() -> void:
-	multiplayer.multiplayer_peer.close()
+	SessionManager.terminate_session()
+	# multiplayer.multiplayer_peer.close()
 
 func _on_copy_to_clipboard_pressed() -> void:
 	DisplayServer.clipboard_set(SessionManager.current_room)

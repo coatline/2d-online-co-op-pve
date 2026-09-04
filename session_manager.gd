@@ -22,6 +22,10 @@ func initialize_session() -> void:
 
 func terminate_session() -> void:
 	NetworkLogger.I.print_networked("Session terminated")
+	
+	if ConnectionManager.is_online():
+		ConnectionManager.disconnect_from_network()
+	
 	initialized = false
 	session_terminated.emit()
 	session_state = null

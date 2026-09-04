@@ -166,7 +166,3 @@ func get_peer_id() -> int:
 		return multiplayer.get_unique_id()
 	else:
 		return -1
-
-func _exit_tree() -> void:
-	if is_online():
-		disconnect_from_network()

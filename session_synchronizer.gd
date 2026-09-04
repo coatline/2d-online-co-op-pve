@@ -9,7 +9,7 @@ signal joined_game()
 
 func _ready() -> void:
 	SessionManager.session_initialized.connect(begin_tracking)
-	# SessionManager.session_state.user_joined.connect(_user_joined)
+	ConnectionManager.peer_disconnected.connect(_on_peer_disconnected)
 
 func begin_tracking() -> void:
 	SessionManager.session_state.user_joined.connect(_user_joined)
@@ -31,6 +31,13 @@ func _user_joined(peer_id: int):
 	
 	# Send the session and user states to the game
 	# initialize_new_user.rpc_id(peer_id, SessionManager.peer_to_user_state)
+
+func _on_peer_disconnected(peer_id: int) -> void:
+	NetworkLogger.I.print_networked("User %d left!" % peer_id)
+	if ConnectionManager.is_server():
+		SessionManager.session_state.remove_user(peer_id)
+		update_session_state.rpc(SessionManager.session_state.serialize())
+
 
 @rpc("any_peer", "call_remote", "reliable")
 func submit_user_info(username: String) -> void:
