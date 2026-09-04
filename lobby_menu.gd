@@ -16,17 +16,15 @@ func _ready() -> void:
 	quit_button.pressed.connect(_quit_button_pressed)
 	copy_to_clipboard_button.pressed.connect(_on_copy_to_clipboard_pressed)
 	
-	if SessionManager.is_server():
-		multiplayer.peer_connected.connect(spawn_card)
-		multiplayer.peer_disconnected.connect(remove_card)
+	SessionManager.user_joined.connect(func(id: int): spawn_card(SessionManager.try_get_user_state(id)))
 
 func on_open() -> void:
-	NetworkLogger.I.print_networked("there are %d players" % SessionManager.peer_to_user_state.size())
-	for peer in SessionManager.peer_to_user_state.keys():
-		spawn_card(peer)
+	NetworkLogger.I.print_networked("there are %d players" % SessionManager.session_state.peer_to_user_state.size())
+	#for user: UserState in SessionManager.session_state.peer_to_user_state.values():
+		#spawn_card(user)
 	
 	# Show different ui based on connection type
-	if SessionManager.is_server():
+	if ConnectionManager.is_server():
 		if ConnectionManager.connection_type == ConnectionManager.ConnectionType.LAN:
 			lan_container.show()
 	else:
@@ -39,22 +37,28 @@ func on_open() -> void:
 		room_id_label.text = "room id: %s" % SessionManager.current_room
 	else:
 		room_id_container.hide()
-	
 
-func spawn_card(pid: int):
-	var player_card = player_card_scene.instantiate()
-	player_card_holder.add_child(player_card)
-	player_card.name = str(pid)
+func back() -> void:
+	# TODO: Disconnect
+	super()
+
+func spawn_card(user_state: UserState):
+	var lobby_player_ui: LobbyPlayerUI = player_card_scene.instantiate()
+	lobby_player_ui.setup(user_state)
+	player_card_holder.add_child(lobby_player_ui)
 
 func remove_card(pid: int) -> void:
 	var client_card = player_card_holder.get_node(str(pid))
 	client_card.queue_free()
 
 func _on_start_game_pressed() -> void:
-	if SessionManager.is_server():
-		SessionSynchronizer.all_set_game_started()
+	if ConnectionManager.is_server():
+		SessionSynchronizer.start_game()
+		# SessionManager.join_game()
+		# SessionSynchronizer.all_set_game_started()
 	else:
-		SessionSynchronizer.all_join_this_player_in_game()
+		pass
+		# SessionSynchronizer.all_join_this_player_in_game()
 	
 	close()
 

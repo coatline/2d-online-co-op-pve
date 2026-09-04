@@ -2,19 +2,21 @@ extends Node
 # Autoload ConnectionManager
 
 enum ConnectionType { NONE, NODE_TUNNEL, LAN }
+enum SessionMode { SINGLEPLAYER, HOST, CLIENT }
 
 @export var lan_port: int = 7777
 
 var connection_type: ConnectionType = ConnectionType.NONE
+var session_mode: SessionMode = SessionMode.SINGLEPLAYER
 var node_tunnel_peer: NodeTunnelPeer
 var peer: MultiplayerPeer
-var is_host: bool = false
+var current_room: String
 
 signal connected_to_network
 signal disconnected_from_network
 
-signal joined_room(peer_id: int)
-signal hosted_room(peer_id: int)
+signal joined_room()
+signal hosted_room()
 signal peer_connected(peer_id: int)
 signal peer_disconnected(peer_id: int)
 signal connection_failed
@@ -47,14 +49,15 @@ func host_room(is_public: bool, meta_data: String) -> String:
 		push_error("Cannot host a NodeTunnel room without connecting to the relay first.")
 		return ""
 	
-	is_host = true
+	session_mode = SessionMode.HOST
 	node_tunnel_peer.host_room(is_public, meta_data)
 	
 	print("Hosting room")
 	await node_tunnel_peer.room_connected
 
 	print("Now hosting room: ", node_tunnel_peer.room_id)
-	hosted_room.emit(multiplayer.get_unique_id())
+	current_room = node_tunnel_peer.room_id
+	hosted_room.emit()
 	return node_tunnel_peer.room_id
 
 func join_room(room_id: String) -> void:
@@ -62,12 +65,13 @@ func join_room(room_id: String) -> void:
 		push_error("Cannot join a NodeTunnel room without connecting to the relay first.")
 		return
 	
-	is_host = false
+	session_mode = SessionMode.CLIENT
 	node_tunnel_peer.join_room(room_id)
 	
 	print("Joining room: ", room_id)
 	await node_tunnel_peer.room_connected
 	
+	current_room = room_id
 	joined_room.emit(peer.get_unique_id())
 	print("Connected to room: ", room_id)
 
@@ -82,11 +86,12 @@ func host_lan(port: int = lan_port) -> void:
 		push_error("Failed to host LAN game: " + str(error))
 		return
 	
+	current_room = "LAN Game on port %d" % port
 	peer = lan_peer
 	multiplayer.multiplayer_peer = peer
 	connection_type = ConnectionType.LAN
-	is_host = true
-	hosted_room.emit(multiplayer.get_unique_id())
+	session_mode = SessionMode.HOST
+	hosted_room.emit()
 	
 	print("Hosting LAN game on port: ", port)
 
@@ -101,13 +106,13 @@ func join_lan(address: String, port: int = lan_port) -> void:
 		push_error("Failed to join LAN game: " + str(error))
 		return
 	
+	current_room = "LAN Game at %s:%d" % [address, port]
 	peer = lan_peer
 	multiplayer.multiplayer_peer = peer
 	connection_type = ConnectionType.LAN
-	is_host = false
+	session_mode = SessionMode.CLIENT
 	
-	joined_room.emit(peer.get_unique_id())
-	print("Joining LAN game at ", address, ":", port)
+	print("Joining LAN game at %s:%d..." % [address, port])
 
 func disconnect_from_network() -> void:
 	multiplayer.multiplayer_peer.close()
@@ -116,7 +121,7 @@ func disconnect_from_network() -> void:
 	peer = null
 	node_tunnel_peer = null
 	connection_type = ConnectionType.NONE
-	is_host = false
+	session_mode = SessionMode.SINGLEPLAYER
 	
 	disconnected_from_network.emit()
 
@@ -124,6 +129,9 @@ func is_connected_to_network() -> bool:
 	return multiplayer.multiplayer_peer != null
 
 func _on_connected_to_server() -> void:
+	if connection_type == ConnectionType.LAN and session_mode == SessionMode.CLIENT:
+		joined_room.emit()
+	
 	NetworkLogger.I.print_networked("I connected to server.")
 	connected_to_network.emit()
 
@@ -149,6 +157,9 @@ func _on_node_tunnel_error(error_message: String) -> void:
 
 func is_online() -> bool:
 	return peer != null
+
+func is_server() -> bool:
+	return session_mode == SessionMode.SINGLEPLAYER or session_mode == SessionMode.HOST
 
 func _exit_tree() -> void:
 	if is_online():

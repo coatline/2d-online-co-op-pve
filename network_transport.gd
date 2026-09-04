@@ -33,8 +33,9 @@ func deserialize_packet(packet: PackedByteArray) -> void:
 			if user_state == null:
 				var in_game = binary_reader.read_bool()
 				user_state = UserState.new(peer_id, binary_reader.read_string())
-				user_state.in_game = in_game
+				user_state.spawned_in_game = in_game
 				SessionManager.join_user(user_state)
+				NetworkLogger.I.print_networked("OKAY JOINING USER")
 			else:
 				user_state.deserialize(binary_reader)
 			#writer.write_header_u8(NetworkTransport.PacketType.INITIALIZE_CLIENT)

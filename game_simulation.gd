@@ -16,7 +16,8 @@ func _enter_tree() -> void:
 	world_state = WorldState.new()
 
 func _physics_process(delta: float) -> void:
-	if SessionManager.is_server():
+	pass
+	if ConnectionManager.is_server():
 		if SessionManager.game_started:
 			update_world_state(world_state)
 			var writer: BinaryWriter = BinaryWriter.new()
@@ -26,7 +27,6 @@ func _physics_process(delta: float) -> void:
 
 
 func spawn_player(peer: int, player_state: PlayerState) -> void:
-	print("Spawnin player")
 	var player: GamePlayer = entity_type_to_scene[EntityState.EntityType.PLAYER].instantiate()
 	player.initialize(SessionManager.try_get_user_state(peer).username, player_state)
 	add_child(player)

@@ -13,7 +13,7 @@ func begin_spawning() -> void:
 	#spawn_timer.timeout.connect(spawn_bunch)
 
 #func spawn_bunch():
-	#if not SessionManager.is_server():
+	#if not ConnectionManager.is_server():
 		#return
 	#
 	#var player: PlayerBody = PlayerSpawner.I.get_game_player(1).player_body

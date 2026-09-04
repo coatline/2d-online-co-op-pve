@@ -7,13 +7,13 @@ class_name Game
 var pid_to_game_player: Dictionary[int, GamePlayer] = {}
 
 func _ready() -> void:
-	if SessionManager.is_server():
+	if ConnectionManager.is_server():
 		#SessionSynchronizer.game_began.connect(_game_began)
 		SessionSynchronizer.player_joined_game.connect(_player_joined_game)
 		enemy_spawner.begin_spawning()
 
 func _player_joined_game(peer: int) -> void:
-	if SessionManager.is_server():
+	if ConnectionManager.is_server():
 		var player_state: PlayerState = PlayerState.new()
 		player_state.position = player_spawn_position.global_position + Vector2.ONE * randf_range(-3.0, 3.0)
 		player_state.peer_id = multiplayer.get_unique_id()

@@ -16,7 +16,7 @@ func _request_spawn(position: Vector2, direction: Vector2, source_entity_id: int
 	spawn_projectile(position, direction, EntityManager.I.get_entity(source_entity_id))
 
 func spawn_projectile(position: Vector2, force: Vector2, source_entity: Entity) -> void:
-	if not SessionManager.is_server():
+	if not ConnectionManager.is_server():
 		#_request_spawn.rpc(position, force, source_entity.id)
 		return
 	

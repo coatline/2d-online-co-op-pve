@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bbdnfb36ll0oy"]
 
 [ext_resource type="Script" uid="uid://cjtrax6u0fgma" path="res://lobby_menu.gd" id="1_iohss"]
-[ext_resource type="PackedScene" uid="uid://bkuapdfpwjbi3" path="res://player_card.tscn" id="2_xrgmn"]
+[ext_resource type="PackedScene" uid="uid://bkuapdfpwjbi3" path="res://lobby_player_ui.tscn" id="2_xrgmn"]
 
 [node name="LobbyMenu" type="Control" unique_id=1894008978 node_paths=PackedStringArray("room_id_container", "lan_container", "player_card_holder", "copy_to_clipboard_button", "start_button", "quit_button", "room_id_label")]
 layout_mode = 3

@@ -3,79 +3,50 @@ extends Node
 
 signal user_joined(peer_id: int)
 signal user_left(peer_id: int)
-signal game_began()
 
-enum SessionMode { SINGLEPLAYER, HOST, CLIENT }
+signal connection_initialized()
 
-@onready var game_scene: PackedScene = preload("uid://cvwkjv2rk8kj2")
 
-var session_mode: SessionMode = SessionMode.SINGLEPLAYER
-
-var peer_to_user_state: Dictionary[int, UserState]
-var game_started: bool
-
-var current_room: String
+var session_state: SessionState
 
 func _ready() -> void:
-	ConnectionManager.joined_room.connect(_on_joined_room)
+	ConnectionManager.joined_room.connect(_joined_room)
 	ConnectionManager.hosted_room.connect(_on_hosted_room)
-	ConnectionManager.peer_connected.connect(_on_peer_connected)
-	ConnectionManager.peer_disconnected.connect(_on_peer_disconnected)
-	ConnectionManager.disconnected_from_network.connect(_on_network_disconnected)
+	# ConnectionManager.peer_connected.connect(_on_peer_connected)
+	ConnectionManager.disconnected_from_network.connect(end_session)
 
-func _on_hosted_room(peer_id: int) -> void:
-	current_room = ""
+func start_session():
+	NetworkLogger.I.print_networked("Starting session")
+	connection_initialized.emit()
+
+func _joined_room() -> void:
+	SessionSynchronizer.submit_user_info.rpc_id(1, "Client %d" % multiplayer.get_unique_id())
+
+func _on_hosted_room() -> void:
+	session_state = SessionState.new()
+	create_user(multiplayer.get_unique_id(), "Host")
 	
-	if not ConnectionManager.is_connected_to_network():
-		push_error("Cannot start session without a network connection.")
-		return
-	
-	end_session()
-	
-	create_user(multiplayer.get_unique_id())
-	session_mode = SessionMode.HOST
+	start_session()
 
-func _on_joined_room(peer_id: int) -> void:
-	#current_room = ConnectionManager.
-	session_mode = SessionMode.CLIENT
+# func _on_peer_connected(peer_id: int) -> void:
+# 	if ConnectionManager.is_server():
+# 		create_user(peer_id)
 
-func _on_peer_connected(peer_id: int) -> void:
-	if SessionManager.is_server():
-		create_user(peer_id)
-
-func create_user(peer_id: int) -> void:
-	var order: int = peer_to_user_state.size()
-	var user_state: UserState = UserState.new(peer_id, "Player %d" % (order + 1))
+# Server only
+func create_user(peer_id: int, username: String) -> void:
+	var user_state: UserState = UserState.new(peer_id, username)
 	join_user(user_state)
 
 func join_user(user_data: UserState) -> void:
 	NetworkLogger.I.print_networked("Registered user: %d" % user_data.peer_id)
-	peer_to_user_state[user_data.peer_id] = user_data
+	session_state.peer_to_user_state[user_data.peer_id] = user_data
 	user_joined.emit(user_data.peer_id)
 
-func _on_peer_disconnected(peer_id: int) -> void:
-	user_left.emit(peer_id)
-
-func begin_game() -> void:
-	game_started = true
-
-	var game = game_scene.instantiate()
-	get_tree().root.add_child(game)
-	game_began.emit()
-	
-	#SessionSynchronizer.all_join_this_player_in_game.rpc()
-
 func end_session() -> void:
-	current_room = ""
-
-func _on_network_disconnected() -> void:
-	end_session()
+	session_state = null
 
 func try_get_user_state(peer_id: int) -> UserState:
-	return peer_to_user_state.get(peer_id)
+	return session_state.peer_to_user_state.get(peer_id)
 
 func get_my_user_state() -> UserState:
-	return peer_to_user_state[multiplayer.get_unique_id()]
-
-func is_server() -> bool:
-	return session_mode == SessionMode.SINGLEPLAYER or session_mode == SessionMode.HOST
+	return session_state.peer_to_user_state[multiplayer.get_unique_id()]
