@@ -3,6 +3,7 @@ class_name GameTypeMenu
 
 @export var online_connection_menu: OnlineConnectionMenu
 @export var lan_connection_screen: LANConnectionMenu
+@export var lobby_menu: LobbyMenu
 
 @export var singleplayer_button: Button
 @export var online_button: Button
@@ -15,7 +16,11 @@ func _ready() -> void:
 
 func _singleplayer_pressed() -> void:
 	close()
-	SessionManager.begin_game()
+	SessionManager.session_state = SessionState.new()
+	SessionManager.create_user(ConnectionManager.get_peer_id(), "Me")
+	SessionManager.initialize_session()
+	lobby_menu.open()
+	#SessionSynchronizer.join_game()
 
 func _online_pressed() -> void:
 	online_connection_menu.open()

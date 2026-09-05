@@ -9,7 +9,8 @@ var pid_to_game_player: Dictionary[int, GamePlayer] = {}
 func _ready() -> void:
 	if ConnectionManager.is_server():
 		#SessionSynchronizer.game_began.connect(_game_began)
-		SessionSynchronizer.player_joined_game.connect(_player_joined_game)
+		#SessionSynchronizer.player_joined_game.connect(_player_joined_game)
+		#SessionManager.session_state.
 		enemy_spawner.begin_spawning()
 
 func _player_joined_game(peer: int) -> void:

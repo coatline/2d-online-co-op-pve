@@ -16,14 +16,13 @@ func _enter_tree() -> void:
 	world_state = WorldState.new()
 
 func _physics_process(delta: float) -> void:
-	pass
+	return
 	if ConnectionManager.is_server():
-		if SessionManager.game_started:
-			update_world_state(world_state)
-			var writer: BinaryWriter = BinaryWriter.new()
-			world_state.serialize(writer)
-			#NetworkTransport.I.clients_update_world_state.rpc(writer.get_data())
-			#print(writer.get_data())
+		update_world_state(world_state)
+		var writer: BinaryWriter = BinaryWriter.new()
+		world_state.serialize(writer)
+		#NetworkTransport.I.clients_update_world_state.rpc(writer.get_data())
+		#print(writer.get_data())
 
 
 func spawn_player(peer: int, player_state: PlayerState) -> void:

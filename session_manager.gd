@@ -30,23 +30,16 @@ func terminate_session() -> void:
 	session_terminated.emit()
 	session_state = null
 
+
 func _joined_room() -> void:
 	initialized = false
-	
-	SessionSynchronizer.submit_user_info.rpc_id(
-		1,
-		"Client %d" % ConnectionManager.get_peer_id()
-	)
+	SessionSynchronizer.submit_user_info.rpc_id(1, "Client %d" % ConnectionManager.get_peer_id())
 
 
 func _on_hosted_room() -> void:
 	session_state = SessionState.new()
 	
-	create_user(
-		ConnectionManager.get_peer_id(),
-		"Host"
-	)
-	
+	create_user(ConnectionManager.get_peer_id(), "Host")
 	initialize_session()
 
 

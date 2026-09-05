@@ -46,7 +46,7 @@ offset_right = 42.0
 offset_bottom = 31.0
 text = "Quit"
 
-[node name="GameTypeMenu" type="Control" parent="CanvasLayer" unique_id=1084682500 node_paths=PackedStringArray("online_connection_menu", "lan_connection_screen", "singleplayer_button", "online_button", "lan_button")]
+[node name="GameTypeMenu" type="Control" parent="CanvasLayer" unique_id=1084682500 node_paths=PackedStringArray("online_connection_menu", "lan_connection_screen", "lobby_menu", "singleplayer_button", "online_button", "lan_button")]
 layout_mode = 3
 anchors_preset = 8
 anchor_left = 0.5
@@ -62,6 +62,7 @@ grow_vertical = 2
 script = ExtResource("2_272bh")
 online_connection_menu = NodePath("../OnlineConnectionMenu")
 lan_connection_screen = NodePath("../LANConnectionScreen")
+lobby_menu = NodePath("../LobbyMenu")
 singleplayer_button = NodePath("VBoxContainer/SingleplayerButton")
 online_button = NodePath("VBoxContainer/OnlineButton")
 lan_button = NodePath("VBoxContainer/LANButton")

@@ -15,11 +15,8 @@ func _ready() -> void:
 	start_button.pressed.connect(_on_start_game_pressed)
 	quit_button.pressed.connect(_quit_button_pressed)
 	copy_to_clipboard_button.pressed.connect(_on_copy_to_clipboard_pressed)
-	SessionManager.session_terminated.connect(_on_session_terminated)
 
 func on_open() -> void:
-	SessionManager.session_state.user_joined.connect(user_joined)
-	SessionManager.session_state.user_left.connect(user_left)
 
 	for ui in player_card_holder.get_children():
 		ui.queue_free()
@@ -43,17 +40,21 @@ func on_open() -> void:
 		room_id_label.text = "room id: %s" % SessionManager.current_room
 	else:
 		room_id_container.hide()
+	
+	SessionManager.session_terminated.connect(_on_session_terminated)
+	SessionManager.session_state.user_joined.connect(user_joined)
+	SessionManager.session_state.user_left.connect(user_left)
 
 func on_close() -> void:
+	SessionManager.session_state.user_left.disconnect(user_left)
 	SessionManager.session_state.user_joined.disconnect(user_joined)
+	SessionManager.session_terminated.disconnect(_on_session_terminated)
 
+# if the session is terminated, and I'm still active, go back.
 func _on_session_terminated():
-	if visible:
-		back()
+	back()
 
 # if back() gets called and i haven't terminated the session, terminate it
-# if the session is terminated, go back.
-
 func on_back() -> void:
 	# If we aren't going back because we just terminated, terminate.
 	if SessionManager.initialized:
@@ -77,6 +78,7 @@ func remove_card(pid: int) -> void:
 
 func _on_start_game_pressed() -> void:
 	if ConnectionManager.is_server():
+		SessionSynchronizer.join_game()
 		pass
 		#SessionSynchronizer.start_game()
 		# SessionManager.join_game()

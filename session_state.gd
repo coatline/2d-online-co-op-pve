@@ -5,16 +5,16 @@ signal game_started_changed(value: bool)
 signal user_joined(peer_id: int)
 signal user_left(peer_id: int)
 
+var peer_to_user_state: Dictionary[int, UserState] = {}
+
 var game_started: bool:
 	set(value):
 		if game_started == value:
 			return
 		
+		NetworkLogger.I.print_networked("GAME STARTYED!")
 		game_started = value
 		game_started_changed.emit(value)
-
-var peer_to_user_state: Dictionary[int, UserState] = {}
-
 
 func add_user(user_state: UserState) -> void:
 	if peer_to_user_state.has(user_state.peer_id):
@@ -34,6 +34,10 @@ func remove_user(peer_id: int) -> void:
 
 func get_user(peer_id: int) -> UserState:
 	return peer_to_user_state.get(peer_id)
+
+
+func get_my_user_state() -> UserState:
+	return peer_to_user_state[ConnectionManager.get_peer_id()]
 
 
 func serialize() -> Dictionary:

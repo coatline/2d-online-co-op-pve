@@ -13,6 +13,7 @@ func _ready() -> void:
 
 func begin_tracking() -> void:
 	SessionManager.session_state.user_joined.connect(_user_joined)
+	SessionManager.session_state.get_my_user_state().spawned_in_game_changed.connect(_on_spawn_in_game_changed)
 
 func _user_joined(peer_id: int):
 	if ConnectionManager.is_server() == false or peer_id == ConnectionManager.get_peer_id():
@@ -20,7 +21,6 @@ func _user_joined(peer_id: int):
 	
 	NetworkLogger.I.print_networked("Initializing the user %d's networking info" % peer_id)
 	
-	var user_state: UserState = SessionManager.session_state.get_user(peer_id)
 	update_session_state.rpc(SessionManager.session_state.serialize())
 
 	# var writer: BinaryWriter = BinaryWriter.new()
@@ -59,10 +59,20 @@ func update_session_state(session_state_dict: Dictionary) -> void:
 	if SessionManager.initialized == false:
 		SessionManager.initialize_session()
 
-#func join_game() -> void:
-	#if ConnectionManager.is_server():
-		#session_state.game_started = true
-	#
-	#var game = game_scene.instantiate()
-	#get_tree().root.add_child(game)
-	#joined_game.emit()
+func join_game() -> void:
+	if ConnectionManager.is_server():
+		SessionManager.session_state.game_started = true
+		NetworkLogger.I.print_networked("Starting game!")
+
+		for user: UserState in SessionManager.session_state.peer_to_user_state.values():
+			NetworkLogger.I.print_networked("Joining user %d" % user.peer_id)
+			user.joined_game = true
+		
+		update_session_state.rpc(SessionManager.session_state.serialize())
+
+func _on_spawn_in_game_changed(value: bool) -> void:
+	if value:
+		NetworkLogger.I.print_networked("Game started!")
+		var game = game_scene.instantiate()
+		get_tree().root.add_child(game)
+		joined_game.emit()
