@@ -2,7 +2,7 @@ extends Node
 # Autoload GameSynchronizer
 
 @export var entity_type_to_scene: Dictionary[EntityState.EntityType, PackedScene]
-var peer_id_to_player: Dictionary[int, GamePlayer]
+var peer_id_to_player_id: Dictionary[int, int]
 
 # Go ahead and spawn it, even if you are the client.
 # If you are the client, send the request to the server
@@ -15,6 +15,8 @@ func server_only_spawn_player(user: UserState) -> void:
 
 	# Spawn in the entity
 	GameSimulation.I.spawn_player_node(player_state)
+	
+	peer_id_to_player_id[user.peer_id] = player_state.id
 
 
 @rpc("any_peer", "call_remote", "reliable")

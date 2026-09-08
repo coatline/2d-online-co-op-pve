@@ -89,7 +89,6 @@ func _on_start_game_pressed() -> void:
 
 func _quit_button_pressed() -> void:
 	SessionManager.terminate_session()
-	# multiplayer.multiplayer_peer.close()
 
 func _on_copy_to_clipboard_pressed() -> void:
 	DisplayServer.clipboard_set(SessionManager.current_room)
