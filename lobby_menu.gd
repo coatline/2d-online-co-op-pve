@@ -43,8 +43,14 @@ func on_open() -> void:
 	SessionManager.session_terminated.connect(_on_session_terminated)
 	SessionManager.session_state.user_joined.connect(user_joined)
 	SessionManager.session_state.user_left.connect(user_left)
+	SessionManager.session_state.game_started_changed.connect(_on_game_started_changed)
+
+func _on_game_started_changed(value: bool) -> void:
+	if value:
+		close()
 
 func on_close() -> void:
+	SessionManager.session_state.game_started_changed.disconnect(_on_game_started_changed)
 	SessionManager.session_state.user_left.disconnect(user_left)
 	SessionManager.session_state.user_joined.disconnect(user_joined)
 	SessionManager.session_terminated.disconnect(_on_session_terminated)
@@ -77,17 +83,9 @@ func remove_card(pid: int) -> void:
 
 func _on_start_game_pressed() -> void:
 	if ConnectionManager.is_server():
-		SessionSynchronizer.join_game()
-		pass
-		#SessionSynchronizer.start_game()
-		# SessionManager.join_game()
-		# SessionSynchronizer.all_set_game_started()
+		SessionSynchronizer.server_start_game()
 	else:
-		SessionSynchronizer.join_client_in_game()
-		pass
-		# SessionSynchronizer.all_join_this_player_in_game()
-	
-	close()
+		SessionSynchronizer.server_join_client()
 
 func _quit_button_pressed() -> void:
 	SessionManager.terminate_session()

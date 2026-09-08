@@ -23,15 +23,6 @@ func _user_joined(peer_id: int):
 	
 	update_session_state.rpc(SessionManager.session_state.serialize())
 
-	# var writer: BinaryWriter = BinaryWriter.new()
-	# var user_state: UserState = SessionManager.try_get_user_state(peer_id)
-	# writer.write_header_u8(NetworkTransport.PacketType.INITIALIZE_CLIENT)
-	# user_state.serialize(writer)
-	# NetworkTransport.send_packet_to(writer.get_data(), peer_id)
-	
-	# Send the session and user states to the game
-	# initialize_new_user.rpc_id(peer_id, SessionManager.peer_to_user_state)
-
 func _on_peer_disconnected(peer_id: int) -> void:
 	NetworkLogger.I.print_networked("User %d left!" % peer_id)
 	if ConnectionManager.is_server():
@@ -40,11 +31,12 @@ func _on_peer_disconnected(peer_id: int) -> void:
 
 
 @rpc("any_peer", "call_remote", "reliable")
-func join_client_in_game() -> void:
+func server_join_client() -> void:
 	if ConnectionManager.is_server():
 		var peer_id: int = multiplayer.get_remote_sender_id()
 		var user: UserState = SessionManager.try_get_user_state(peer_id)
 		user.joined_game = true
+		#GameSynchronizer.auth_spawn_new_player_at(Vector2.ZERO)
 		update_session_state.rpc(SessionManager.session_state.serialize())
 
 
@@ -68,7 +60,7 @@ func update_session_state(session_state_dict: Dictionary) -> void:
 	if SessionManager.initialized == false:
 		SessionManager.initialize_session()
 
-func join_game() -> void:
+func server_start_game() -> void:
 	if ConnectionManager.is_server():
 		SessionManager.session_state.game_started = true
 		NetworkLogger.I.print_networked("Starting game!")
@@ -76,11 +68,9 @@ func join_game() -> void:
 		for user: UserState in SessionManager.session_state.peer_to_user_state.values():
 			NetworkLogger.I.print_networked("Joining user %d" % user.peer_id)
 			user.joined_game = true
+			GameSynchronizer.server_only_spawn_player(user)
 		
-		var new_player_state: PlayerState = PlayerState.new()
-		new_player_state.peer_id = ConnectionManager.get_peer_id()
-		new_player_state.id = EntityManager.I.get_next_entity_id()
-		GameSimulation.I.spawn_player_node(ConnectionManager.get_peer_id(), new_player_state)
+		#GameSynchronizer.auth_spawn_new_player_at(Vector2.ZERO)
 		
 		update_session_state.rpc(SessionManager.session_state.serialize())
 
@@ -93,10 +83,8 @@ func _on_spawn_in_game_changed(value: bool) -> void:
 
 @rpc("authority", "call_remote", "unreliable")
 func update_world_state(world_state_data: PackedByteArray) -> void:
-	NetworkLogger.I.print_networked("Updating world state!")
 	var binary_reader: BinaryReader = BinaryReader.new(world_state_data)
 	GameSimulation.I.apply_world_state(binary_reader)
-	#GameSimulation.I.world_state.deserialize(binary_reader)
 
 func _process(delta: float) -> void:
 	if ConnectionManager.is_server() and ConnectionManager.is_online():

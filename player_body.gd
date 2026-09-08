@@ -5,8 +5,7 @@ class_name PlayerBody
 @export var game_player: GamePlayer
 
 func _ready() -> void:
-	if is_multiplayer_authority() == false:
-		physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_ON
+	physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_ON
 
 func _physics_process(delta: float) -> void:
 	if game_player.peer_id == ConnectionManager.get_peer_id():
@@ -17,4 +16,5 @@ func _physics_process(delta: float) -> void:
 		var mouse_pos = get_global_mouse_position()
 		look_at(mouse_pos)
 	
+	NetworkLogger.I.print_networked(str(velocity))
 	move_and_slide()

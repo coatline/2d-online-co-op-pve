@@ -3,7 +3,7 @@ extends RefCounted
 
 enum EntityType { PLAYER, ENEMY, PROJECTILE }
 
-var id: int
+var id: int = -1
 var entity_type: EntityType
 var position: Vector2
 var velocity: Vector2
@@ -20,4 +20,3 @@ func deserialize(reader: BinaryReader) -> void:
 	rotation_degrees = reader.read_float()
 	position = reader.read_vector2()
 	velocity = reader.read_vector2()
-	NetworkLogger.I.print_networked(str(position))

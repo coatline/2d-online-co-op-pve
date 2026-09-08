@@ -25,6 +25,7 @@ func spawn_player_node(player_state: PlayerState) -> GamePlayer:
 	var player: GamePlayer = entity_type_to_scene[EntityState.EntityType.PLAYER].instantiate()
 	player.apply_state(player_state)
 	add_child(player)
+	EntityManager.I.register_entity(player.id, player)
 	return player
 
 # Client only
@@ -36,10 +37,11 @@ func apply_world_state(reader: BinaryReader) -> void:
 		var state: EntityState = world_state.entity_id_to_state[entity_id]
 		var entity: Entity = EntityManager.I.get_entity(entity_id)
 		if entity == null:
-			entity = entity_type_to_scene[state.entity_type].instantiate()
+			entity = GameSimulation.I.spawn_player_node(state)
+			EntityManager.I.register_entity(entity.id, entity)
 			entity.apply_state(state)
 			NetworkLogger.I.print_networked("Adding entity! %s %d %s" % [entity.name, entity.id, EntityManager.I.entities])
-			add_child(entity)
+			#add_child(entity)
 		
 		entity.apply_state(state)
 
