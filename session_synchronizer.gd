@@ -80,7 +80,7 @@ func join_game() -> void:
 		var new_player_state: PlayerState = PlayerState.new()
 		new_player_state.peer_id = ConnectionManager.get_peer_id()
 		new_player_state.id = EntityManager.I.get_next_entity_id()
-		GameSimulation.I.spawn_player(ConnectionManager.get_peer_id(), new_player_state)
+		GameSimulation.I.spawn_player_node(ConnectionManager.get_peer_id(), new_player_state)
 		
 		update_session_state.rpc(SessionManager.session_state.serialize())
 

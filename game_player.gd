@@ -16,7 +16,6 @@ func apply_state(entity_state: EntityState) -> void:
 	peer_id = player_state.peer_id
 
 func _ready() -> void:
-	super()
 	username_label.position.x = -username_label.size.x / 2
 	player_body.global_position = spawn_position
 	

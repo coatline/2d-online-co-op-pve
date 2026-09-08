@@ -18,4 +18,4 @@ func _player_joined_game(peer: int) -> void:
 		var player_state: PlayerState = PlayerState.new()
 		player_state.position = player_spawn_position.global_position + Vector2.ONE * randf_range(-3.0, 3.0)
 		player_state.peer_id = ConnectionManager.get_peer_id()
-		GameSimulation.I.spawn_player(peer, player_state)
+		GameSimulation.I.spawn_player_node(peer, player_state)

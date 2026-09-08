@@ -24,8 +24,5 @@ func get_current_state() -> EntityState:
 	state.rotation_degrees = body.rotation_degrees
 	return state
 
-func _ready() -> void:
-	EntityManager.I.register_entity(id, self)
-
 func _exit_tree() -> void:
 	EntityManager.I.unregister_entity(id)

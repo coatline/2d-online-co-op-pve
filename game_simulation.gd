@@ -5,8 +5,6 @@ static var I: GameSimulation
 
 @export var entity_type_to_scene: Dictionary[EntityState.EntityType, PackedScene]
 
-var peer_id_to_player_state: Dictionary[int, PlayerState] = {}
-var peer_id_to_player: Dictionary[int, GamePlayer]
 var world_state: WorldState
 
 func _enter_tree() -> void:
@@ -23,11 +21,11 @@ func _physics_process(delta: float) -> void:
 	#else:
 		#apply_world_state(world_state)
 
-func spawn_player(peer: int, player_state: PlayerState) -> void:
+func spawn_player_node(player_state: PlayerState) -> GamePlayer:
 	var player: GamePlayer = entity_type_to_scene[EntityState.EntityType.PLAYER].instantiate()
 	player.apply_state(player_state)
 	add_child(player)
-	peer_id_to_player[peer] = player
+	return player
 
 # Client only
 
