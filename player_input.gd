@@ -13,4 +13,3 @@ func _physics_process(_delta: float) -> void:
 		player_body.look_at(mouse_pos)
 
 		CommandManager.rotate_player.rpc_id(1, player_body.rotation_degrees)
-		

@@ -1,7 +1,6 @@
 extends Node
 class_name EnemySpawner
 
-@export var multiplayer_spawner: MultiplayerSpawner
 @export var zombie_scene: PackedScene
 @export var spawn_timer: Timer
 

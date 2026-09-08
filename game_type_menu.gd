@@ -17,7 +17,7 @@ func _ready() -> void:
 func _singleplayer_pressed() -> void:
 	close()
 	SessionManager.session_state = SessionState.new()
-	SessionManager.create_user(ConnectionManager.get_peer_id(), "Me")
+	SessionManager.create_user(ConnectionManager.get_peer_id(), "")
 	SessionManager.initialize_session()
 	lobby_menu.open()
 	#SessionSynchronizer.join_game()

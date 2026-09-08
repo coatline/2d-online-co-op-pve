@@ -20,6 +20,7 @@ func initialize_session() -> void:
 	NetworkLogger.I.print_networked("Initialized session")
 	session_initialized.emit()
 
+
 func terminate_session() -> void:
 	NetworkLogger.I.print_networked("Session terminated")
 	
@@ -85,3 +86,7 @@ func get_my_user_state() -> UserState:
 		return null
 	
 	return session_state.get_user(ConnectionManager.get_peer_id())
+
+
+func session_exists() -> bool:
+	return session_state != null

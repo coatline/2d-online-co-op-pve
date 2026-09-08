@@ -58,6 +58,7 @@ func host_room(is_public: bool, meta_data: String) -> String:
 	print("Now hosting room: ", node_tunnel_peer.room_id)
 	current_room = node_tunnel_peer.room_id
 	hosted_room.emit()
+
 	return node_tunnel_peer.room_id
 
 func join_room(room_id: String) -> void:
@@ -72,13 +73,10 @@ func join_room(room_id: String) -> void:
 	await node_tunnel_peer.room_connected
 	
 	current_room = room_id
-	joined_room.emit(peer.get_unique_id())
+	joined_room.emit()
 	print("Connected to room: ", room_id)
 
 func host_lan(port: int = lan_port) -> void:
-	if is_online():
-		disconnect_from_network()
-	
 	var lan_peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
 	var error: Error = lan_peer.create_server(port)
 	
@@ -96,9 +94,6 @@ func host_lan(port: int = lan_port) -> void:
 	print("Hosting LAN game on port: ", port)
 
 func join_lan(address: String, port: int = lan_port) -> void:
-	if is_online():
-		disconnect_from_network()
-	
 	var lan_peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
 	var error: Error = lan_peer.create_client(address, port)
 	
@@ -165,4 +160,4 @@ func get_peer_id() -> int:
 	if peer and peer.get_connection_status() != peer.ConnectionStatus.CONNECTION_DISCONNECTED:
 		return multiplayer.get_unique_id()
 	else:
-		return -1
+		return 1

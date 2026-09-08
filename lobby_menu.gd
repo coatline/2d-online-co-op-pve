@@ -36,21 +36,21 @@ func on_open() -> void:
 	if ConnectionManager.connection_type == ConnectionManager.ConnectionType.NODE_TUNNEL:
 		room_id_container.show()
 		lan_container.hide()
-		room_id_label.text = "room id: %s" % SessionManager.current_room
+		room_id_label.text = "room id: %s" % ConnectionManager.current_room
 	else:
 		room_id_container.hide()
 	
 	SessionManager.session_terminated.connect(_on_session_terminated)
 	SessionManager.session_state.user_joined.connect(user_joined)
 	SessionManager.session_state.user_left.connect(user_left)
-	SessionManager.session_state.game_started_changed.connect(_on_game_started_changed)
+	SessionManager.get_my_user_state().spawned_in_game_changed.connect(_on_spawned_in_game_changed)
 
-func _on_game_started_changed(value: bool) -> void:
+func _on_spawned_in_game_changed(value: bool) -> void:
 	if value:
 		close()
 
 func on_close() -> void:
-	SessionManager.session_state.game_started_changed.disconnect(_on_game_started_changed)
+	SessionManager.get_my_user_state().spawned_in_game_changed.disconnect(_on_spawned_in_game_changed)
 	SessionManager.session_state.user_left.disconnect(user_left)
 	SessionManager.session_state.user_joined.disconnect(user_joined)
 	SessionManager.session_terminated.disconnect(_on_session_terminated)
@@ -85,10 +85,10 @@ func _on_start_game_pressed() -> void:
 	if ConnectionManager.is_server():
 		SessionSynchronizer.server_start_game()
 	else:
-		SessionSynchronizer.server_join_client()
+		SessionSynchronizer.server_join_client.rpc_id(1)
 
 func _quit_button_pressed() -> void:
 	SessionManager.terminate_session()
 
 func _on_copy_to_clipboard_pressed() -> void:
-	DisplayServer.clipboard_set(SessionManager.current_room)
+	DisplayServer.clipboard_set(ConnectionManager.current_room)

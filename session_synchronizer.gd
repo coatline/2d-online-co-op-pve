@@ -20,7 +20,6 @@ func _user_joined(peer_id: int):
 		return
 	
 	NetworkLogger.I.print_networked("Initializing the user %d's networking info" % peer_id)
-	
 	update_session_state.rpc(SessionManager.session_state.serialize())
 
 func _on_peer_disconnected(peer_id: int) -> void:
@@ -37,6 +36,7 @@ func server_join_client() -> void:
 		var user: UserState = SessionManager.try_get_user_state(peer_id)
 		user.joined_game = true
 		#GameSynchronizer.auth_spawn_new_player_at(Vector2.ZERO)
+		GameSynchronizer.server_only_spawn_player(user)
 		update_session_state.rpc(SessionManager.session_state.serialize())
 
 
@@ -87,7 +87,7 @@ func update_world_state(world_state_data: PackedByteArray) -> void:
 	GameSimulation.I.apply_world_state(binary_reader)
 
 func _process(delta: float) -> void:
-	if ConnectionManager.is_server() and ConnectionManager.is_online():
+	if ConnectionManager.is_server() and ConnectionManager.is_online() and SessionManager.session_exists():
 		if SessionManager.get_my_user_state().joined_game:
 			for peer in multiplayer.get_peers():
 				var user_state: UserState = SessionManager.try_get_user_state(peer)
