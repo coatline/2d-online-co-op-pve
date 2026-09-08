@@ -20,7 +20,7 @@ func server_only_spawn_player(user: UserState) -> void:
 
 
 @rpc("any_peer", "call_remote", "reliable")
-func request_spawn(requested_entity_state: PackedByteArray) -> void:
+func request_spawn_rpc(requested_entity_state: PackedByteArray) -> void:
 	var binary_reader: BinaryReader = BinaryReader.new(requested_entity_state)
 	var new_entity_state: EntityState = EntityState.new()
 	new_entity_state.deserialize(binary_reader)
@@ -34,6 +34,9 @@ func request_spawn(requested_entity_state: PackedByteArray) -> void:
 
 	# Add the entity to the server's world state.
 	EntityManager.I.register_entity(new_entity_state.id, entity)
+
+func get_player_id_from_peer(peer_id: int) -> int:
+	return peer_id_to_player_id.get(peer_id, -1)
 
 #  update_world_state (entity sync)
 #├── spawn_entity / despawn_entity RPCs

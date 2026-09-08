@@ -2,18 +2,18 @@ extends Node
 # Autoload ConnectionManager
 
 enum ConnectionType { NONE, NODE_TUNNEL, LAN }
-enum SessionMode { SINGLEPLAYER, HOST, CLIENT }
+enum SessionType { SINGLEPLAYER, HOST, CLIENT }
 
 @export var lan_port: int = 7777
 
 var connection_type: ConnectionType = ConnectionType.NONE
-var session_mode: SessionMode = SessionMode.SINGLEPLAYER
+var session_type: SessionType = SessionType.SINGLEPLAYER
 var node_tunnel_peer: NodeTunnelPeer
 var peer: MultiplayerPeer
 var current_room: String
 
 signal connected_to_network
-signal disconnected_from_network
+signal network_session_terminated()
 
 signal joined_room()
 signal hosted_room()
@@ -25,12 +25,12 @@ func _ready() -> void:
 	multiplayer.peer_connected.connect(_on_peer_connected)
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 	multiplayer.connected_to_server.connect(_on_connected_to_server)
-	multiplayer.connection_failed.connect(_on_connection_failed)
 	multiplayer.server_disconnected.connect(_on_server_disconnected)
+	multiplayer.connection_failed.connect(_on_connection_failed)
 
 func connect_to_relay() -> void:
 	if is_online():
-		disconnect_from_network()
+		terminate_network_session()
 	
 	node_tunnel_peer = NodeTunnelPeer.new()
 	node_tunnel_peer.error.connect(_on_node_tunnel_error)
@@ -49,7 +49,7 @@ func host_room(is_public: bool, meta_data: String) -> String:
 		push_error("Cannot host a NodeTunnel room without connecting to the relay first.")
 		return ""
 	
-	session_mode = SessionMode.HOST
+	session_type = SessionType.HOST
 	node_tunnel_peer.host_room(is_public, meta_data)
 	
 	print("Hosting room")
@@ -66,7 +66,7 @@ func join_room(room_id: String) -> void:
 		push_error("Cannot join a NodeTunnel room without connecting to the relay first.")
 		return
 	
-	session_mode = SessionMode.CLIENT
+	session_type = SessionType.CLIENT
 	node_tunnel_peer.join_room(room_id)
 	
 	print("Joining room: ", room_id)
@@ -88,7 +88,7 @@ func host_lan(port: int = lan_port) -> void:
 	peer = lan_peer
 	multiplayer.multiplayer_peer = peer
 	connection_type = ConnectionType.LAN
-	session_mode = SessionMode.HOST
+	session_type = SessionType.HOST
 	hosted_room.emit()
 	
 	print("Hosting LAN game on port: ", port)
@@ -105,26 +105,27 @@ func join_lan(address: String, port: int = lan_port) -> void:
 	peer = lan_peer
 	multiplayer.multiplayer_peer = peer
 	connection_type = ConnectionType.LAN
-	session_mode = SessionMode.CLIENT
+	session_type = SessionType.CLIENT
 	
 	print("Joining LAN game at %s:%d..." % [address, port])
 
-func disconnect_from_network() -> void:
-	multiplayer.multiplayer_peer.close()
+func terminate_network_session() -> void:
+	if is_online():
+		multiplayer.multiplayer_peer.close()
 	
 	multiplayer.multiplayer_peer = null
 	peer = null
 	node_tunnel_peer = null
 	connection_type = ConnectionType.NONE
-	session_mode = SessionMode.SINGLEPLAYER
+	session_type = SessionType.SINGLEPLAYER
 	
-	disconnected_from_network.emit()
+	network_session_terminated.emit()
 
 func is_connected_to_network() -> bool:
 	return multiplayer.multiplayer_peer != null
 
 func _on_connected_to_server() -> void:
-	if connection_type == ConnectionType.LAN and session_mode == SessionMode.CLIENT:
+	if connection_type == ConnectionType.LAN and session_type == SessionType.CLIENT:
 		joined_room.emit()
 	
 	NetworkLogger.I.print_networked("I connected to server.")
@@ -136,7 +137,7 @@ func _on_connection_failed() -> void:
 
 func _on_server_disconnected() -> void:
 	NetworkLogger.I.print_networked("The server disconnected.")
-	disconnected_from_network.emit()
+	terminate_network_session()
 
 func _on_peer_connected(peer_id: int) -> void:
 	NetworkLogger.I.print_networked("Peer %d connected." % peer_id)
@@ -154,7 +155,7 @@ func is_online() -> bool:
 	return peer != null
 
 func is_server() -> bool:
-	return session_mode == SessionMode.SINGLEPLAYER or session_mode == SessionMode.HOST
+	return session_type == SessionType.SINGLEPLAYER or session_type == SessionType.HOST
 
 func get_peer_id() -> int:
 	if peer and peer.get_connection_status() != peer.ConnectionStatus.CONNECTION_DISCONNECTED:

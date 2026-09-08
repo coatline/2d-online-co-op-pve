@@ -48,14 +48,14 @@ func _enable_microphone() -> void:
 	print("[VoiceChat] Microphone enabled for peer ", ConnectionManager.get_peer_id())
 
 func _on_mic_packet(packet: PackedByteArray, frame_count: int) -> void:
-	_send_voice_packet_to_server.rpc_id(1, packet)
+	_send_voice_packet_to_server_rpc.rpc_id(1, packet)
 
 func _on_mic_json(json_bytes: Dictionary) -> void:
 	var bytes: PackedByteArray = JSON.stringify(json_bytes).to_ascii_buffer()
-	_send_voice_json_to_server.rpc_id(1, bytes)
+	_send_voice_json_to_server_rpc.rpc_id(1, bytes)
 
 @rpc("any_peer", "call_remote", "unreliable", 0)
-func _send_voice_packet_to_server(packet: PackedByteArray) -> void:
+func _send_voice_packet_to_server_rpc(packet: PackedByteArray) -> void:
 	if not ConnectionManager.is_server():
 		return
 
@@ -65,10 +65,10 @@ func _send_voice_packet_to_server(packet: PackedByteArray) -> void:
 		#if network_player.peer_id == sender_id:
 			#continue
 #
-		#network_player.voice_chat._receive_voice_packet.rpc_id(network_player.peer_id, packet)
+		#network_player.voice_chat._receive_voice_packet_rpc.rpc_id(network_player.peer_id, packet)
 
 @rpc("any_peer", "call_remote", "reliable", 0)
-func _send_voice_json_to_server(json_bytes: PackedByteArray) -> void:
+func _send_voice_json_to_server_rpc(json_bytes: PackedByteArray) -> void:
 	if not ConnectionManager.is_server():
 		return
 
@@ -78,12 +78,12 @@ func _send_voice_json_to_server(json_bytes: PackedByteArray) -> void:
 		#if network_player.peer_id == sender_id:
 			#continue
 #
-		#network_player.voice_chat._receive_voice_json.rpc_id(network_player.peer_id, json_bytes)
+		#network_player.voice_chat._receive_voice_json_rpc.rpc_id(network_player.peer_id, json_bytes)
 
 @rpc("authority", "call_remote", "unreliable", 0)
-func _receive_voice_packet(packet: PackedByteArray) -> void:
+func _receive_voice_packet_rpc(packet: PackedByteArray) -> void:
 	speaker.tv_incomingaudiopacket(packet)
 
 @rpc("authority", "call_remote", "reliable", 0)
-func _receive_voice_json(json_bytes: PackedByteArray) -> void:
+func _receive_voice_json_rpc(json_bytes: PackedByteArray) -> void:
 	speaker.tv_incomingaudiopacket(json_bytes)

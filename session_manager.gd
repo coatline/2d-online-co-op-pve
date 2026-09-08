@@ -11,7 +11,7 @@ var initialized: bool = false
 func _ready() -> void:
 	ConnectionManager.joined_room.connect(_joined_room)
 	ConnectionManager.hosted_room.connect(_on_hosted_room)
-	ConnectionManager.disconnected_from_network.connect(terminate_session)
+	ConnectionManager.network_session_terminated.connect(terminate_session)
 
 
 func initialize_session() -> void:
@@ -25,7 +25,7 @@ func terminate_session() -> void:
 	NetworkLogger.I.print_networked("Session terminated")
 	
 	if ConnectionManager.is_online():
-		ConnectionManager.disconnect_from_network()
+		ConnectionManager.terminate_network_session()
 	
 	initialized = false
 	session_terminated.emit()
@@ -34,7 +34,7 @@ func terminate_session() -> void:
 
 func _joined_room() -> void:
 	initialized = false
-	SessionSynchronizer.submit_user_info.rpc_id(1, "Client %d" % ConnectionManager.get_peer_id())
+	SessionSynchronizer.submit_user_info_rpc.rpc_id(1, "Client %d" % ConnectionManager.get_peer_id())
 
 
 func _on_hosted_room() -> void:

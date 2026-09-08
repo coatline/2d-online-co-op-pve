@@ -25,6 +25,7 @@ func _ensure_focus() -> void:
 		grab_focus_on_open()
 
 func close() -> void:
+	print("CLOSING1")
 	_last_focus = get_viewport().gui_get_focus_owner()
 	on_close()
 	hide()
@@ -32,6 +33,7 @@ func close() -> void:
 	UIMenuController.I.menu_closed(self)
 
 func back() -> void:
+	print("BACK!")
 	UIMenuController.I.pop_menu()
 	on_back()
 

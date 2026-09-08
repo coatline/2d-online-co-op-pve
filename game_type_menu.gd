@@ -2,7 +2,7 @@ extends UIMenu
 class_name GameTypeMenu
 
 @export var online_connection_menu: OnlineConnectionMenu
-@export var lan_connection_screen: LANConnectionMenu
+@export var lan_connection_menu: LANConnectionMenu
 @export var lobby_menu: LobbyMenu
 
 @export var singleplayer_button: Button
@@ -16,6 +16,7 @@ func _ready() -> void:
 
 func _singleplayer_pressed() -> void:
 	close()
+	ConnectionManager.session_type = ConnectionManager.SessionType.SINGLEPLAYER
 	SessionManager.session_state = SessionState.new()
 	SessionManager.create_user(ConnectionManager.get_peer_id(), "")
 	SessionManager.initialize_session()
@@ -26,4 +27,4 @@ func _online_pressed() -> void:
 	online_connection_menu.open()
 
 func _lan_pressed() -> void:
-	lan_connection_screen.open()
+	lan_connection_menu.open()
