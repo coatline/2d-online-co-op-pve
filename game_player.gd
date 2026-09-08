@@ -1,4 +1,4 @@
-extends Node
+extends Entity
 class_name GamePlayer
 
 @export var camera_2d: Camera2D
@@ -9,20 +9,14 @@ class_name GamePlayer
 var peer_id: int
 var spawn_position: Vector2
 
-func initialize(_username: String, player_state: PlayerState):
-	username_label.text = _username
+func apply_state(entity_state: EntityState) -> void:
+	super(entity_state)
+	var player_state: PlayerState = entity_state as PlayerState
+	username_label.text = SessionManager.try_get_user_state(player_state.peer_id).username
 	peer_id = player_state.peer_id
-	receive_packet(player_state)
-
-func receive_packet(player_state: PlayerState):
-	player_body.velocity = player_state.velocity
-	player_body.global_position = player_state.position
-	player_body.rotation_degrees = player_state.rotation_degrees
 
 func _ready() -> void:
-	set_multiplayer_authority(peer_id)
-	
-	player_body.set_multiplayer_authority(peer_id)
+	super()
 	username_label.position.x = -username_label.size.x / 2
 	player_body.global_position = spawn_position
 	

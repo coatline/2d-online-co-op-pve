@@ -17,7 +17,6 @@ func _ready() -> void:
 	copy_to_clipboard_button.pressed.connect(_on_copy_to_clipboard_pressed)
 
 func on_open() -> void:
-
 	for ui in player_card_holder.get_children():
 		ui.queue_free()
 
@@ -30,7 +29,7 @@ func on_open() -> void:
 			lan_container.show()
 		
 		start_button.show()
-	else:
+	elif SessionManager.session_state.game_started == false:
 		start_button.hide()
 	#elif SessionManager.get_my_user_state().in_game == false:
 	
@@ -84,6 +83,7 @@ func _on_start_game_pressed() -> void:
 		# SessionManager.join_game()
 		# SessionSynchronizer.all_set_game_started()
 	else:
+		SessionSynchronizer.join_client_in_game()
 		pass
 		# SessionSynchronizer.all_join_this_player_in_game()
 	

@@ -30,6 +30,7 @@ SessionManager="*uid://gocopu8gcjcd"
 SessionSynchronizer="*uid://dd7axq0konukw"
 NetworkTransport="*uid://bmhy3elwy58if"
 ReplicationManager="*uid://cv7kdhxilcf2a"
+GameSynchronizer="*uid://dxckv6fuw1urw"
 
 [display]
 

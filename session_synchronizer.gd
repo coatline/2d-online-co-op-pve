@@ -40,6 +40,15 @@ func _on_peer_disconnected(peer_id: int) -> void:
 
 
 @rpc("any_peer", "call_remote", "reliable")
+func join_client_in_game() -> void:
+	if ConnectionManager.is_server():
+		var peer_id: int = multiplayer.get_remote_sender_id()
+		var user: UserState = SessionManager.try_get_user_state(peer_id)
+		user.joined_game = true
+		update_session_state.rpc(SessionManager.session_state.serialize())
+
+
+@rpc("any_peer", "call_remote", "reliable")
 func submit_user_info(username: String) -> void:
 	if ConnectionManager.is_server():
 		var peer_id: int = multiplayer.get_remote_sender_id()
@@ -68,11 +77,34 @@ func join_game() -> void:
 			NetworkLogger.I.print_networked("Joining user %d" % user.peer_id)
 			user.joined_game = true
 		
+		var new_player_state: PlayerState = PlayerState.new()
+		new_player_state.peer_id = ConnectionManager.get_peer_id()
+		new_player_state.id = EntityManager.I.get_next_entity_id()
+		GameSimulation.I.spawn_player(ConnectionManager.get_peer_id(), new_player_state)
+		
 		update_session_state.rpc(SessionManager.session_state.serialize())
 
 func _on_spawn_in_game_changed(value: bool) -> void:
 	if value:
-		NetworkLogger.I.print_networked("Game started!")
+		NetworkLogger.I.print_networked("I Spawned in!")
 		var game = game_scene.instantiate()
 		get_tree().root.add_child(game)
 		joined_game.emit()
+
+@rpc("authority", "call_remote", "unreliable")
+func update_world_state(world_state_data: PackedByteArray) -> void:
+	NetworkLogger.I.print_networked("Updating world state!")
+	var binary_reader: BinaryReader = BinaryReader.new(world_state_data)
+	GameSimulation.I.apply_world_state(binary_reader)
+	#GameSimulation.I.world_state.deserialize(binary_reader)
+
+func _process(delta: float) -> void:
+	if ConnectionManager.is_server() and ConnectionManager.is_online():
+		if SessionManager.get_my_user_state().joined_game:
+			for peer in multiplayer.get_peers():
+				var user_state: UserState = SessionManager.try_get_user_state(peer)
+				if user_state:
+					if user_state.joined_game:
+						var binary_writer: BinaryWriter = BinaryWriter.new()
+						GameSimulation.I.world_state.serialize(binary_writer)
+						update_world_state.rpc_id(peer, binary_writer.get_data())

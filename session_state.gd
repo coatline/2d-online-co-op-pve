@@ -12,7 +12,6 @@ var game_started: bool:
 		if game_started == value:
 			return
 		
-		NetworkLogger.I.print_networked("GAME STARTYED!")
 		game_started = value
 		game_started_changed.emit(value)
 

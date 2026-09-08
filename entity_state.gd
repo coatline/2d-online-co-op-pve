@@ -20,3 +20,4 @@ func deserialize(reader: BinaryReader) -> void:
 	rotation_degrees = reader.read_float()
 	position = reader.read_vector2()
 	velocity = reader.read_vector2()
+	NetworkLogger.I.print_networked(str(position))

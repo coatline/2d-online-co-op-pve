@@ -55,7 +55,7 @@ func apply_session_state(data: Dictionary) -> void:
 
 # Server only.
 func create_user(peer_id: int, username: String) -> void:
-	if not is_server():
+	if not ConnectionManager.is_server():
 		return
 	
 	var user_state: UserState = UserState.new()
@@ -67,7 +67,7 @@ func create_user(peer_id: int, username: String) -> void:
 
 # Server only.
 func remove_user(peer_id: int) -> void:
-	if not is_server():
+	if not ConnectionManager.is_server():
 		return
 	
 	session_state.remove_user(peer_id)
@@ -85,7 +85,3 @@ func get_my_user_state() -> UserState:
 		return null
 	
 	return session_state.get_user(ConnectionManager.get_peer_id())
-
-
-func is_server() -> bool:
-	return ConnectionManager.is_server()
