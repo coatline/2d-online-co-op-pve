@@ -35,8 +35,15 @@ func _physics_process(delta: float) -> void:
 	lifetime -= delta
 
 	if lifetime <= 0:
-		queue_free()
-	#global_position += global_transform.x * speed * delta
+		despawn()
 
-# func _exit_tree() -> void:
-	
+func _exit_tree() -> void:
+	print("unregistering entity %d" % id)
+	EntityManager.I.unregister_entity(id)
+
+func despawn() -> void:
+	if ConnectionManager.is_server():
+		GameSynchronizer.server_despawn_entity(id)
+	else:
+		# Client requests server to despawn
+		GameSynchronizer.despawn_entity_rpc.rpc_id(1, id)
