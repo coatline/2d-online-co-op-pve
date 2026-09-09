@@ -45,10 +45,8 @@ func apply_world_state(reader: BinaryReader) -> void:
 		var entity: Entity = EntityManager.I.get_entity(entity_id)
 		if entity == null:
 			entity = spawn_entity_node(state)
-			#EntityManager.I.register_entity(entity.id, entity)
 			entity.apply_state(state)
 			NetworkLogger.I.print_networked("Adding entity! %s %d %s" % [entity.name, entity.id, EntityManager.I.entities])
-			#add_child(entity)
 		
 		entity.apply_state(state)
 

@@ -38,5 +38,6 @@ func create_entity(entity_type: int) -> EntityState:
 		#EntityState.EntityType.ENEMY:
 			#return EnemyState.new()
 		EntityState.EntityType.PROJECTILE:
+			NetworkLogger.I.print_networked("PROJECTILE IS BEING CREATED!")
 			return ProjectileState.new()
 	return null

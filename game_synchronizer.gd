@@ -37,27 +37,31 @@ func server_only_despawn_player(peer_id: int) -> void:
 
 
 func spawn_entity(entity_state: EntityState) -> void:
-	# Check if we already have an entity with that id (if so, change it to the next one)
-	if EntityManager.I.entities.has(entity_state.id) or entity_state.id == -1:
-		entity_state.id = EntityManager.I.get_next_entity_id()
+	# Only assign ID and spawn locally on server
+	if ConnectionManager.is_server():
+		# Check if we already have an entity with that id (if so, change it to the next one)
+		if EntityManager.I.entities.has(entity_state.id) or entity_state.id == -1:
+			entity_state.id = EntityManager.I.get_next_entity_id()
 
-	# Spawn the entity in the world
-	GameSimulation.I.spawn_entity_node(entity_state)
+		# Spawn the entity in the world
+		GameSimulation.I.spawn_entity_node(entity_state)
 	
 	if ConnectionManager.is_server() == false:
+		# Client: send to server without assigning local ID
 		var binary_writer: BinaryWriter = BinaryWriter.new()
 		entity_state.serialize(binary_writer)
-		request_spawn_rpc.rpc_id(1, binary_writer.get_data())
+		server_spawn_entity_rpc.rpc_id(1, binary_writer.get_data())
 
 
 @rpc("any_peer", "call_remote", "reliable")
-func request_spawn_rpc(requested_entity_state: PackedByteArray) -> void:
+func server_spawn_entity_rpc(requested_entity_state: PackedByteArray) -> void:
 	var binary_reader: BinaryReader = BinaryReader.new(requested_entity_state)
 	var entity_type: int = binary_reader.read_u8()
-	var entity_id: int = binary_reader.read_u32()
+	# Ignore client's entity_id - server assigns its own
+	binary_reader.read_u32()
 	
 	var new_entity_state: EntityState = create_entity(entity_type)
-	new_entity_state.deserialize(entity_id, entity_type, binary_reader)
+	new_entity_state.deserialize(EntityManager.I.get_next_entity_id(), entity_type, binary_reader)
 
 	spawn_entity(new_entity_state)
 
