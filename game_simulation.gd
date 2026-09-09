@@ -54,6 +54,6 @@ func apply_world_state(reader: BinaryReader) -> void:
 
 func update_world_state(world_state: WorldState) -> void:
 	for entity: Entity in EntityManager.I.entities.values():
-		print("Updating entity! %s %d" % [entity.name, entity.id])
+		#print("Updating entity! %s %d" % [entity.name, entity.id])
 		world_state.entity_id_to_state[entity.id] = entity.get_current_state()
 		#world_state.entity_id_to_state.get_or_add(entity.id, EntityState.new()) = entity.get_current_state()

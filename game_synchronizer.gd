@@ -32,8 +32,6 @@ func server_only_despawn_player(peer_id: int) -> void:
 
 	var player_node: GamePlayer = EntityManager.I.get_entity(player_id)
 	player_node.queue_free()
-	EntityManager.I.unregister_entity(player_id)
-	peer_id_to_player_id.erase(peer_id)
 
 
 func spawn_entity(entity_state: EntityState) -> void:
@@ -74,31 +72,14 @@ func create_entity(entity_type: int) -> EntityState:
 	return EntityState.new()
 
 
-
-#  update_world_state (entity sync)
-#├── spawn_entity / despawn_entity RPCs
 #└── tick synchronization
 
-func server_despawn_entity(entity_id: int) -> void:
-	if not ConnectionManager.is_server():
-		return
-	
+func unregister_entity(entity_id: int) -> void:
 	# Remove from world state
 	GameSimulation.I.world_state.entity_id_to_state.erase(entity_id)
 	
-	# Remove from entity manager and queue free
-	var entity: Entity = EntityManager.I.get_entity(entity_id)
-	if entity:
-		entity.queue_free()
+	## Remove from entity manager and queue free
+	#var entity: Entity = EntityManager.I.get_entity(entity_id)
+	#if entity:
+		#entity.queue_free()
 	EntityManager.I.unregister_entity(entity_id)
-	
-	# Notify clients
-	despawn_entity_rpc.rpc(entity_id)
-
-@rpc("any_peer", "call_remote", "reliable")
-func despawn_entity_rpc(entity_id: int) -> void:
-	var entity: Entity = EntityManager.I.get_entity(entity_id)
-	if entity:
-		entity.queue_free()
-	EntityManager.I.unregister_entity(entity_id)
-	GameSimulation.I.world_state.entity_id_to_state.erase(entity_id)

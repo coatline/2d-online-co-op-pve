@@ -58,10 +58,9 @@ shape = SubResource("CircleShape2D_lxywf")
 script = ExtResource("6_hb3fq")
 health = NodePath("../Health")
 
-[node name="Health" type="Node" parent="." unique_id=655140992 node_paths=PackedStringArray("root")]
+[node name="Health" type="Node" parent="." unique_id=655140992]
 script = ExtResource("7_6ngf4")
 destroy_on_death = false
-root = NodePath("")
 
 [node name="PlayerInput" type="Node2D" parent="." unique_id=77744284 node_paths=PackedStringArray("game_player", "player_body")]
 script = ExtResource("10_d341c")

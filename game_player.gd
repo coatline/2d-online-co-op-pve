@@ -19,16 +19,11 @@ func _ready() -> void:
 	username_label.position.x = -username_label.size.x / 2
 	player_body.global_position = spawn_position
 	
-	print("[%d] is setting up player %d" % [ConnectionManager.get_peer_id(), peer_id])
-	
 	if peer_id != ConnectionManager.get_peer_id():
 		camera_2d.queue_free()
 	else:
-		NetworkLogger.I.print_networked("I have the camera!")
-		#username_label.hide()
+		username_label.hide()
 		camera_2d.make_current()
 
 func _process(_delta: float) -> void:
 	ui.global_position = player_body.global_position
-	#var reference_pos = camera_2d.global_position if camera_2d else player_body.global_position
-	#username_label.global_position = reference_pos - Vector2(username_label.size.x / 2.0, username_label.size.y + 10.0)

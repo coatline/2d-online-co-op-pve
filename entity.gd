@@ -23,4 +23,5 @@ func get_current_state() -> EntityState:
 	return state
 
 func _exit_tree() -> void:
-	EntityManager.I.unregister_entity(id)
+	if EntityManager.I.get_entity(id):
+		GameSynchronizer.unregister_entity(id)
