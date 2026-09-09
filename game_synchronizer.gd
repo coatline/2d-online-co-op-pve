@@ -53,10 +53,23 @@ func spawn_entity(entity_state: EntityState) -> void:
 @rpc("any_peer", "call_remote", "reliable")
 func request_spawn_rpc(requested_entity_state: PackedByteArray) -> void:
 	var binary_reader: BinaryReader = BinaryReader.new(requested_entity_state)
-	var new_entity_state: EntityState = EntityState.new()
+	var entity_type: int = binary_reader.read_u8()
+	var entity_id: int = binary_reader.read_u32()
+	
+	var new_entity_state: EntityState = create_entity(entity_type)
+	new_entity_state.id = entity_id
+	new_entity_state.entity_type = entity_type
 	new_entity_state.deserialize(binary_reader)
 
 	spawn_entity(new_entity_state)
+
+func create_entity(entity_type: int) -> EntityState:
+	match entity_type:
+		EntityState.EntityType.PLAYER:
+			return PlayerState.new()
+		EntityState.EntityType.PROJECTILE:
+			return ProjectileState.new()
+	return EntityState.new()
 
 
 

@@ -11,6 +11,9 @@ var damage: int
 func apply_state(entity_state: EntityState) -> void:
 	super(entity_state)
 	var projectile_state: ProjectileState = entity_state as ProjectileState
+	if projectile_state == null:
+		push_error("Projectile.apply_state: entity_state is not a ProjectileState! Got: ", entity_state.get_class(), " entity_type: ", entity_state.entity_type)
+		return
 	damage_dealer.setup(EntityManager.I.get_entity(projectile_state.source_entity_id), 10, projectile_state.force)
 	damage_dealer.source_entity = EntityManager.I.get_entity(projectile_state.source_entity_id)
 	force = projectile_state.force
