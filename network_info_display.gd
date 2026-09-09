@@ -11,6 +11,7 @@ func _ready() -> void:
 func session_initialize() -> void:
 	update_network_info()
 	SessionManager.session_state.user_joined.connect(user_joined)
+	SessionManager.session_state.user_left.connect(user_joined)
 
 func user_joined(pid: int) -> void:
 	update_network_info()

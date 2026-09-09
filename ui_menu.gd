@@ -25,7 +25,6 @@ func _ensure_focus() -> void:
 		grab_focus_on_open()
 
 func close() -> void:
-	print("CLOSING1")
 	_last_focus = get_viewport().gui_get_focus_owner()
 	on_close()
 	hide()

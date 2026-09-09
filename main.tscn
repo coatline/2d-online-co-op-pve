@@ -10,12 +10,14 @@
 [ext_resource type="Script" uid="uid://d2gik0axsre5w" path="res://flow_orchestrator.gd" id="5_efxa6"]
 [ext_resource type="Script" uid="uid://ca4m5hxjdms6r" path="res://entity_manager.gd" id="9_999999"]
 [ext_resource type="Script" uid="uid://ekta5qaxp3pl" path="res://network_info_display.gd" id="9_kek77"]
+[ext_resource type="Script" uid="uid://c2aymmgvoh07o" path="res://pause_menu.gd" id="11_efxa6"]
 
 [node name="Main" type="Node" unique_id=873018209]
 
-[node name="UIMenuController" type="Node" parent="." unique_id=1483285719 node_paths=PackedStringArray("default_menu")]
+[node name="UIMenuController" type="Node" parent="." unique_id=1483285719 node_paths=PackedStringArray("default_menu", "pause_menu")]
 script = ExtResource("1_7mycd")
 default_menu = NodePath("../CanvasLayer/GameTypeMenu")
+pause_menu = NodePath("../CanvasLayer/PauseMenu")
 
 [node name="NetworkLogger" type="Node" parent="." unique_id=255615257]
 script = ExtResource("2_7mycd")
@@ -133,3 +135,32 @@ text = "sdf"
 [node name="UserCountLabel" type="Label" parent="CanvasLayer/NetworkInfoDisplay/VBoxContainer" unique_id=868394624]
 layout_mode = 2
 text = "sdf"
+
+[node name="PauseMenu" type="Control" parent="CanvasLayer" unique_id=1870822900 node_paths=PackedStringArray("resume_button", "quit_button")]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("11_efxa6")
+resume_button = NodePath("VBoxContainer/ResumeButton")
+quit_button = NodePath("VBoxContainer/QuitButton")
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/PauseMenu" unique_id=6694549]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0, 0, 0, 0.07058824)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/PauseMenu" unique_id=1763702806]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ResumeButton" type="Button" parent="CanvasLayer/PauseMenu/VBoxContainer" unique_id=1781564937]
+layout_mode = 2
+text = "Resume"
+
+[node name="QuitButton" type="Button" parent="CanvasLayer/PauseMenu/VBoxContainer" unique_id=1579113681]
+layout_mode = 2
+text = "Quit"

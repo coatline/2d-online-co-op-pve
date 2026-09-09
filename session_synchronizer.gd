@@ -24,6 +24,7 @@ func _on_peer_disconnected(peer_id: int) -> void:
 
 	if ConnectionManager.is_server():
 		SessionManager.session_state.remove_user(peer_id)
+		GameSynchronizer.server_only_despawn_player(peer_id)
 		update_session_state_rpc.rpc(SessionManager.session_state.serialize())
 
 

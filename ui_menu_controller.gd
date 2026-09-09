@@ -3,8 +3,8 @@ class_name UIMenuController
 
 static var I: UIMenuController
 
-#@export var pause_menu: PauseMenu
 @export var default_menu: UIMenu
+@export var pause_menu: PauseMenu
 
 var current_menu: UIMenu
 var menu_stack: Array[UIMenu] = []
@@ -40,7 +40,7 @@ func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("pause"):
 		if current_menu:
 			_handle_menu_close_input()
-		#elif pause_menu:
+		#elif pause_menu and FlowOrchestrator.I.game != null:
 			#push_menu(pause_menu)
 	elif Input.is_action_just_pressed("ui_cancel"):
 		if current_menu:
@@ -79,9 +79,6 @@ func pop_menu() -> void:
 
 	if previous_menu:
 		previous_menu.show_menu()
-	else:
-		# If first person game:
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func clear() -> void:
 	if current_menu:

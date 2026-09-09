@@ -4,6 +4,7 @@ extends Node
 @export var entity_type_to_scene: Dictionary[EntityState.EntityType, PackedScene]
 var peer_id_to_player_id: Dictionary[int, int]
 
+
 # Go ahead and spawn it, even if you are the client.
 # If you are the client, send the request to the server
 func server_only_spawn_player(user: UserState) -> void:
@@ -18,6 +19,27 @@ func server_only_spawn_player(user: UserState) -> void:
 	
 	peer_id_to_player_id[user.peer_id] = player_state.id
 
+
+func get_player_id_from_peer(peer_id: int) -> int:
+	return peer_id_to_player_id.get(peer_id, -1)
+
+
+func server_only_despawn_player(peer_id: int) -> void:
+	var player_id: int = get_player_id_from_peer(peer_id)
+
+	if player_id == -1:
+		return
+
+	var player_node: GamePlayer = EntityManager.I.get_entity(player_id)
+	player_node.queue_free()
+	EntityManager.I.unregister_entity(player_id)
+	peer_id_to_player_id.erase(peer_id)
+
+
+func spawn_entity(entity_state: EntityState) -> void:
+	var binary_writer: BinaryWriter = BinaryWriter.new()
+	entity_state.serialize(binary_writer)
+	request_spawn_rpc.rpc(binary_writer.get_buffer())
 
 @rpc("any_peer", "call_remote", "reliable")
 func request_spawn_rpc(requested_entity_state: PackedByteArray) -> void:
@@ -35,11 +57,6 @@ func request_spawn_rpc(requested_entity_state: PackedByteArray) -> void:
 	# Add the entity to the server's world state.
 	EntityManager.I.register_entity(new_entity_state.id, entity)
 
-func get_player_id_from_peer(peer_id: int) -> int:
-	return peer_id_to_player_id.get(peer_id, -1)
-
 #  update_world_state (entity sync)
 #├── spawn_entity / despawn_entity RPCs
-#├── player_input RPCs
-#├── game scene lifecycle (instantiate/cleanup)
 #└── tick synchronization
