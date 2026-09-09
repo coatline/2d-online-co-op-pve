@@ -16,8 +16,8 @@ func serialize(writer: BinaryWriter) -> void:
 	writer.write_float(damage)
 	writer.write_float(force)
 
-func deserialize(reader: BinaryReader) -> void:
-	super.deserialize(reader)
+func deserialize(_id: int, _entity_type: int, reader: BinaryReader) -> void:
+	super.deserialize(_id, _entity_type, reader)
 	source_entity_id = reader.read_u32()
 	lifetime = reader.read_float()
 	damage = reader.read_float()

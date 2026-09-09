@@ -57,9 +57,7 @@ func request_spawn_rpc(requested_entity_state: PackedByteArray) -> void:
 	var entity_id: int = binary_reader.read_u32()
 	
 	var new_entity_state: EntityState = create_entity(entity_type)
-	new_entity_state.id = entity_id
-	new_entity_state.entity_type = entity_type
-	new_entity_state.deserialize(binary_reader)
+	new_entity_state.deserialize(entity_id, entity_type, binary_reader)
 
 	spawn_entity(new_entity_state)
 

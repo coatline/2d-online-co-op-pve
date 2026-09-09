@@ -25,9 +25,7 @@ func deserialize(reader: BinaryReader) -> void:
 			entity_id_to_state[entity_id] = create_entity(entity_type)
 
 		var entity: EntityState = entity_id_to_state[entity_id]
-		entity.id = entity_id
-		entity.entity_type = entity_type
-		entity.deserialize(reader)
+		entity.deserialize(entity_id, entity_type, reader)
 
 	for entity_id: int in entity_id_to_state.keys():
 		if not received_ids.has(entity_id):

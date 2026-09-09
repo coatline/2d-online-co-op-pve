@@ -14,6 +14,8 @@ func serialize(writer: BinaryWriter) -> void:
 	writer.write_float(rotation_degrees)
 	writer.write_vector2(position)
 
-func deserialize(reader: BinaryReader) -> void:
+func deserialize(_id: int, _entity_type: int, reader: BinaryReader) -> void:
+	id = _id
+	entity_type = _entity_type
 	rotation_degrees = reader.read_float()
 	position = reader.read_vector2()
