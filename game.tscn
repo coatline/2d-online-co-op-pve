@@ -4,6 +4,7 @@
 [ext_resource type="TileSet" uid="uid://vjavknqaeyq2" path="res://_resources/new_tile_set.tres" id="2_vef74"]
 [ext_resource type="PackedScene" uid="uid://dhyqw3rvhl107" path="res://game_player.tscn" id="4_mfdv2"]
 [ext_resource type="Script" uid="uid://dwip3c3711own" path="res://enemy_spawner.gd" id="5_iotsf"]
+[ext_resource type="PackedScene" uid="uid://cmm25fpv320tr" path="res://projectile.tscn" id="8_7sc4i"]
 [ext_resource type="Script" uid="uid://bavttgd10563" path="res://game_simulation.gd" id="9_vef74"]
 
 [node name="Game" type="Node2D" unique_id=2077963371 node_paths=PackedStringArray("enemy_spawner", "player_spawn_position")]
@@ -26,7 +27,8 @@ tile_set = ExtResource("2_vef74")
 [node name="GameSimulation" type="Node" parent="." unique_id=751457911]
 script = ExtResource("9_vef74")
 entity_type_to_scene = Dictionary[int, PackedScene]({
-0: ExtResource("4_mfdv2")
+0: ExtResource("4_mfdv2"),
+2: ExtResource("8_7sc4i")
 })
 
 [node name="EnemySpawner" type="Node" parent="." unique_id=1454641399 node_paths=PackedStringArray("spawn_timer")]

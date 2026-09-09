@@ -1,29 +1,39 @@
-extends Node2D
+extends Entity
 class_name Projectile
 
 @export var damage_dealer: DamageDealer
 @export var hit_box: Hitbox
 
-var force: Vector2
+var lifetime: float
+var force: float
+var damage: int
 
-func setup(_source_entity: Entity, _force: Vector2) -> void:
-	if _source_entity == null:
-		push_error("source entity null!")
-	damage_dealer.setup(_source_entity, 10, force.length())
-	damage_dealer.source_entity = _source_entity
-	force = _force
+func apply_state(entity_state: EntityState) -> void:
+	super(entity_state)
+	var projectile_state: ProjectileState = entity_state as ProjectileState
+	damage_dealer.setup(EntityManager.I.get_entity(projectile_state.source_entity_id), 10, projectile_state.force)
+	damage_dealer.source_entity = EntityManager.I.get_entity(projectile_state.source_entity_id)
+	force = projectile_state.force
+
+func get_current_state() -> EntityState:
+	var proj_state: ProjectileState = super() as ProjectileState
+	proj_state.source_entity_id = damage_dealer.source_entity.id
+	proj_state.force = force
+	proj_state.damage = damage
+	proj_state.lifetime = lifetime
+	return proj_state
 
 func _ready() -> void:
-	if ConnectionManager.is_server() == false:
-		hit_box.queue_free()
-		return
-	
-	get_tree().create_timer(1.5).timeout.connect(queue_free)
 	hit_box.damaged_entity.connect(queue_free)
+	lifetime = 1
 
 func _physics_process(delta: float) -> void:
-	if ConnectionManager.is_server() == false:
-		return
-	
-	global_position += force * delta
+	global_position += force * delta * transform.x
+	lifetime -= delta
+
+	if lifetime <= 0:
+		queue_free()
 	#global_position += global_transform.x * speed * delta
+
+# func _exit_tree() -> void:
+	

@@ -15,3 +15,13 @@ func _physics_process(_delta: float) -> void:
 	player_body.look_at(mouse_pos)
 
 	CommandManager.rotate_player(player_body.rotation_degrees)
+	
+	if Input.is_action_just_pressed("shoot"):
+		var new_projectile: ProjectileState = ProjectileState.new()
+		new_projectile.position = player_body.global_position
+		new_projectile.rotation_degrees = player_body.rotation_degrees
+		new_projectile.damage = 0
+		new_projectile.lifetime = 1
+		new_projectile.force = 300
+		new_projectile.source_entity_id = game_player.id
+		GameSynchronizer.spawn_entity(new_projectile)

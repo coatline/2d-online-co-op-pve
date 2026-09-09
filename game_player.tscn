@@ -18,7 +18,7 @@ height = 14.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_lxywf"]
 radius = 8.0
 
-[node name="GamePlayer" type="Node" unique_id=623911534 node_paths=PackedStringArray("camera_2d", "username_label", "player_body", "ui", "body")]
+[node name="GamePlayer" type="Node2D" unique_id=881298999 node_paths=PackedStringArray("camera_2d", "username_label", "player_body", "ui", "body")]
 script = ExtResource("1_36iq3")
 camera_2d = NodePath("PlayerBody/Camera2D")
 username_label = NodePath("UI/UsernameLabel")
@@ -61,7 +61,7 @@ health = NodePath("../Health")
 [node name="Health" type="Node" parent="." unique_id=655140992 node_paths=PackedStringArray("root")]
 script = ExtResource("7_6ngf4")
 destroy_on_death = false
-root = NodePath("..")
+root = NodePath("")
 
 [node name="PlayerInput" type="Node2D" parent="." unique_id=77744284 node_paths=PackedStringArray("game_player", "player_body")]
 script = ExtResource("10_d341c")

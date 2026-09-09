@@ -21,12 +21,19 @@ func _physics_process(delta: float) -> void:
 	#else:
 		#apply_world_state(world_state)
 
-func spawn_player_node(player_state: PlayerState) -> GamePlayer:
-	var player: GamePlayer = entity_type_to_scene[EntityState.EntityType.PLAYER].instantiate()
-	player.apply_state(player_state)
-	add_child(player)
-	EntityManager.I.register_entity(player.id, player)
-	return player
+func spawn_entity_node(entity_state: EntityState) -> Entity:
+	var entity: Entity = entity_type_to_scene[entity_state.entity_type].instantiate()
+	entity.apply_state(entity_state)
+	add_child(entity)
+	EntityManager.I.register_entity(entity.id, entity)
+	return entity
+
+#func spawn_player_node(player_state: PlayerState) -> GamePlayer:
+	#var player: GamePlayer = entity_type_to_scene[EntityState.EntityType.PLAYER].instantiate()
+	#player.apply_state(player_state)
+	#add_child(player)
+	#EntityManager.I.register_entity(player.id, player)
+	#return player
 
 # Client only
 
@@ -37,8 +44,8 @@ func apply_world_state(reader: BinaryReader) -> void:
 		var state: EntityState = world_state.entity_id_to_state[entity_id]
 		var entity: Entity = EntityManager.I.get_entity(entity_id)
 		if entity == null:
-			entity = GameSimulation.I.spawn_player_node(state)
-			EntityManager.I.register_entity(entity.id, entity)
+			entity = spawn_entity_node(state)
+			#EntityManager.I.register_entity(entity.id, entity)
 			entity.apply_state(state)
 			NetworkLogger.I.print_networked("Adding entity! %s %d %s" % [entity.name, entity.id, EntityManager.I.entities])
 			#add_child(entity)

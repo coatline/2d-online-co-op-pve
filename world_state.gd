@@ -39,6 +39,6 @@ func create_entity(entity_type: int) -> EntityState:
 			return PlayerState.new()
 		#EntityState.EntityType.ENEMY:
 			#return EnemyState.new()
-		#EntityState.EntityType.PROJECTILE:
-			#return ProjectileState.new()
+		EntityState.EntityType.PROJECTILE:
+			return ProjectileState.new()
 	return null
